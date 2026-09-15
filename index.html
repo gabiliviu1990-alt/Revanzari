@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Revânzări</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F4F0E6">
@@ -44,17 +44,25 @@
   --footer-line:#573A31; --footer-gold:#E3B677; --footer-profit:#A8D19C; --footer-pierdere:#E9A28F;
   --input-bg:#FBF3EE; --input-border:#EBD8C9; --segment-bg:#F0DFD3; --danger-soft:#FBF0E9;
 }
-[data-theme="intunecat"]{
-  --bg:#14181D; --card:#1E242B; --card-border:#2A323B;
-  --ink:#EDEFF2; --ink-soft:#7C8896; --ink-faded:#98A2AD;
-  --accent:#C9A227; --profit:#5FAE7F; --pierdere:#D9705C;
-  --footer-bg:#0B0E12; --footer-text:#EDEFF2; --footer-subtle:#7C8896;
-  --footer-line:#262D35; --footer-gold:#D9BE73; --footer-profit:#7FD8A6; --footer-pierdere:#E39385;
-  --input-bg:#181D23; --input-border:#2A323B; --segment-bg:#20262D; --danger-soft:#20262D;
+[data-theme="negru-verde"]{
+  --bg:#0A0F0D; --card:#121A16; --card-border:#1E2B23;
+  --ink:#EAF6EE; --ink-soft:#6E8A79; --ink-faded:#8FA697;
+  --accent:#34D399; --profit:#34D399; --pierdere:#F87171;
+  --footer-bg:#060907; --footer-text:#EAF6EE; --footer-subtle:#6E8A79;
+  --footer-line:#1E2B23; --footer-gold:#F0C674; --footer-profit:#34D399; --footer-pierdere:#F87171;
+  --input-bg:#0F1712; --input-border:#1E2B23; --segment-bg:#152019; --danger-soft:#1B1210;
+}
+[data-theme="violet"]{
+  --bg:#120E1C; --card:#1C1630; --card-border:#2C2447;
+  --ink:#EFEBFA; --ink-soft:#8A80AC; --ink-faded:#A79DC9;
+  --accent:#A78BFA; --profit:#4ADE80; --pierdere:#FB7185;
+  --footer-bg:#0B0817; --footer-text:#EFEBFA; --footer-subtle:#8A80AC;
+  --footer-line:#2C2447; --footer-gold:#D4B8FF; --footer-profit:#86EFAC; --footer-pierdere:#FDA4AF;
+  --input-bg:#171128; --input-border:#2C2447; --segment-bg:#211A38; --danger-soft:#1F1730;
 }
 
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
+html,body{margin:0;padding:0;width:100%;overflow-x:hidden;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
   background:var(--bg); color:var(--ink);
@@ -66,7 +74,7 @@ body{
 
 header{
   position:sticky; top:0; z-index:10; background:var(--bg);
-  padding:22px 20px 12px; border-bottom:1px solid var(--card-border);
+  padding:calc(env(safe-area-inset-top,0px) + 22px) 20px 12px; border-bottom:1px solid var(--card-border);
 }
 .badge-row{ display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:16px; }
 .badge{
@@ -233,7 +241,8 @@ const TEME = {
   verde:{ nume:"Verde", swatch:["#EEF1E6","#233A28","#7C9A56"] },
   ocean:{ nume:"Ocean", swatch:["#E9F0F1","#16323A","#3B8FA0"] },
   corai:{ nume:"Corai", swatch:["#F7EAE2","#3A2620","#C97B5A"] },
-  intunecat:{ nume:"Întunecat", swatch:["#14181D","#EDEFF2","#C9A227"] },
+  "negru-verde":{ nume:"Negru & Verde", swatch:["#0A0F0D","#EAF6EE","#34D399"] },
+  violet:{ nume:"Violet", swatch:["#120E1C","#EFEBFA","#A78BFA"] },
 };
 
 const uid = () => Math.random().toString(36).slice(2,9);
@@ -299,7 +308,7 @@ function randareTeme(){
     btn.className = "tema-btn" + (stare.tema === cheie ? " activ" : "");
     btn.setAttribute("aria-label", tema.nume);
     btn.innerHTML = `<span class="tema-swatch" style="background:conic-gradient(${tema.swatch[0]} 0deg 120deg, ${tema.swatch[1]} 120deg 240deg, ${tema.swatch[2]} 240deg 360deg);"></span>`;
-    btn.onclick = () => { stare.tema = cheie; document.documentElement.setAttribute("data-theme", cheie === "clasic" ? "" : cheie); randareTot(); salveaza(); };
+    btn.onclick = () => { stare.tema = cheie; document.documentElement.setAttribute("data-theme", cheie === "clasic" ? "" : cheie); actualizeazaCuloareStatus(); randareTot(); salveaza(); };
     cont.appendChild(btn);
   });
 }
@@ -413,6 +422,11 @@ function randareSumar(){
   document.getElementById("s-incasat").textContent = lei(deIncasat);
 }
 
+function actualizeazaCuloareStatus(){
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta && TEME[stare.tema]) meta.setAttribute("content", TEME[stare.tema].swatch[0]);
+}
+
 function escHtml(s){
   return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
@@ -477,6 +491,7 @@ function porneste_confirmare_reset(){
 // pornire
 incarca();
 document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
+actualizeazaCuloareStatus();
 randareTot();
 ataseazaReset();
 
