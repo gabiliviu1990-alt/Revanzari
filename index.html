@@ -140,14 +140,18 @@ main{ padding:16px 16px 210px; display:flex; flex-direction:column; gap:12px; }
 .marja{ font-size:12.5px; color:var(--ink-soft); }
 .profit-val{ font-size:18px; font-weight:700; }
 
-.datornic-row{ display:flex; align-items:center; gap:10px; }
+.datornic-top{ display:flex; align-items:center; gap:10px; }
 .bifa{
   border:none; width:30px; height:30px; border-radius:9px; flex-shrink:0; display:flex;
   align-items:center; justify-content:center; background:var(--segment-bg);
 }
 .bifa.platit{ background:var(--profit); }
-.suma-camp{ width:110px; flex-shrink:0; }
-.suma-camp input{ text-align:right; font-size:16px; }
+.datornic-suma{ margin-top:10px; }
+.datornic-suma label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:4px; }
+.datornic-suma input{
+  width:100%; border:1px solid var(--input-border); background:var(--input-bg); border-radius:10px;
+  padding:10px; font-size:16px; color:var(--ink); outline:none; font-family:inherit;
+}
 .platit-label{ margin-top:8px; font-size:12px; color:var(--profit); font-weight:600; }
 
 .reset-zona{ margin-top:8px; display:flex; justify-content:center; gap:8px; align-items:center; }
@@ -368,11 +372,14 @@ function randareDatornici(){
     div.className = "card";
     div.style.opacity = d.platit ? "0.55" : "1";
     div.innerHTML = `
-      <div class="datornic-row">
+      <div class="datornic-top">
         <button class="bifa ${d.platit ? "platit" : ""}" aria-label="Marchează plătit">${d.platit ? "✓" : ""}</button>
         <input class="input-nume" style="font-size:16px;text-decoration:${d.platit ? "line-through" : "none"};" placeholder="Nume" value="${escHtml(d.nume)}" data-field="nume">
-        <div class="suma-camp"><input type="number" inputmode="decimal" placeholder="0 lei" value="${d.suma}" data-field="suma"></div>
         <button class="buton-sterge" aria-label="Șterge">✕</button>
+      </div>
+      <div class="datornic-suma">
+        <label>Sumă</label>
+        <input type="number" inputmode="decimal" placeholder="0 lei" value="${d.suma}" data-field="suma">
       </div>
       ${d.platit ? '<div class="platit-label">✓ Plătit</div>' : ""}
     `;
