@@ -209,6 +209,11 @@ h1{ font-size:17px; font-weight:700; margin:0; letter-spacing:-0.2px; }
   width:100%; margin-top:14px; border:none; background:var(--ink); color:var(--bg);
   border-radius:13px; padding:12px 0; font-size:14.5px; font-weight:600; font-family:inherit;
 }
+.curs-auto{
+  width:100%; border:1px solid var(--card-border); background:transparent; color:var(--accent);
+  border-radius:11px; padding:10px 0; font-size:13.5px; font-weight:600; font-family:inherit; margin-top:2px;
+}
+.curs-auto-status{ font-size:11.5px; color:var(--ink-faded); text-align:center; margin-top:6px; min-height:14px; }
 
 .convertor{ margin-top:20px; padding-top:16px; border-top:1px solid var(--card-border); }
 .convertor-titlu{ font-size:12.5px; font-weight:700; color:var(--ink-faded); margin-bottom:8px; }
@@ -305,6 +310,22 @@ main{
 .marja{ font-size:12.5px; color:var(--ink-soft); }
 .profit-val{ font-size:18px; font-weight:700; }
 
+.stoc-rand{ display:flex; align-items:center; gap:8px; margin-top:10px; }
+.stoc-eticheta{ font-size:11.5px; color:var(--ink-soft); flex-shrink:0; }
+.stoc-btn{
+  width:26px; height:26px; border-radius:8px; border:1px solid var(--input-border);
+  background:var(--input-bg); color:var(--ink); font-size:15px; font-weight:700;
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:inherit;
+}
+.stoc-input{
+  width:48px; flex-shrink:0; text-align:center; border:1px solid var(--input-border);
+  background:var(--input-bg); border-radius:8px; padding:5px 2px; font-size:14px;
+  color:var(--ink); outline:none; font-family:inherit;
+}
+.stoc-status{ font-size:11px; font-weight:700; margin-left:2px; }
+.stoc-status.stoc-rosu{ color:var(--pierdere); }
+.stoc-status.stoc-portocaliu{ color:#C98A2C; }
+
 .datornic-row{ display:flex; align-items:center; gap:10px; }
 .bifa{
   border:none; width:30px; height:30px; border-radius:9px; flex-shrink:0; display:flex;
@@ -346,9 +367,52 @@ footer{
 .incasat-linie .val{ font-size:14.5px; font-weight:700; color:var(--footer-gold); }
 
 svg{ display:block; }
+
+.ecran-blocare{
+  position:fixed; inset:0; z-index:100; background:var(--bg); color:var(--ink);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:24px; text-align:center;
+}
+.blocare-badge{
+  width:52px; height:52px; border-radius:15px; background:var(--accent);
+  display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+}
+.blocare-input{
+  width:100%; max-width:260px; border:1px solid var(--input-border); background:var(--input-bg);
+  border-radius:12px; padding:13px 14px; font-size:16px; color:var(--ink); outline:none;
+  font-family:inherit; text-align:center; margin-bottom:12px;
+}
+.blocare-eroare{ min-height:16px; font-size:12.5px; color:var(--pierdere); margin-top:10px; }
+
+.parola-camp{ margin-bottom:12px; }
+.parola-camp label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:4px; }
+.parola-camp input{
+  width:100%; box-sizing:border-box; border:1px solid var(--input-border); background:var(--input-bg);
+  border-radius:10px; padding:10px; font-size:15.5px; color:var(--ink); outline:none; font-family:inherit;
+}
+.parola-eroare{ font-size:12px; color:var(--pierdere); margin-bottom:8px; min-height:15px; }
+.parola-activa{
+  display:flex; align-items:center; gap:8px; background:var(--input-bg); border:1px solid var(--input-border);
+  border-radius:11px; padding:11px 13px; font-size:13.5px; color:var(--ink); margin-bottom:14px;
+}
+.parola-secundar{
+  width:100%; border:1px solid var(--card-border); background:transparent; color:var(--ink-faded);
+  border-radius:11px; padding:11px 0; font-size:13.5px; font-weight:600; font-family:inherit; margin-top:8px;
+}
 </style>
 </head>
 <body>
+
+<div id="ecran-blocare" class="ecran-blocare" style="display:none;">
+  <div class="blocare-badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  </div>
+  <h1 style="margin:0 0 4px;">Revânzări</h1>
+  <p style="margin:0 0 18px;font-size:13px;color:var(--ink-faded);">Introdu parola ca să continui</p>
+  <input type="password" id="blocare-input" class="blocare-input" inputmode="text" placeholder="Parolă" autocomplete="off">
+  <button id="btn-deblocheaza" class="sheet-inchide" style="max-width:260px;">Deblochează</button>
+  <div id="blocare-eroare" class="blocare-eroare"></div>
+</div>
 
 <header>
   <div class="badge-row">
@@ -364,6 +428,7 @@ svg{ display:block; }
         <span style="opacity:.5;">▾</span>
       </button>
       <button id="btn-curs" class="btn-teme">💱 Curs</button>
+      <button id="btn-parola" class="btn-teme">🔒</button>
     </div>
   </div>
 
@@ -437,6 +502,8 @@ svg{ display:block; }
       <label>1 USD = ? RON</label>
       <input type="number" inputmode="decimal" id="curs-usd" placeholder="ex: 4.65">
     </div>
+    <button class="curs-auto" id="btn-curs-auto">⟳ Actualizează automat</button>
+    <div class="curs-auto-status" id="curs-auto-status"></div>
     <button class="sheet-inchide" id="btn-inchide-curs">Salvează</button>
 
     <div class="convertor">
@@ -463,6 +530,10 @@ svg{ display:block; }
   </div>
 </div>
 
+<div class="overlay" id="overlay-parola">
+  <div class="sheet" id="sheet-parola"></div>
+</div>
+
 <script>
 const CHEIE = "revanzari-date";
 const TEME = {
@@ -485,7 +556,7 @@ const TEME = {
 };
 
 const uid = () => Math.random().toString(36).slice(2,9);
-const produsGol = () => ({ id:uid(), nume:"", pretAchizitie:"", moneda:"RON", pretVanzare:"", cantitate:"1", cheltuieli:"" });
+const produsGol = () => ({ id:uid(), nume:"", pretAchizitie:"", moneda:"RON", pretVanzare:"", cantitate:"1", cheltuieli:"", stoc:"" });
 const datornicGol = () => ({ id:uid(), nume:"", pentruCe:"", suma:"", platit:false });
 const nr = v => (v==="" || isNaN(parseFloat(v))) ? 0 : parseFloat(v);
 const lei = n => n.toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2}) + " lei";
@@ -497,6 +568,7 @@ let stare = {
   datornici:[datornicGol()],
   tema:"clasic",
   extins:false,
+  parola:"",
 };
 
 function incarca(){
@@ -508,6 +580,7 @@ function incarca(){
       if(Array.isArray(parsate.datornici) && parsate.datornici.length) stare.datornici = parsate.datornici;
       if(parsate.tema && TEME[parsate.tema]) stare.tema = parsate.tema;
       if(parsate.curs) stare.curs = { eur: parsate.curs.eur || "", usd: parsate.curs.usd || "" };
+      if(typeof parsate.parola === "string") stare.parola = parsate.parola;
     }
   }catch(e){}
 }
@@ -520,7 +593,7 @@ function salveaza(){
   clearTimeout(salvTimer);
   salvTimer = setTimeout(() => {
     try{
-      localStorage.setItem(CHEIE, JSON.stringify({produse:stare.produse, datornici:stare.datornici, tema:stare.tema, curs:stare.curs}));
+      localStorage.setItem(CHEIE, JSON.stringify({produse:stare.produse, datornici:stare.datornici, tema:stare.tema, curs:stare.curs, parola:stare.parola}));
       statusEl.textContent = "salvat";
     }catch(e){
       statusEl.textContent = "eroare";
@@ -600,6 +673,13 @@ function randareProduse(){
         <span class="marja">${p.vanzare > 0 ? "marjă " + p.marja.toFixed(0) + "%" : "—"}</span>
         <span class="profit-val mono" style="color:${p.profit>0 ? "var(--profit)" : p.profit<0 ? "var(--pierdere)" : "var(--ink-soft)"};">${p.profit>=0?"+":""}${lei(p.profit)}</span>
       </div>
+      <div class="stoc-rand">
+        <span class="stoc-eticheta">Stoc</span>
+        <button class="stoc-btn" data-stoc="-1" aria-label="Scade stocul">−</button>
+        <input type="number" inputmode="numeric" class="stoc-input" placeholder="—" value="${p.stoc}" data-field="stoc">
+        <button class="stoc-btn" data-stoc="1" aria-label="Crește stocul">+</button>
+        <span class="stoc-status" id="stoc-status-${p.id}"></span>
+      </div>
     `;
     div.querySelectorAll("input, select").forEach(inp => {
       inp.addEventListener(inp.tagName === "SELECT" ? "change" : "input", e => {
@@ -622,8 +702,46 @@ function randareProduse(){
       randareTot();
       salveaza();
     });
+    div.querySelectorAll(".stoc-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const item = stare.produse.find(x => x.id === p.id);
+        const curent = nr(item.stoc);
+        const nou = Math.max(0, curent + parseInt(btn.dataset.stoc, 10));
+        item.stoc = String(nou);
+        div.querySelector(".stoc-input").value = nou;
+        actualizeazaStocStatus(p.id, nou, item.stoc !== "");
+        salveaza();
+      });
+    });
+    div.querySelector(".stoc-input").addEventListener("input", e => {
+      const item = stare.produse.find(x => x.id === p.id);
+      item.stoc = e.target.value;
+      actualizeazaStocStatus(p.id, nr(e.target.value), e.target.value !== "");
+      salveaza();
+    });
+    actualizeazaStocStatus(p.id, nr(p.stoc), p.stoc !== "");
     cont.appendChild(div);
   });
+}
+
+function actualizeazaStocStatus(id, valoare, areValoare){
+  const el = document.getElementById(`stoc-status-${id}`);
+  if(!el) return;
+  if(!areValoare){
+    el.textContent = "";
+    el.className = "stoc-status";
+    return;
+  }
+  if(valoare <= 0){
+    el.textContent = "epuizat";
+    el.className = "stoc-status stoc-rosu";
+  }else if(valoare <= 2){
+    el.textContent = "stoc redus";
+    el.className = "stoc-status stoc-portocaliu";
+  }else{
+    el.textContent = "";
+    el.className = "stoc-status";
+  }
 }
 
 function randareDatornici(){
@@ -785,6 +903,26 @@ document.getElementById("btn-inchide-curs").onclick = () => {
 document.getElementById("overlay-curs").onclick = (e) => {
   if(e.target.id === "overlay-curs") e.target.classList.remove("deschis");
 };
+document.getElementById("btn-curs-auto").onclick = async () => {
+  const status = document.getElementById("curs-auto-status");
+  status.textContent = "se actualizează…";
+  try{
+    const [rEur, rUsd] = await Promise.all([
+      fetch("https://api.frankfurter.app/latest?from=EUR&to=RON").then(r => r.json()),
+      fetch("https://api.frankfurter.app/latest?from=USD&to=RON").then(r => r.json()),
+    ]);
+    const eur = rEur && rEur.rates && rEur.rates.RON;
+    const usd = rUsd && rUsd.rates && rUsd.rates.RON;
+    if(!eur || !usd) throw new Error("lipsă date");
+    document.getElementById("curs-eur").value = eur.toFixed(4);
+    document.getElementById("curs-usd").value = usd.toFixed(4);
+    randareConvertor();
+    const data = rEur.date || "";
+    status.textContent = `actualizat (curs BCE${data ? ", " + data : ""})`;
+  }catch(e){
+    status.textContent = "nu am putut lua cursul — verifică internetul sau scrie-l manual";
+  }
+};
 ["curs-eur", "curs-usd", "conv-suma", "conv-moneda"].forEach(id => {
   document.getElementById(id).addEventListener("input", randareConvertor);
   document.getElementById(id).addEventListener("change", randareConvertor);
@@ -821,6 +959,98 @@ function randareConvertor(){
     </div>
   `).join("");
 }
+
+// ---------- Parolă / blocare ----------
+
+function randareSheetParola(){
+  const cont = document.getElementById("sheet-parola");
+  if(stare.parola){
+    cont.innerHTML = `
+      <h2>Parolă</h2>
+      <p class="sub">Parola e activă — se cere de fiecare dată când redeschizi aplicația.</p>
+      <div class="parola-activa">🔒 Parolă setată</div>
+      <button class="parola-secundar" id="btn-blocheaza-acum">Blochează acum</button>
+      <button class="parola-secundar" id="btn-elimina-parola" style="color:var(--pierdere);">Elimină parola</button>
+      <button class="sheet-inchide" id="btn-inchide-parola" style="margin-top:14px;">Gata</button>
+    `;
+    document.getElementById("btn-blocheaza-acum").onclick = () => {
+      document.getElementById("overlay-parola").classList.remove("deschis");
+      aratLockScreen();
+    };
+    document.getElementById("btn-elimina-parola").onclick = () => {
+      const actuala = prompt("Pentru siguranță, scrie parola actuală ca să o elimini:");
+      if(actuala === null) return;
+      if(actuala !== stare.parola){
+        alert("Parolă greșită.");
+        return;
+      }
+      stare.parola = "";
+      salveaza();
+      randareSheetParola();
+    };
+    document.getElementById("btn-inchide-parola").onclick = () => {
+      document.getElementById("overlay-parola").classList.remove("deschis");
+    };
+  }else{
+    cont.innerHTML = `
+      <h2>Setează o parolă</h2>
+      <p class="sub">O protecție simplă, locală, ca alții să nu-ți deschidă aplicația din curiozitate — nu ține loc de securitate reală, dar te lasă liniștit(ă) pentru uz de zi cu zi.</p>
+      <div class="parola-camp"><label>Parolă nouă</label><input type="password" id="parola-noua" autocomplete="off"></div>
+      <div class="parola-camp"><label>Confirmă parola</label><input type="password" id="parola-confirma" autocomplete="off"></div>
+      <div class="parola-eroare" id="parola-eroare"></div>
+      <button class="sheet-inchide" id="btn-salveaza-parola">Activează parola</button>
+    `;
+    document.getElementById("btn-salveaza-parola").onclick = () => {
+      const noua = document.getElementById("parola-noua").value;
+      const confirma = document.getElementById("parola-confirma").value;
+      const eroare = document.getElementById("parola-eroare");
+      if(!noua.trim()){
+        eroare.textContent = "Scrie o parolă.";
+        return;
+      }
+      if(noua !== confirma){
+        eroare.textContent = "Parolele nu se potrivesc.";
+        return;
+      }
+      stare.parola = noua;
+      salveaza();
+      randareSheetParola();
+      document.getElementById("overlay-parola").classList.remove("deschis");
+    };
+  }
+}
+
+document.getElementById("btn-parola").onclick = () => {
+  randareSheetParola();
+  document.getElementById("overlay-parola").classList.add("deschis");
+};
+document.getElementById("overlay-parola").onclick = (e) => {
+  if(e.target.id === "overlay-parola") e.target.classList.remove("deschis");
+};
+
+function aratLockScreen(){
+  document.getElementById("ecran-blocare").style.display = "flex";
+  document.getElementById("blocare-input").value = "";
+  document.getElementById("blocare-eroare").textContent = "";
+  setTimeout(() => document.getElementById("blocare-input").focus(), 50);
+}
+function ascundeLockScreen(){
+  document.getElementById("ecran-blocare").style.display = "none";
+}
+function incearcaDeblocare(){
+  const val = document.getElementById("blocare-input").value;
+  if(val === stare.parola){
+    ascundeLockScreen();
+  }else{
+    document.getElementById("blocare-eroare").textContent = "Parolă greșită, încearcă din nou.";
+    document.getElementById("blocare-input").value = "";
+    document.getElementById("blocare-input").focus();
+  }
+}
+document.getElementById("btn-deblocheaza").onclick = incearcaDeblocare;
+document.getElementById("blocare-input").addEventListener("keydown", e => {
+  if(e.key === "Enter") incearcaDeblocare();
+});
 
 function aplicaExtins(){
   document.getElementById("sumar-detalii").style.display = stare.extins ? "block" : "none";
@@ -976,6 +1206,7 @@ randareTot();
 aplicaExtins();
 ataseazaReset();
 inputRestaurareAsculta();
+if(stare.parola) aratLockScreen();
 
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
