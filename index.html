@@ -2,10 +2,10 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Revânzări</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#F4F0E6">
+<meta name="theme-color" content="#F4F0E6" id="meta-theme-color">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,14 +36,6 @@
   --footer-line:#254A54; --footer-gold:#D9BE73; --footer-profit:#8AD8C4; --footer-pierdere:#E39385;
   --input-bg:#F3F8F9; --input-border:#D3E3E5; --segment-bg:#D9E7E9; --danger-soft:#EEF5F6;
 }
-[data-theme="corai"]{
-  --bg:#F7EAE2; --card:#FFFFFF; --card-border:#EBD8C9;
-  --ink:#3A2620; --ink-soft:#AB8F80; --ink-faded:#8A6C5D;
-  --accent:#C97B5A; --profit:#4F7A4E; --pierdere:#B0402F;
-  --footer-bg:#3A2620; --footer-text:#F7EAE2; --footer-subtle:#C7AA99;
-  --footer-line:#573A31; --footer-gold:#E3B677; --footer-profit:#A8D19C; --footer-pierdere:#E9A28F;
-  --input-bg:#FBF3EE; --input-border:#EBD8C9; --segment-bg:#F0DFD3; --danger-soft:#FBF0E9;
-}
 [data-theme="intunecat"]{
   --bg:#14181D; --card:#1E242B; --card-border:#2A323B;
   --ink:#EDEFF2; --ink-soft:#7C8896; --ink-faded:#98A2AD;
@@ -53,20 +45,20 @@
   --input-bg:#181D23; --input-border:#2A323B; --segment-bg:#20262D; --danger-soft:#20262D;
 }
 [data-theme="mov"]{
-  --bg:#F0EBF5; --card:#FFFFFF; --card-border:#E0D5EB;
-  --ink:#2E2140; --ink-soft:#9C8CB0; --ink-faded:#7A6890;
-  --accent:#8A5FB5; --profit:#3C7A5E; --pierdere:#B0402F;
-  --footer-bg:#2E2140; --footer-text:#F0EBF5; --footer-subtle:#B3A3C7;
-  --footer-line:#463359; --footer-gold:#E0BE7C; --footer-profit:#9FD9B8; --footer-pierdere:#E39CA0;
-  --input-bg:#FAF6FD; --input-border:#E0D5EB; --segment-bg:#E5DCEF; --danger-soft:#F6F0FA;
+  --bg:#F5EEFF; --card:#FFFFFF; --card-border:#E3CFFB;
+  --ink:#2B0F54; --ink-soft:#9E7FD6; --ink-faded:#7C4FCB;
+  --accent:#8A2BE2; --profit:#2F8F5E; --pierdere:#C23B3B;
+  --footer-bg:#2B0F54; --footer-text:#F5EEFF; --footer-subtle:#C6ACF0;
+  --footer-line:#451F80; --footer-gold:#E3BEFF; --footer-profit:#8CF0B0; --footer-pierdere:#F0958C;
+  --input-bg:#FAF4FF; --input-border:#E3CFFB; --segment-bg:#EBDBFC; --danger-soft:#F8EFFD;
 }
-[data-theme="grafit"]{
-  --bg:#EDEEF0; --card:#FFFFFF; --card-border:#DDDFE3;
-  --ink:#22262B; --ink-soft:#93989F; --ink-faded:#6B7178;
-  --accent:#5B6470; --profit:#2F7050; --pierdere:#AB4030;
-  --footer-bg:#22262B; --footer-text:#EDEEF0; --footer-subtle:#9BA1A9;
-  --footer-line:#343A41; --footer-gold:#D5C084; --footer-profit:#86CFA5; --footer-pierdere:#E0958A;
-  --input-bg:#F7F8F9; --input-border:#DDDFE3; --segment-bg:#E1E3E7; --danger-soft:#F4F1F0;
+[data-theme="smarald"]{
+  --bg:#E8FBF2; --card:#FFFFFF; --card-border:#BEEDD8;
+  --ink:#04331E; --ink-soft:#5DAE8A; --ink-faded:#1F8C5F;
+  --accent:#00B871; --profit:#00A05F; --pierdere:#C23B3B;
+  --footer-bg:#04331E; --footer-text:#E8FBF2; --footer-subtle:#95D7B7;
+  --footer-line:#0B5238; --footer-gold:#F0CD7A; --footer-profit:#6FE8AA; --footer-pierdere:#F0958C;
+  --input-bg:#F2FEF8; --input-border:#BEEDD8; --segment-bg:#D3F4E4; --danger-soft:#EEFBF5;
 }
 [data-theme="miere"]{
   --bg:#FBF3DC; --card:#FFFFFF; --card-border:#F0E2BE;
@@ -313,6 +305,7 @@ svg{ display:block; }
   </div>
 
   <div class="reset-zona" id="reset-zona">
+    <button class="buton-mic" id="btn-export" style="background:var(--segment-bg);color:var(--ink-faded);">⬇ Exportă CSV</button>
     <button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>
   </div>
 </main>
@@ -352,11 +345,10 @@ const TEME = {
   clasic:{ nume:"Clasic", swatch:["#F4F0E6","#1C2A33","#B7861F"] },
   verde:{ nume:"Verde", swatch:["#EEF1E6","#233A28","#7C9A56"] },
   ocean:{ nume:"Ocean", swatch:["#E9F0F1","#16323A","#3B8FA0"] },
-  corai:{ nume:"Corai", swatch:["#F7EAE2","#3A2620","#C97B5A"] },
-  mov:{ nume:"Mov", swatch:["#F0EBF5","#2E2140","#8A5FB5"] },
+  mov:{ nume:"Mov electric", swatch:["#F5EEFF","#2B0F54","#8A2BE2"] },
+  smarald:{ nume:"Smarald", swatch:["#E8FBF2","#04331E","#00B871"] },
   miere:{ nume:"Miere", swatch:["#FBF3DC","#3D2E12","#D8A31C"] },
   roz:{ nume:"Roz", swatch:["#FBECF1","#3D1E2B","#C9587F"] },
-  grafit:{ nume:"Grafit", swatch:["#EDEEF0","#22262B","#5B6470"] },
   intunecat:{ nume:"Întunecat", swatch:["#14181D","#EDEFF2","#C9A227"] },
   noapte:{ nume:"Noapte", swatch:["#101827","#E4EAF5","#5B8DEF"] },
   padure:{ nume:"Pădure", swatch:["#0F1A14","#E3EDE5","#6FAE6B"] },
@@ -421,6 +413,7 @@ function randareTeme(){
   const tema = TEME[stare.tema] || TEME.clasic;
   document.getElementById("tema-nume").textContent = tema.nume;
   document.getElementById("tema-punct").style.background = tema.swatch[2];
+  document.getElementById("meta-theme-color").setAttribute("content", tema.swatch[0]);
 
   const grid = document.getElementById("teme-grid");
   grid.innerHTML = "";
@@ -450,10 +443,10 @@ function randareProduse(){
         <button class="buton-sterge" aria-label="Șterge">✕</button>
       </div>
       <div class="grid4">
-        <div class="camp"><label>Cumpărare</label><input type="number" inputmode="decimal" placeholder="0" value="${p.pretAchizitie}" data-field="pretAchizitie"></div>
-        <div class="camp"><label>Vânzare</label><input type="number" inputmode="decimal" placeholder="0" value="${p.pretVanzare}" data-field="pretVanzare"></div>
-        <div class="camp"><label>Bucăți</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cantitate}" data-field="cantitate"></div>
-        <div class="camp"><label>Transport/taxe</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cheltuieli}" data-field="cheltuieli"></div>
+        <div class="camp"><label>Cumpărare</label><input type="number" inputmode="decimal" placeholder="0" value="${escHtml(p.pretAchizitie)}" data-field="pretAchizitie"></div>
+        <div class="camp"><label>Vânzare</label><input type="number" inputmode="decimal" placeholder="0" value="${escHtml(p.pretVanzare)}" data-field="pretVanzare"></div>
+        <div class="camp"><label>Bucăți</label><input type="number" inputmode="decimal" placeholder="0" value="${escHtml(p.cantitate)}" data-field="cantitate"></div>
+        <div class="camp"><label>Transport/taxe</label><input type="number" inputmode="decimal" placeholder="0" value="${escHtml(p.cheltuieli)}" data-field="cheltuieli"></div>
       </div>
       <div class="linie-total">
         <span class="marja">${p.vanzare > 0 ? "marjă " + p.marja.toFixed(0) + "%" : "—"}</span>
@@ -504,7 +497,7 @@ function randareDatornici(){
       </div>
       <div class="suma-rand">
         <label>Suma datorată</label>
-        <input type="number" inputmode="decimal" placeholder="0" value="${d.suma}" data-field="suma">
+        <input type="number" inputmode="decimal" placeholder="0" value="${escHtml(d.suma)}" data-field="suma">
       </div>
       ${d.platit ? '<div class="platit-label">✓ Plătit</div>' : ""}
     `;
@@ -600,9 +593,15 @@ document.getElementById("toggle-sumar").onclick = () => {
   document.getElementById("sumar-corp").style.display = stare.extins ? "block" : "none";
   document.getElementById("chevron").textContent = stare.extins ? "▾" : "▴";
 };
+const RESET_ZONA_HTML = `
+  <button class="buton-mic" id="btn-export" style="background:var(--segment-bg);color:var(--ink-faded);">⬇ Exportă CSV</button>
+  <button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>
+`;
 function ataseazaReset(){
-  const btn = document.getElementById("btn-reset");
-  if(btn) btn.onclick = porneste_confirmare_reset;
+  const btnReset = document.getElementById("btn-reset");
+  if(btnReset) btnReset.onclick = porneste_confirmare_reset;
+  const btnExport = document.getElementById("btn-export");
+  if(btnExport) btnExport.onclick = exportaCSV;
 }
 function porneste_confirmare_reset(){
   const zona = document.getElementById("reset-zona");
@@ -616,13 +615,62 @@ function porneste_confirmare_reset(){
     stare.datornici = [datornicGol()];
     randareTot();
     salveaza();
-    zona.innerHTML = `<button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>`;
+    zona.innerHTML = RESET_ZONA_HTML;
     ataseazaReset();
   };
   document.getElementById("confirma-nu").onclick = () => {
-    zona.innerHTML = `<button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>`;
+    zona.innerHTML = RESET_ZONA_HTML;
     ataseazaReset();
   };
+}
+
+function csvEsc(v){
+  v = String(v);
+  if(v.includes(";") || v.includes('"') || v.includes("\n")){
+    return '"' + v.replace(/"/g,'""') + '"';
+  }
+  return v;
+}
+function exportaCSV(){
+  const randuri = randuriProduse();
+  const linii = [];
+  linii.push("Produse");
+  linii.push(["Nume","Cumpărare/buc","Vânzare/buc","Bucăți","Transport/taxe","Total cumpărare","Total vânzare","Profit","Marjă %"].map(csvEsc).join(";"));
+  randuri.forEach((p, idx) => {
+    linii.push([
+      p.nume || `Produs ${idx+1}`,
+      nr(p.pretAchizitie).toFixed(2).replace(".", ","),
+      nr(p.pretVanzare).toFixed(2).replace(".", ","),
+      p.cantitate || "0",
+      nr(p.cheltuieli).toFixed(2).replace(".", ","),
+      p.achizitie.toFixed(2).replace(".", ","),
+      p.vanzare.toFixed(2).replace(".", ","),
+      p.profit.toFixed(2).replace(".", ","),
+      p.marja.toFixed(1).replace(".", ",")
+    ].map(csvEsc).join(";"));
+  });
+  linii.push("");
+  linii.push("De încasat");
+  linii.push(["Nume","Pentru ce","Sumă","Plătit"].map(csvEsc).join(";"));
+  stare.datornici.forEach(d => {
+    linii.push([
+      d.nume || "",
+      d.pentruCe || "",
+      nr(d.suma).toFixed(2).replace(".", ","),
+      d.platit ? "Da" : "Nu"
+    ].map(csvEsc).join(";"));
+  });
+  const continut = "\uFEFF" + linii.join("\r\n");
+  const blob = new Blob([continut], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const data = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `revanzari-${data}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // pornire
