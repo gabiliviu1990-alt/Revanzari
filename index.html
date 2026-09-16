@@ -164,7 +164,7 @@ header{
   padding-right:calc(env(safe-area-inset-right, 0px) + 18px);
   border-bottom:1px solid var(--card-border);
 }
-.badge-row{ display:flex; flex-direction:row; align-items:center; justify-content:center; gap:9px; margin-bottom:9px; }
+.badge-row{ display:flex; flex-direction:row; align-items:center; justify-content:center; gap:9px; margin-bottom:9px; flex-wrap:wrap; row-gap:6px; }
 .badge{
   width:32px; height:32px; border-radius:10px; background:var(--accent);
   display:flex; align-items:center; justify-content:center; flex-shrink:0;
@@ -239,6 +239,19 @@ main{
 }
 .hint{ margin:0 4px; font-size:13px; color:var(--ink-faded); line-height:1.5; }
 
+.totaluri-persoane{
+  background:var(--card); border:1px solid var(--card-border); border-radius:13px;
+  padding:11px 14px;
+}
+.tp-titlu{ font-size:11px; font-weight:700; color:var(--ink-faded); margin-bottom:6px; }
+.tp-rand{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:4px 0; font-size:13.5px;
+}
+.tp-nume{ color:var(--ink); font-weight:600; }
+.tp-count{ color:var(--ink-soft); font-weight:400; font-size:12px; }
+.tp-suma{ color:var(--accent); font-weight:700; font-size:14px; }
+
 .card{
   background:var(--card); border:1px solid var(--card-border); border-radius:16px;
   padding:16px 16px 14px; box-shadow:0 1px 2px rgba(0,0,0,.06);
@@ -257,6 +270,12 @@ main{
 .camp input{
   width:100%; border:1px solid var(--input-border); background:var(--input-bg); border-radius:10px;
   padding:10px; font-size:15.5px; color:var(--ink); outline:none; font-family:inherit;
+}
+.camp-cu-moneda{ display:flex; gap:5px; }
+.camp-cu-moneda input{ flex:1; min-width:0; }
+.camp-cu-moneda select{
+  border:1px solid var(--input-border); background:var(--input-bg); color:var(--ink-faded);
+  border-radius:10px; padding:0 4px; font-size:12px; font-family:inherit; flex-shrink:0; width:58px;
 }
 .linie-total{
   display:flex; justify-content:space-between; align-items:baseline; padding-top:10px;
@@ -279,7 +298,7 @@ main{
 }
 .platit-label{ margin-top:8px; font-size:12px; color:var(--profit); font-weight:600; }
 
-.reset-zona{ flex-shrink:0; padding:10px 0 12px; display:flex; justify-content:center; gap:8px; align-items:center; }
+.reset-zona{ flex-shrink:0; padding:10px 0 12px; display:flex; flex-wrap:wrap; justify-content:center; gap:8px; align-items:center; }
 .buton-mic{ border:none; border-radius:8px; padding:7px 12px; font-size:12.5px; font-weight:600; font-family:inherit; }
 
 footer{
@@ -317,11 +336,14 @@ svg{ display:block; }
     </div>
     <h1>Revânzări</h1>
     <span id="status" class="status">salvat</span>
-    <button id="btn-teme" class="btn-teme" style="margin-left:auto;">
-      <span class="tema-punct" id="tema-punct"></span>
-      <span id="tema-nume">Clasic</span>
-      <span style="opacity:.5;">▾</span>
-    </button>
+    <div style="display:flex; gap:6px; margin-left:auto;">
+      <button id="btn-teme" class="btn-teme">
+        <span class="tema-punct" id="tema-punct"></span>
+        <span id="tema-nume">Clasic</span>
+        <span style="opacity:.5;">▾</span>
+      </button>
+      <button id="btn-curs" class="btn-teme">💱 Curs</button>
+    </div>
   </div>
 
   <div class="segment">
@@ -344,6 +366,7 @@ svg{ display:block; }
     <div class="zona-fixa">
       <button class="buton-principal" id="btn-adauga-datornic">+ Persoană nouă</button>
       <p class="hint">Notează cine îți mai datorează bani. Apasă bifa când ți-a dat banii — suma iese automat din totalul de încasat.</p>
+      <div class="totaluri-persoane" id="totaluri-persoane" style="display:none;"></div>
     </div>
     <div class="zona-scroll">
       <div id="lista-datornici"></div>
@@ -352,8 +375,11 @@ svg{ display:block; }
 
   <div class="reset-zona" id="reset-zona">
     <button class="buton-mic" id="btn-export" style="background:var(--segment-bg);color:var(--ink-faded);">⬇ Exportă CSV</button>
+    <button class="buton-mic" id="btn-backup" style="background:var(--segment-bg);color:var(--ink-faded);">💾 Backup complet</button>
+    <button class="buton-mic" id="btn-restaurare" style="background:var(--segment-bg);color:var(--ink-faded);">⤴ Restaurează backup</button>
     <button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>
   </div>
+  <input type="file" id="input-restaurare" accept="application/json,.json" style="display:none;">
 </main>
 
 <footer>
@@ -377,6 +403,22 @@ svg{ display:block; }
     </div>
   </div>
 </footer>
+
+<div class="overlay" id="overlay-curs">
+  <div class="sheet">
+    <h2>Curs valutar</h2>
+    <p class="sub">Prețul de cumpărare poate fi introdus în EUR sau USD — se convertește automat în lei, după cursul de aici. Verifică-l din când în când (ex. cursul BNR).</p>
+    <div class="curs-camp">
+      <label>1 EUR = ? RON</label>
+      <input type="number" inputmode="decimal" id="curs-eur" placeholder="ex: 5.05">
+    </div>
+    <div class="curs-camp">
+      <label>1 USD = ? RON</label>
+      <input type="number" inputmode="decimal" id="curs-usd" placeholder="ex: 4.65">
+    </div>
+    <button class="sheet-inchide" id="btn-inchide-curs">Salvează</button>
+  </div>
+</div>
 
 <div class="overlay" id="overlay-teme">
   <div class="sheet">
@@ -409,7 +451,7 @@ const TEME = {
 };
 
 const uid = () => Math.random().toString(36).slice(2,9);
-const produsGol = () => ({ id:uid(), nume:"", pretAchizitie:"", pretVanzare:"", cantitate:"1", cheltuieli:"" });
+const produsGol = () => ({ id:uid(), nume:"", pretAchizitie:"", moneda:"RON", pretVanzare:"", cantitate:"1", cheltuieli:"" });
 const datornicGol = () => ({ id:uid(), nume:"", pentruCe:"", suma:"", platit:false });
 const nr = v => (v==="" || isNaN(parseFloat(v))) ? 0 : parseFloat(v);
 const lei = n => n.toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2}) + " lei";
@@ -417,6 +459,7 @@ const leiScurt = n => n.toLocaleString("ro-RO",{minimumFractionDigits:0,maximumF
 
 let stare = {
   produse:[produsGol()],
+  curs:{ eur:"", usd:"" },
   datornici:[datornicGol()],
   tema:"clasic",
   extins:false,
@@ -430,6 +473,7 @@ function incarca(){
       if(Array.isArray(parsate.produse) && parsate.produse.length) stare.produse = parsate.produse;
       if(Array.isArray(parsate.datornici) && parsate.datornici.length) stare.datornici = parsate.datornici;
       if(parsate.tema && TEME[parsate.tema]) stare.tema = parsate.tema;
+      if(parsate.curs) stare.curs = { eur: parsate.curs.eur || "", usd: parsate.curs.usd || "" };
     }
   }catch(e){}
 }
@@ -442,7 +486,7 @@ function salveaza(){
   clearTimeout(salvTimer);
   salvTimer = setTimeout(() => {
     try{
-      localStorage.setItem(CHEIE, JSON.stringify({produse:stare.produse, datornici:stare.datornici, tema:stare.tema}));
+      localStorage.setItem(CHEIE, JSON.stringify({produse:stare.produse, datornici:stare.datornici, tema:stare.tema, curs:stare.curs}));
       statusEl.textContent = "salvat";
     }catch(e){
       statusEl.textContent = "eroare";
@@ -451,10 +495,17 @@ function salveaza(){
   }, 400);
 }
 
+function curs(moneda){
+  if(moneda === "EUR") return nr(stare.curs.eur) || 0;
+  if(moneda === "USD") return nr(stare.curs.usd) || 0;
+  return 1;
+}
+
 function randuriProduse(){
   return stare.produse.map(p => {
     const cant = nr(p.cantitate) || 0;
-    const achizitie = nr(p.pretAchizitie) * cant;
+    const rataCurs = curs(p.moneda);
+    const achizitie = nr(p.pretAchizitie) * rataCurs * cant;
     const vanzare = nr(p.pretVanzare) * cant;
     const cheltuieli = nr(p.cheltuieli);
     const profit = vanzare - achizitie - cheltuieli;
@@ -496,7 +547,17 @@ function randareProduse(){
         <button class="buton-sterge" aria-label="Șterge">✕</button>
       </div>
       <div class="grid4">
-        <div class="camp"><label>Cumpărare</label><input type="number" inputmode="decimal" placeholder="0" value="${p.pretAchizitie}" data-field="pretAchizitie"></div>
+        <div class="camp">
+          <label>Cumpărare</label>
+          <div class="camp-cu-moneda">
+            <input type="number" inputmode="decimal" placeholder="0" value="${p.pretAchizitie}" data-field="pretAchizitie">
+            <select data-field="moneda">
+              <option value="RON" ${p.moneda==="RON"?"selected":""}>RON</option>
+              <option value="EUR" ${p.moneda==="EUR"?"selected":""}>EUR</option>
+              <option value="USD" ${p.moneda==="USD"?"selected":""}>USD</option>
+            </select>
+          </div>
+        </div>
         <div class="camp"><label>Vânzare</label><input type="number" inputmode="decimal" placeholder="0" value="${p.pretVanzare}" data-field="pretVanzare"></div>
         <div class="camp"><label>Bucăți</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cantitate}" data-field="cantitate"></div>
         <div class="camp"><label>Transport/taxe</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cheltuieli}" data-field="cheltuieli"></div>
@@ -506,8 +567,8 @@ function randareProduse(){
         <span class="profit-val mono" style="color:${p.profit>0 ? "var(--profit)" : p.profit<0 ? "var(--pierdere)" : "var(--ink-soft)"};">${p.profit>=0?"+":""}${lei(p.profit)}</span>
       </div>
     `;
-    div.querySelectorAll("input").forEach(inp => {
-      inp.addEventListener("input", e => {
+    div.querySelectorAll("input, select").forEach(inp => {
+      inp.addEventListener(inp.tagName === "SELECT" ? "change" : "input", e => {
         const f = e.target.dataset.field;
         const item = stare.produse.find(x => x.id === p.id);
         item[f] = e.target.value;
@@ -559,6 +620,7 @@ function randareDatornici(){
         const item = stare.datornici.find(x => x.id === d.id);
         item[e.target.dataset.field] = e.target.value;
         randareSumar();
+        randareTotaluriPersoane();
         salveaza();
       });
     });
@@ -575,6 +637,38 @@ function randareDatornici(){
     });
     cont.appendChild(div);
   });
+  randareTotaluriPersoane();
+}
+
+function calculeazaTotaluriPersoane(){
+  const harta = {};
+  stare.datornici.forEach(d => {
+    const nume = (d.nume || "").trim();
+    if(!nume || d.platit) return;
+    const cheie = nume.toLowerCase();
+    if(!harta[cheie]) harta[cheie] = { nume, suma:0, count:0 };
+    harta[cheie].suma += nr(d.suma);
+    harta[cheie].count += 1;
+  });
+  return Object.values(harta).filter(g => g.count > 1).sort((a,b) => b.suma - a.suma);
+}
+
+function randareTotaluriPersoane(){
+  const cont = document.getElementById("totaluri-persoane");
+  if(!cont) return;
+  const grupuri = calculeazaTotaluriPersoane();
+  if(!grupuri.length){
+    cont.style.display = "none";
+    cont.innerHTML = "";
+    return;
+  }
+  cont.style.display = "block";
+  cont.innerHTML = `<div class="tp-titlu">Total pe persoană</div>` + grupuri.map(g => `
+    <div class="tp-rand">
+      <span class="tp-nume">${escHtml(g.nume)} <span class="tp-count">(${g.count})</span></span>
+      <span class="tp-suma mono">${lei(g.suma)}</span>
+    </div>
+  `).join("");
 }
 
 function randareSumar(){
@@ -679,8 +773,67 @@ function exportaCSV(){
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function exportaBackup(){
+  const payload = {
+    tip: "revanzari-backup",
+    versiune: 1,
+    exportat: new Date().toISOString(),
+    produse: stare.produse,
+    datornici: stare.datornici,
+    tema: stare.tema,
+    curs: stare.curs,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const azi = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `revanzari-backup-${azi}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function porneste_restaurare(fisierText){
+  let parsate;
+  try{
+    parsate = JSON.parse(fisierText);
+  }catch(e){
+    alert("Fișierul nu e un backup valid.");
+    return;
+  }
+  if(!parsate || (!Array.isArray(parsate.produse) && !Array.isArray(parsate.datornici))){
+    alert("Fișierul nu pare să fie un backup făcut din această aplicație.");
+    return;
+  }
+  const zona = document.getElementById("reset-zona");
+  zona.innerHTML = `
+    <span style="font-size:12.5px;color:var(--ink-faded);">Înlocuiești toate datele actuale cu cele din backup?</span>
+    <button class="buton-mic" id="confirma-restaurare-da" style="background:var(--pierdere);color:#fff;">Da, restaurează</button>
+    <button class="buton-mic" id="confirma-restaurare-nu" style="background:var(--segment-bg);color:var(--ink-faded);">Anulează</button>
+  `;
+  document.getElementById("confirma-restaurare-da").onclick = () => {
+    stare.produse = Array.isArray(parsate.produse) && parsate.produse.length ? parsate.produse : [produsGol()];
+    stare.datornici = Array.isArray(parsate.datornici) && parsate.datornici.length ? parsate.datornici : [datornicGol()];
+    stare.tema = (parsate.tema && TEME[parsate.tema]) ? parsate.tema : "clasic";
+    stare.curs = parsate.curs ? { eur: parsate.curs.eur || "", usd: parsate.curs.usd || "" } : { eur:"", usd:"" };
+    document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
+    randareTot();
+    salveaza();
+    zona.innerHTML = zonaResetNormala();
+    ataseazaReset();
+  };
+  document.getElementById("confirma-restaurare-nu").onclick = () => {
+    zona.innerHTML = zonaResetNormala();
+    ataseazaReset();
+  };
+}
+
 function zonaResetNormala(){
   return `<button class="buton-mic" id="btn-export" style="background:var(--segment-bg);color:var(--ink-faded);">⬇ Exportă CSV</button>
+    <button class="buton-mic" id="btn-backup" style="background:var(--segment-bg);color:var(--ink-faded);">💾 Backup complet</button>
+    <button class="buton-mic" id="btn-restaurare" style="background:var(--segment-bg);color:var(--ink-faded);">⤴ Restaurează backup</button>
     <button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>`;
 }
 
@@ -689,6 +842,23 @@ function ataseazaReset(){
   if(btn) btn.onclick = porneste_confirmare_reset;
   const exp = document.getElementById("btn-export");
   if(exp) exp.onclick = exportaCSV;
+  const bak = document.getElementById("btn-backup");
+  if(bak) bak.onclick = exportaBackup;
+  const res = document.getElementById("btn-restaurare");
+  const inputFisier = document.getElementById("input-restaurare");
+  if(res && inputFisier) res.onclick = () => inputFisier.click();
+}
+function inputRestaurareAsculta(){
+  const inputFisier = document.getElementById("input-restaurare");
+  if(!inputFisier) return;
+  inputFisier.addEventListener("change", (e) => {
+    const fisier = e.target.files[0];
+    if(!fisier) return;
+    const cititor = new FileReader();
+    cititor.onload = () => porneste_restaurare(cititor.result);
+    cititor.readAsText(fisier);
+    inputFisier.value = "";
+  });
 }
 function porneste_confirmare_reset(){
   const zona = document.getElementById("reset-zona");
@@ -711,12 +881,14 @@ function porneste_confirmare_reset(){
   };
 }
 
+
 // pornire
 incarca();
 document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
 randareTot();
 aplicaExtins();
 ataseazaReset();
+inputRestaurareAsculta();
 
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
