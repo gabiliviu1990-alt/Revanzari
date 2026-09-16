@@ -1,4 +1,4 @@
-const CACHE = "revanzari-v7";
+const CACHE = "revanzari-v8";
 const ASSETS = [
   "./index.html",
   "./manifest.json",

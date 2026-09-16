@@ -210,6 +210,27 @@ h1{ font-size:17px; font-weight:700; margin:0; letter-spacing:-0.2px; }
   border-radius:13px; padding:12px 0; font-size:14.5px; font-weight:600; font-family:inherit;
 }
 
+.convertor{ margin-top:20px; padding-top:16px; border-top:1px solid var(--card-border); }
+.convertor-titlu{ font-size:12.5px; font-weight:700; color:var(--ink-faded); margin-bottom:8px; }
+.convertor-rand{ display:flex; gap:8px; margin-bottom:10px; }
+.convertor-rand input{
+  flex:1; min-width:0; border:1px solid var(--input-border); background:var(--input-bg);
+  border-radius:10px; padding:10px; font-size:15.5px; color:var(--ink); outline:none; font-family:inherit;
+}
+.convertor-rand select{
+  border:1px solid var(--input-border); background:var(--input-bg); border-radius:10px;
+  padding:0 8px; font-size:14px; color:var(--ink); font-family:inherit; font-weight:600;
+}
+.convertor-rezultate{ display:flex; flex-direction:column; gap:6px; }
+.convertor-rezultate .cr-rand{
+  display:flex; justify-content:space-between; align-items:baseline;
+  background:var(--input-bg); border:1px solid var(--input-border); border-radius:10px;
+  padding:9px 12px; font-size:14px;
+}
+.convertor-rezultate .cr-eticheta{ color:var(--ink-faded); }
+.convertor-rezultate .cr-val{ font-weight:700; color:var(--accent); }
+.convertor-rezultate .cr-lipsa{ font-size:11.5px; color:var(--ink-soft); font-weight:400; }
+
 .segment{ display:flex; background:var(--segment-bg); border-radius:11px; padding:3px; gap:3px; }
 .segment button{
   flex:1; border:none; background:transparent; border-radius:8px; padding:8px 6px;
@@ -417,6 +438,19 @@ svg{ display:block; }
       <input type="number" inputmode="decimal" id="curs-usd" placeholder="ex: 4.65">
     </div>
     <button class="sheet-inchide" id="btn-inchide-curs">Salvează</button>
+
+    <div class="convertor">
+      <div class="convertor-titlu">Convertor rapid</div>
+      <div class="convertor-rand">
+        <input type="number" inputmode="decimal" id="conv-suma" placeholder="0" value="1">
+        <select id="conv-moneda">
+          <option value="RON">RON</option>
+          <option value="EUR" selected>EUR</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+      <div class="convertor-rezultate" id="conv-rezultate"></div>
+    </div>
   </div>
 </div>
 
@@ -734,6 +768,59 @@ document.getElementById("btn-inchide-teme").onclick = () => {
 document.getElementById("overlay-teme").onclick = (e) => {
   if(e.target.id === "overlay-teme") e.target.classList.remove("deschis");
 };
+
+document.getElementById("btn-curs").onclick = () => {
+  document.getElementById("curs-eur").value = stare.curs.eur || "";
+  document.getElementById("curs-usd").value = stare.curs.usd || "";
+  randareConvertor();
+  document.getElementById("overlay-curs").classList.add("deschis");
+};
+document.getElementById("btn-inchide-curs").onclick = () => {
+  stare.curs.eur = document.getElementById("curs-eur").value;
+  stare.curs.usd = document.getElementById("curs-usd").value;
+  randareTot();
+  salveaza();
+  document.getElementById("overlay-curs").classList.remove("deschis");
+};
+document.getElementById("overlay-curs").onclick = (e) => {
+  if(e.target.id === "overlay-curs") e.target.classList.remove("deschis");
+};
+["curs-eur", "curs-usd", "conv-suma", "conv-moneda"].forEach(id => {
+  document.getElementById(id).addEventListener("input", randareConvertor);
+  document.getElementById(id).addEventListener("change", randareConvertor);
+});
+
+function randareConvertor(){
+  const eur = nr(document.getElementById("curs-eur").value);
+  const usd = nr(document.getElementById("curs-usd").value);
+  const suma = nr(document.getElementById("conv-suma").value);
+  const moneda = document.getElementById("conv-moneda").value;
+  const cont = document.getElementById("conv-rezultate");
+
+  // valoarea sumei introduse, convertită mai întâi în lei
+  let sumaInLei;
+  if(moneda === "RON") sumaInLei = suma;
+  else if(moneda === "EUR") sumaInLei = suma * eur;
+  else sumaInLei = suma * usd;
+
+  const randuri = [];
+  if(moneda !== "RON"){
+    randuri.push({ eticheta: "RON", valoare: sumaInLei, gata: true });
+  }
+  if(moneda !== "EUR"){
+    randuri.push({ eticheta: "EUR", valoare: eur > 0 ? sumaInLei / eur : 0, gata: eur > 0 });
+  }
+  if(moneda !== "USD"){
+    randuri.push({ eticheta: "USD", valoare: usd > 0 ? sumaInLei / usd : 0, gata: usd > 0 });
+  }
+
+  cont.innerHTML = randuri.map(r => `
+    <div class="cr-rand">
+      <span class="cr-eticheta">${r.eticheta}</span>
+      <span class="cr-val">${r.gata ? r.valoare.toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2}) : '<span class="cr-lipsa">completează cursul</span>'}</span>
+    </div>
+  `).join("");
+}
 
 function aplicaExtins(){
   document.getElementById("sumar-detalii").style.display = stare.extins ? "block" : "none";
