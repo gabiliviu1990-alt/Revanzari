@@ -1,4 +1,4 @@
-const CACHE = "revanzari-v6";
+const CACHE = "revanzari-v1";
 const ASSETS = [
   "./index.html",
   "./manifest.json",
@@ -25,21 +25,6 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  const isPage = event.request.mode === "navigate" || event.request.destination === "document";
-
-  if (isPage) {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-          return response;
-        })
-        .catch(() => caches.match(event.request))
-    );
-    return;
-  }
-
   event.respondWith(
     caches.match(event.request).then((cached) => {
       return (
