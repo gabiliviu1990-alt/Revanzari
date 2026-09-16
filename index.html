@@ -135,17 +135,40 @@ h1{ font-size:19px; font-weight:700; margin:0; letter-spacing:-0.2px; }
 .status{ font-size:11px; color:var(--ink-soft); }
 .status.err{ color:var(--pierdere); }
 
-.teme-row{
-  display:flex; gap:8px; margin-bottom:12px; overflow-x:auto; padding-bottom:2px;
-  -webkit-overflow-scrolling:touch; scrollbar-width:none;
+.tema-bar{ display:flex; justify-content:center; margin-bottom:12px; }
+.btn-teme{
+  display:flex; align-items:center; gap:7px; border:1px solid var(--card-border);
+  background:var(--card); color:var(--ink-faded); border-radius:20px;
+  padding:6px 13px; font-size:12.5px; font-weight:600; font-family:inherit;
 }
-.teme-row::-webkit-scrollbar{ display:none; }
-.tema-btn{
-  width:30px; height:30px; border-radius:50%; border:2px solid transparent;
-  padding:2px; background:transparent; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+.tema-punct{ width:13px; height:13px; border-radius:50%; display:block; border:1px solid var(--card-border); }
+
+.overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:50;
+  display:none; align-items:flex-end;
 }
-.tema-btn.activ{ border-color:var(--accent); }
-.tema-swatch{ width:100%; height:100%; border-radius:50%; display:block; border:1px solid var(--card-border); }
+.overlay.deschis{ display:flex; }
+.sheet{
+  background:var(--bg); width:100%; border-top-left-radius:22px; border-top-right-radius:22px;
+  padding:18px 18px calc(env(safe-area-inset-bottom, 0px) + 18px);
+  max-height:75vh; overflow-y:auto;
+}
+.sheet h2{ font-size:16px; margin:0 0 4px; font-weight:700; color:var(--ink); }
+.sheet .sub{ font-size:12.5px; color:var(--ink-faded); margin:0 0 14px; }
+.teme-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tema-optiune{
+  display:flex; align-items:center; gap:10px; border:1.5px solid var(--card-border);
+  background:var(--card); border-radius:13px; padding:11px 12px; font-family:inherit;
+  font-size:13.5px; font-weight:600; color:var(--ink); text-align:left;
+}
+.tema-optiune.activ{ border-color:var(--accent); }
+.tema-optiune .swatch{
+  width:24px; height:24px; border-radius:50%; flex-shrink:0; border:1px solid var(--card-border);
+}
+.sheet-inchide{
+  width:100%; margin-top:14px; border:none; background:var(--ink); color:var(--bg);
+  border-radius:13px; padding:12px 0; font-size:14.5px; font-weight:600; font-family:inherit;
+}
 
 .segment{ display:flex; background:var(--segment-bg); border-radius:11px; padding:3px; gap:3px; }
 .segment button{
@@ -255,7 +278,13 @@ svg{ display:block; }
     <span id="status" class="status">salvat</span>
   </div>
 
-  <div class="teme-row" id="teme-row"></div>
+  <div class="tema-bar">
+    <button id="btn-teme" class="btn-teme">
+      <span class="tema-punct" id="tema-punct"></span>
+      <span id="tema-nume">Clasic</span>
+      <span style="opacity:.5;">▾</span>
+    </button>
+  </div>
 
   <div class="segment">
     <button data-tab="produse" class="activ"><span>Produse</span></button>
@@ -308,6 +337,15 @@ svg{ display:block; }
   </div>
 </footer>
 
+<div class="overlay" id="overlay-teme">
+  <div class="sheet">
+    <h2>Alege o temă</h2>
+    <p class="sub">Culorile se aplică imediat și se salvează.</p>
+    <div class="teme-grid" id="teme-grid"></div>
+    <button class="sheet-inchide" id="btn-inchide-teme">Gata</button>
+  </div>
+</div>
+
 <script>
 const CHEIE = "revanzari-date";
 const TEME = {
@@ -326,7 +364,7 @@ const TEME = {
 
 const uid = () => Math.random().toString(36).slice(2,9);
 const produsGol = () => ({ id:uid(), nume:"", pretAchizitie:"", pretVanzare:"", cantitate:"1", cheltuieli:"" });
-const datornicGol = () => ({ id:uid(), nume:"", suma:"", platit:false });
+const datornicGol = () => ({ id:uid(), nume:"", pentruCe:"", suma:"", platit:false });
 const nr = v => (v==="" || isNaN(parseFloat(v))) ? 0 : parseFloat(v);
 const lei = n => n.toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2}) + " lei";
 const leiScurt = n => n.toLocaleString("ro-RO",{minimumFractionDigits:0,maximumFractionDigits:0}) + " lei";
@@ -380,15 +418,23 @@ function randuriProduse(){
 }
 
 function randareTeme(){
-  const cont = document.getElementById("teme-row");
-  cont.innerHTML = "";
-  Object.entries(TEME).forEach(([cheie, tema]) => {
+  const tema = TEME[stare.tema] || TEME.clasic;
+  document.getElementById("tema-nume").textContent = tema.nume;
+  document.getElementById("tema-punct").style.background = tema.swatch[2];
+
+  const grid = document.getElementById("teme-grid");
+  grid.innerHTML = "";
+  Object.entries(TEME).forEach(([cheie, t]) => {
     const btn = document.createElement("button");
-    btn.className = "tema-btn" + (stare.tema === cheie ? " activ" : "");
-    btn.setAttribute("aria-label", tema.nume);
-    btn.innerHTML = `<span class="tema-swatch" style="background:conic-gradient(${tema.swatch[0]} 0deg 120deg, ${tema.swatch[1]} 120deg 240deg, ${tema.swatch[2]} 240deg 360deg);"></span>`;
-    btn.onclick = () => { stare.tema = cheie; document.documentElement.setAttribute("data-theme", cheie === "clasic" ? "" : cheie); randareTot(); salveaza(); };
-    cont.appendChild(btn);
+    btn.className = "tema-optiune" + (stare.tema === cheie ? " activ" : "");
+    btn.innerHTML = `<span class="swatch" style="background:conic-gradient(${t.swatch[0]} 0deg 120deg, ${t.swatch[1]} 120deg 240deg, ${t.swatch[2]} 240deg 360deg);"></span><span>${t.nume}</span>`;
+    btn.onclick = () => {
+      stare.tema = cheie;
+      document.documentElement.setAttribute("data-theme", cheie === "clasic" ? "" : cheie);
+      randareTeme();
+      salveaza();
+    };
+    grid.appendChild(btn);
   });
 }
 
@@ -451,6 +497,10 @@ function randareDatornici(){
         <button class="bifa ${d.platit ? "platit" : ""}" aria-label="Marchează plătit">${d.platit ? "✓" : ""}</button>
         <input class="input-nume" style="font-size:16px;text-decoration:${d.platit ? "line-through" : "none"};" placeholder="Nume" value="${escHtml(d.nume)}" data-field="nume">
         <button class="buton-sterge" aria-label="Șterge">✕</button>
+      </div>
+      <div class="suma-rand">
+        <label>Pentru ce</label>
+        <input type="text" placeholder="ex: parfum, haine" value="${escHtml(d.pentruCe)}" data-field="pentruCe">
       </div>
       <div class="suma-rand">
         <label>Suma datorată</label>
@@ -535,6 +585,16 @@ document.querySelectorAll(".segment button").forEach(btn => {
     document.getElementById("panel-datornici").classList.toggle("activ", tab === "datornici");
   };
 });
+document.getElementById("btn-teme").onclick = () => {
+  document.getElementById("overlay-teme").classList.add("deschis");
+};
+document.getElementById("btn-inchide-teme").onclick = () => {
+  document.getElementById("overlay-teme").classList.remove("deschis");
+};
+document.getElementById("overlay-teme").onclick = (e) => {
+  if(e.target.id === "overlay-teme") e.target.classList.remove("deschis");
+};
+
 document.getElementById("toggle-sumar").onclick = () => {
   stare.extins = !stare.extins;
   document.getElementById("sumar-corp").style.display = stare.extins ? "block" : "none";
