@@ -13,132 +13,116 @@
 <meta name="apple-mobile-web-app-title" content="Revânzări">
 <style>
 :root{
-  --bg:#F4F0E6; --card:#FFFFFF; --card-border:#ECE6D6;
-  --ink:#1C2A33; --ink-soft:#9A9481; --ink-faded:#7A7361;
-  --accent:#B7861F; --profit:#2F6F4E; --pierdere:#B0402F;
-  --footer-bg:#1C2A33; --footer-text:#F4F0E6; --footer-subtle:#9DAAB2;
-  --footer-line:#33414A; --footer-gold:#E3C27F; --footer-profit:#7FD8A6; --footer-pierdere:#E39385;
-  --input-bg:#FAF8F1; --input-border:#ECE6D6; --segment-bg:#E9E2CE; --danger-soft:#F7F3E9;
+  --bg:#FAF6EC; --card:#FFFFFF; --card-border:#EDE3C8;
+  --ink:#20242B; --ink-soft:#A79F86; --ink-faded:#7D735A;
+  --accent:#E3A518; --profit:#1A9850; --pierdere:#E43D3D;
+  --footer-bg:#20242B; --footer-text:#FAF6EC; --footer-subtle:#B7AF95;
+  --footer-line:#3A3F49; --footer-gold:#F2C94C; --footer-profit:#5FE8A0; --footer-pierdere:#FF8A75;
+  --input-bg:#FFFDF7; --input-border:#EDE3C8; --segment-bg:#F0E7CB; --danger-soft:#FBF6E9;
 }
 [data-theme="verde"]{
-  --bg:#EEF1E6; --card:#FFFFFF; --card-border:#DCE3D1;
-  --ink:#233A28; --ink-soft:#8B9A80; --ink-faded:#6C7A61;
-  --accent:#7C9A56; --profit:#3C7A4E; --pierdere:#B0402F;
-  --footer-bg:#233A28; --footer-text:#EEF1E6; --footer-subtle:#A9BFA0;
-  --footer-line:#33502F; --footer-gold:#D9C77A; --footer-profit:#9FD9A0; --footer-pierdere:#E3A08A;
-  --input-bg:#F7F8F1; --input-border:#DCE3D1; --segment-bg:#E2E7D6; --danger-soft:#F2F4EA;
+  --bg:#EAF9EE; --card:#FFFFFF; --card-border:#C7ECD3;
+  --ink:#0B3D22; --ink-soft:#6FB98D; --ink-faded:#3E8863;
+  --accent:#12B45A; --profit:#0EA858; --pierdere:#E43D3D;
+  --footer-bg:#0B3D22; --footer-text:#EAF9EE; --footer-subtle:#8FCBAA;
+  --footer-line:#175937; --footer-gold:#F2C94C; --footer-profit:#6CF0A6; --footer-pierdere:#FF8A75;
+  --input-bg:#F3FCF5; --input-border:#C7ECD3; --segment-bg:#D6F2DF; --danger-soft:#EFFBF2;
 }
 [data-theme="ocean"]{
-  --bg:#E9F0F1; --card:#FFFFFF; --card-border:#D3E3E5;
-  --ink:#16323A; --ink-soft:#8AA3A8; --ink-faded:#5F7C81;
-  --accent:#3B8FA0; --profit:#2E7D5F; --pierdere:#B0402F;
-  --footer-bg:#16323A; --footer-text:#E9F0F1; --footer-subtle:#9BB5BA;
-  --footer-line:#254A54; --footer-gold:#D9BE73; --footer-profit:#8AD8C4; --footer-pierdere:#E39385;
-  --input-bg:#F3F8F9; --input-border:#D3E3E5; --segment-bg:#D9E7E9; --danger-soft:#EEF5F6;
-}
-[data-theme="corai"]{
-  --bg:#F7EAE2; --card:#FFFFFF; --card-border:#EBD8C9;
-  --ink:#3A2620; --ink-soft:#AB8F80; --ink-faded:#8A6C5D;
-  --accent:#C97B5A; --profit:#4F7A4E; --pierdere:#B0402F;
-  --footer-bg:#3A2620; --footer-text:#F7EAE2; --footer-subtle:#C7AA99;
-  --footer-line:#573A31; --footer-gold:#E3B677; --footer-profit:#A8D19C; --footer-pierdere:#E9A28F;
-  --input-bg:#FBF3EE; --input-border:#EBD8C9; --segment-bg:#F0DFD3; --danger-soft:#FBF0E9;
+  --bg:#E6F5FC; --card:#FFFFFF; --card-border:#BFE4F5;
+  --ink:#053050; --ink-soft:#6FA9C7; --ink-faded:#3A7DA0;
+  --accent:#0EA5E9; --profit:#0FAF6F; --pierdere:#E43D3D;
+  --footer-bg:#053050; --footer-text:#E6F5FC; --footer-subtle:#8DBEDA;
+  --footer-line:#0E4A75; --footer-gold:#F2C94C; --footer-profit:#5EE0C4; --footer-pierdere:#FF8A75;
+  --input-bg:#F1FAFE; --input-border:#BFE4F5; --segment-bg:#D3EDF9; --danger-soft:#EBF8FD;
 }
 [data-theme="intunecat"]{
-  --bg:#14181D; --card:#1E242B; --card-border:#2A323B;
-  --ink:#EDEFF2; --ink-soft:#7C8896; --ink-faded:#98A2AD;
-  --accent:#C9A227; --profit:#5FAE7F; --pierdere:#D9705C;
-  --footer-bg:#0B0E12; --footer-text:#EDEFF2; --footer-subtle:#7C8896;
-  --footer-line:#262D35; --footer-gold:#D9BE73; --footer-profit:#7FD8A6; --footer-pierdere:#E39385;
-  --input-bg:#181D23; --input-border:#2A323B; --segment-bg:#20262D; --danger-soft:#20262D;
+  --bg:#12151A; --card:#1C2129; --card-border:#2B323C;
+  --ink:#F1F3F6; --ink-soft:#7E8B9B; --ink-faded:#A6B0BC;
+  --accent:#F2B705; --profit:#2FD97C; --pierdere:#FF5C4D;
+  --footer-bg:#0A0D11; --footer-text:#F1F3F6; --footer-subtle:#8492A2;
+  --footer-line:#262E38; --footer-gold:#F2C94C; --footer-profit:#54F0A0; --footer-pierdere:#FF8A75;
+  --input-bg:#171B21; --input-border:#2B323C; --segment-bg:#20262E; --danger-soft:#20262E;
 }
 [data-theme="mov"]{
-  --bg:#F0EBF5; --card:#FFFFFF; --card-border:#E0D5EB;
-  --ink:#2E2140; --ink-soft:#9C8CB0; --ink-faded:#7A6890;
-  --accent:#8A5FB5; --profit:#3C7A5E; --pierdere:#B0402F;
-  --footer-bg:#2E2140; --footer-text:#F0EBF5; --footer-subtle:#B3A3C7;
-  --footer-line:#463359; --footer-gold:#E0BE7C; --footer-profit:#9FD9B8; --footer-pierdere:#E39CA0;
-  --input-bg:#FAF6FD; --input-border:#E0D5EB; --segment-bg:#E5DCEF; --danger-soft:#F6F0FA;
+  --bg:#F3EBFC; --card:#FFFFFF; --card-border:#E1CCF7;
+  --ink:#2E1065; --ink-soft:#AD8FD6; --ink-faded:#7E56B8;
+  --accent:#9333EA; --profit:#12A452; --pierdere:#E43D3D;
+  --footer-bg:#2E1065; --footer-text:#F3EBFC; --footer-subtle:#C0A7E3;
+  --footer-line:#46208A; --footer-gold:#F2C94C; --footer-profit:#78EBAE; --footer-pierdere:#FF8A75;
+  --input-bg:#F9F4FE; --input-border:#E1CCF7; --segment-bg:#EBDBFA; --danger-soft:#F7F0FD;
 }
 [data-theme="grafit"]{
-  --bg:#EDEEF0; --card:#FFFFFF; --card-border:#DDDFE3;
-  --ink:#22262B; --ink-soft:#93989F; --ink-faded:#6B7178;
-  --accent:#5B6470; --profit:#2F7050; --pierdere:#AB4030;
-  --footer-bg:#22262B; --footer-text:#EDEEF0; --footer-subtle:#9BA1A9;
-  --footer-line:#343A41; --footer-gold:#D5C084; --footer-profit:#86CFA5; --footer-pierdere:#E0958A;
-  --input-bg:#F7F8F9; --input-border:#DDDFE3; --segment-bg:#E1E3E7; --danger-soft:#F4F1F0;
-}
-[data-theme="miere"]{
-  --bg:#FBF3DC; --card:#FFFFFF; --card-border:#F0E2BE;
-  --ink:#3D2E12; --ink-soft:#B3A075; --ink-faded:#8A7644;
-  --accent:#D8A31C; --profit:#4C7A3A; --pierdere:#B24A26;
-  --footer-bg:#3D2E12; --footer-text:#FBF3DC; --footer-subtle:#C4B189;
-  --footer-line:#5A4620; --footer-gold:#F0CD7A; --footer-profit:#B4D98C; --footer-pierdere:#E8A47F;
-  --input-bg:#FEFAEF; --input-border:#F0E2BE; --segment-bg:#F4E8C9; --danger-soft:#FCF4E4;
-}
-[data-theme="roz"]{
-  --bg:#FBECF1; --card:#FFFFFF; --card-border:#F2D8E1;
-  --ink:#3D1E2B; --ink-soft:#BC94A5; --ink-faded:#8F6274;
-  --accent:#C9587F; --profit:#3F7A5C; --pierdere:#B0402F;
-  --footer-bg:#3D1E2B; --footer-text:#FBECF1; --footer-subtle:#C9A4B3;
-  --footer-line:#5B3143; --footer-gold:#E8BE85; --footer-profit:#A2D6B4; --footer-pierdere:#EC9BA4;
-  --input-bg:#FDF6F9; --input-border:#F2D8E1; --segment-bg:#F5E2E9; --danger-soft:#FBF0F3;
+  --bg:#EEF1F5; --card:#FFFFFF; --card-border:#D6DCE5;
+  --ink:#161B22; --ink-soft:#8D97A6; --ink-faded:#5B6675;
+  --accent:#2563EB; --profit:#12A452; --pierdere:#E43D3D;
+  --footer-bg:#161B22; --footer-text:#EEF1F5; --footer-subtle:#96A1B0;
+  --footer-line:#2A323D; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
+  --input-bg:#F7F9FB; --input-border:#D6DCE5; --segment-bg:#E3E7EC; --danger-soft:#F2EDEC;
 }
 [data-theme="noapte"]{
-  --bg:#101827; --card:#1A2438; --card-border:#26334A;
-  --ink:#E4EAF5; --ink-soft:#7385A3; --ink-faded:#94A3BC;
-  --accent:#5B8DEF; --profit:#4FA97E; --pierdere:#D9705C;
-  --footer-bg:#0A1120; --footer-text:#E4EAF5; --footer-subtle:#7385A3;
-  --footer-line:#233048; --footer-gold:#D9BE73; --footer-profit:#7FD8A6; --footer-pierdere:#E39385;
-  --input-bg:#151E30; --input-border:#26334A; --segment-bg:#1D283D; --danger-soft:#1D283D;
+  --bg:#0C1526; --card:#16223A; --card-border:#233252;
+  --ink:#E7EDFB; --ink-soft:#6E85AC; --ink-faded:#93A6C6;
+  --accent:#3B82F6; --profit:#2FD97C; --pierdere:#FF5C4D;
+  --footer-bg:#080E1C; --footer-text:#E7EDFB; --footer-subtle:#7387AD;
+  --footer-line:#1D2C4B; --footer-gold:#F2C94C; --footer-profit:#54F0A0; --footer-pierdere:#FF8A75;
+  --input-bg:#111B30; --input-border:#233252; --segment-bg:#192544; --danger-soft:#192544;
 }
 [data-theme="padure"]{
-  --bg:#0F1A14; --card:#18251D; --card-border:#26362C;
-  --ink:#E3EDE5; --ink-soft:#75907F; --ink-faded:#95AC9C;
-  --accent:#6FAE6B; --profit:#5FBE84; --pierdere:#D9705C;
-  --footer-bg:#09120C; --footer-text:#E3EDE5; --footer-subtle:#75907F;
-  --footer-line:#213028; --footer-gold:#D9C77A; --footer-profit:#93DCA5; --footer-pierdere:#E39385;
-  --input-bg:#141F18; --input-border:#26362C; --segment-bg:#1C2A21; --danger-soft:#1C2A21;
+  --bg:#0B1712; --card:#15251C; --card-border:#22392C;
+  --ink:#E4F3E9; --ink-soft:#6C9179; --ink-faded:#93B49F;
+  --accent:#22C55E; --profit:#2FD97C; --pierdere:#FF5C4D;
+  --footer-bg:#08120D; --footer-text:#E4F3E9; --footer-subtle:#729480;
+  --footer-line:#1D3226; --footer-gold:#F2C94C; --footer-profit:#5FF0A6; --footer-pierdere:#FF8A75;
+  --input-bg:#101E17; --input-border:#22392C; --segment-bg:#182B21; --danger-soft:#182B21;
 }
 [data-theme="rosu"]{
-  --bg:#FDEBE8; --card:#FFFFFF; --card-border:#F6CFC6;
-  --ink:#3A140C; --ink-soft:#C99284; --ink-faded:#A5624F;
-  --accent:#E33F22; --profit:#2F7A4E; --pierdere:#B0402F;
-  --footer-bg:#2A0E0A; --footer-text:#FDEBE8; --footer-subtle:#CBA096;
-  --footer-line:#48211A; --footer-gold:#F0B95E; --footer-profit:#8AD8A6; --footer-pierdere:#F4917A;
-  --input-bg:#FFF5F2; --input-border:#F6CFC6; --segment-bg:#FADAD2; --danger-soft:#FDF1EE;
+  --bg:#FDECEA; --card:#FFFFFF; --card-border:#F7CEC7;
+  --ink:#420E08; --ink-soft:#C98A7C; --ink-faded:#A15243;
+  --accent:#EF4444; --profit:#12A452; --pierdere:#DC2626;
+  --footer-bg:#2E0A06; --footer-text:#FDECEA; --footer-subtle:#CB9A8E;
+  --footer-line:#4E1912; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
+  --input-bg:#FFF4F2; --input-border:#F7CEC7; --segment-bg:#FBDAD3; --danger-soft:#FDF0EE;
 }
 [data-theme="portocaliu"]{
-  --bg:#FFF0DF; --card:#FFFFFF; --card-border:#F7D7AE;
-  --ink:#3D2506; --ink-soft:#C9A26D; --ink-faded:#A47A3C;
-  --accent:#F2790A; --profit:#2F7A4E; --pierdere:#B0402F;
-  --footer-bg:#2E1706; --footer-text:#FFF0DF; --footer-subtle:#D3AC85;
-  --footer-line:#4C2C0E; --footer-gold:#F5C862; --footer-profit:#8AD8A6; --footer-pierdere:#F0977A;
-  --input-bg:#FFF8EF; --input-border:#F7D7AE; --segment-bg:#FBE3C4; --danger-soft:#FDF2E4;
+  --bg:#FFF1E2; --card:#FFFFFF; --card-border:#FAD9AC;
+  --ink:#421F02; --ink-soft:#CBA26A; --ink-faded:#A87536;
+  --accent:#FB923C; --profit:#12A452; --pierdere:#E43D3D;
+  --footer-bg:#301A05; --footer-text:#FFF1E2; --footer-subtle:#D3AC80;
+  --footer-line:#4E2E0C; --footer-gold:#FFD166; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
+  --input-bg:#FFF8ED; --input-border:#FAD9AC; --segment-bg:#FCE4C0; --danger-soft:#FEF3E5;
 }
 [data-theme="turcoaz"]{
-  --bg:#E1F8F5; --card:#FFFFFF; --card-border:#B9E9E1;
-  --ink:#063330; --ink-soft:#7FB6AE; --ink-faded:#3F8A80;
-  --accent:#06B6A6; --profit:#1F9D6C; --pierdere:#C4432D;
-  --footer-bg:#052E2B; --footer-text:#E1F8F5; --footer-subtle:#7FBAB1;
-  --footer-line:#0E4A44; --footer-gold:#E7C568; --footer-profit:#6FE0B8; --footer-pierdere:#F0937C;
-  --input-bg:#EFFBF9; --input-border:#B9E9E1; --segment-bg:#CBF0E9; --danger-soft:#EAF9F6;
+  --bg:#DEFAF5; --card:#FFFFFF; --card-border:#AEEEE1;
+  --ink:#04332E; --ink-soft:#6BB7A9; --ink-faded:#358C7C;
+  --accent:#06D6A0; --profit:#0FA968; --pierdere:#E43D3D;
+  --footer-bg:#04332E; --footer-text:#DEFAF5; --footer-subtle:#7AC0B0;
+  --footer-line:#0B4F46; --footer-gold:#F2C94C; --footer-profit:#5FF0C0; --footer-pierdere:#FF8A75;
+  --input-bg:#EAFBF8; --input-border:#AEEEE1; --segment-bg:#C4F2E7; --danger-soft:#E7FAF6;
 }
 [data-theme="electric"]{
-  --bg:#EFEAFE; --card:#FFFFFF; --card-border:#D5C7FB;
-  --ink:#1E1240; --ink-soft:#A697D6; --ink-faded:#7B65B8;
-  --accent:#6C3CE9; --profit:#2F8A5E; --pierdere:#C4432D;
-  --footer-bg:#180F33; --footer-text:#EFEAFE; --footer-subtle:#AB9DDD;
-  --footer-line:#2E2058; --footer-gold:#E7C568; --footer-profit:#83E0AE; --footer-pierdere:#F0937C;
-  --input-bg:#F6F3FE; --input-border:#D5C7FB; --segment-bg:#E2D9FC; --danger-soft:#F4F0FE;
+  --bg:#EEEAFE; --card:#FFFFFF; --card-border:#D2C2FB;
+  --ink:#1B1140; --ink-soft:#9C8CD9; --ink-faded:#6E56C4;
+  --accent:#7C3AED; --profit:#12A452; --pierdere:#E43D3D;
+  --footer-bg:#160C33; --footer-text:#EEEAFE; --footer-subtle:#A996E0;
+  --footer-line:#2A1C57; --footer-gold:#F2C94C; --footer-profit:#7BEBB2; --footer-pierdere:#FF8A75;
+  --input-bg:#F5F2FE; --input-border:#D2C2FB; --segment-bg:#E2D8FC; --danger-soft:#F2EEFE;
 }
-[data-theme="lamaie"]{
-  --bg:#FBF7D8; --card:#FFFFFF; --card-border:#EDE29C;
-  --ink:#332E04; --ink-soft:#B3A85E; --ink-faded:#8A8130;
-  --accent:#C9B408; --profit:#2F7A4E; --pierdere:#B0402F;
-  --footer-bg:#2E2A05; --footer-text:#FBF7D8; --footer-subtle:#C7BC79;
-  --footer-line:#4C440E; --footer-gold:#F0DB6E; --footer-profit:#8AD8A6; --footer-pierdere:#E89A7E;
-  --input-bg:#FDFBEC; --input-border:#EDE29C; --segment-bg:#F5EDB0; --danger-soft:#FBF8E2;
+[data-theme="fucsia"]{
+  --bg:#FDEAF3; --card:#FFFFFF; --card-border:#F8C9E1;
+  --ink:#420A28; --ink-soft:#CB84A9; --ink-faded:#A14E7A;
+  --accent:#EC4899; --profit:#12A452; --pierdere:#E43D3D;
+  --footer-bg:#33071F; --footer-text:#FDEAF3; --footer-subtle:#D392B4;
+  --footer-line:#4F1132; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
+  --input-bg:#FFF4F9; --input-border:#F8C9E1; --segment-bg:#FBD9EB; --danger-soft:#FDF0F6;
+}
+[data-theme="lime"]{
+  --bg:#F3FBDC; --card:#FFFFFF; --card-border:#DFEFA3;
+  --ink:#273107; --ink-soft:#A3B266; --ink-faded:#748239;
+  --accent:#A3E635; --profit:#12A452; --pierdere:#E43D3D;
+  --footer-bg:#232B08; --footer-text:#F3FBDC; --footer-subtle:#B9C784;
+  --footer-line:#3A4611; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
+  --input-bg:#F9FDEE; --input-border:#DFEFA3; --segment-bg:#ECF7C3; --danger-soft:#F7FBE9;
 }
 
 *{box-sizing:border-box; max-width:100%;}
@@ -585,22 +569,20 @@ svg{ display:block; }
 <script>
 const CHEIE = "revanzari-date";
 const TEME = {
-  clasic:{ nume:"Clasic", swatch:["#F4F0E6","#1C2A33","#B7861F"] },
-  verde:{ nume:"Verde", swatch:["#EEF1E6","#233A28","#7C9A56"] },
-  ocean:{ nume:"Ocean", swatch:["#E9F0F1","#16323A","#3B8FA0"] },
-  corai:{ nume:"Corai", swatch:["#F7EAE2","#3A2620","#C97B5A"] },
-  mov:{ nume:"Mov", swatch:["#F0EBF5","#2E2140","#8A5FB5"] },
-  miere:{ nume:"Miere", swatch:["#FBF3DC","#3D2E12","#D8A31C"] },
-  roz:{ nume:"Roz", swatch:["#FBECF1","#3D1E2B","#C9587F"] },
-  grafit:{ nume:"Grafit", swatch:["#EDEEF0","#22262B","#5B6470"] },
-  intunecat:{ nume:"Întunecat", swatch:["#14181D","#EDEFF2","#C9A227"] },
-  noapte:{ nume:"Noapte", swatch:["#101827","#E4EAF5","#5B8DEF"] },
-  padure:{ nume:"Pădure", swatch:["#0F1A14","#E3EDE5","#6FAE6B"] },
-  rosu:{ nume:"Roșu", swatch:["#FDEBE8","#3A140C","#E33F22"] },
-  portocaliu:{ nume:"Portocaliu", swatch:["#FFF0DF","#3D2506","#F2790A"] },
-  turcoaz:{ nume:"Turcoaz", swatch:["#E1F8F5","#063330","#06B6A6"] },
-  electric:{ nume:"Electric", swatch:["#EFEAFE","#1E1240","#6C3CE9"] },
-  lamaie:{ nume:"Lămâie", swatch:["#FBF7D8","#332E04","#C9B408"] },
+  clasic:{ nume:"Clasic", swatch:["#FAF6EC","#20242B","#E3A518"] },
+  verde:{ nume:"Verde", swatch:["#EAF9EE","#0B3D22","#12B45A"] },
+  ocean:{ nume:"Ocean", swatch:["#E6F5FC","#053050","#0EA5E9"] },
+  mov:{ nume:"Mov", swatch:["#F3EBFC","#2E1065","#9333EA"] },
+  grafit:{ nume:"Grafit", swatch:["#EEF1F5","#161B22","#2563EB"] },
+  intunecat:{ nume:"Întunecat", swatch:["#12151A","#F1F3F6","#F2B705"] },
+  noapte:{ nume:"Noapte", swatch:["#0C1526","#E7EDFB","#3B82F6"] },
+  padure:{ nume:"Pădure", swatch:["#0B1712","#E4F3E9","#22C55E"] },
+  rosu:{ nume:"Roșu", swatch:["#FDECEA","#420E08","#EF4444"] },
+  portocaliu:{ nume:"Portocaliu", swatch:["#FFF1E2","#421F02","#FB923C"] },
+  turcoaz:{ nume:"Turcoaz", swatch:["#DEFAF5","#04332E","#06D6A0"] },
+  electric:{ nume:"Electric", swatch:["#EEEAFE","#1B1140","#7C3AED"] },
+  fucsia:{ nume:"Fucsia", swatch:["#FDEAF3","#420A28","#EC4899"] },
+  lime:{ nume:"Lime", swatch:["#F3FBDC","#273107","#A3E635"] },
 };
 
 const uid = () => Math.random().toString(36).slice(2,9);
