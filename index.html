@@ -2,10 +2,10 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Revânzări</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#F4F0E6">
+<meta name="theme-color" content="#F4F0E6" id="meta-theme-color">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -272,6 +272,7 @@ main{
   width:60px; border:1px solid var(--input-border); background:var(--input-bg); border-radius:8px;
   padding:5px 7px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none;
 }
+.factura-profit-preview{ font-size:13px; margin-top:9px; min-height:17px; }
 .factura-sterge{
   flex-shrink:0; border:none; background:transparent; color:var(--ink-soft); font-size:14px;
   width:20px; height:20px; margin-top:2px;
@@ -594,7 +595,7 @@ svg{ display:block; }
 <div class="overlay" id="overlay-factura">
   <div class="sheet">
     <h2>Scanează factură</h2>
-    <p class="sub">Fă o poză facturii sau alege una din galerie. Caut doar totalul de pe factură — îl adaugi ca un singur produs, apoi pui tu denumirea și, dacă vrei, prețul de vânzare, ca să vezi câștigul. Prima scanare are nevoie de internet; după aceea funcționează și offline.</p>
+    <p class="sub">Fă o poză facturii sau alege una din galerie. Caut doar totalul de plată — pui denumirea și cu cât vinzi marfa, ca să vezi profitul pe loc. Prima scanare are nevoie de internet; după aceea funcționează și offline.</p>
     <div class="factura-status" id="factura-status"></div>
     <div class="factura-rezultate" id="factura-rezultate"></div>
     <div class="factura-actiuni" id="factura-actiuni" style="display:none;">
@@ -656,22 +657,37 @@ function parseNumRo(str){
   return parseFloat(str);
 }
 
+function numereDinLinie(linie){
+  return (linie.match(/-?\d[\d.,]*\d|\d/g) || [])
+    .map(parseNumRo)
+    .filter(v => !isNaN(v) && v > 0);
+}
+
 function parseFacturaTotal(text){
   const t = String(text||"");
   const linii = t.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  const CUVANT_TOTAL = /(total\s*(de\s*plat[ăa])?|valoare\s*total[ăa]|sum[ăa]\s*total[ăa]|de\s*plat[ăa]|total\s*factur[ăa])/i;
+
+  // 1) prioritate maximă: linia cu "total plată / total de plată" —
+  // e suma pe care chiar ai achitat-o, indiferent câte alte "total"-uri
+  // (subtotal fără TVA, valoare TVA etc.) mai apar pe factură.
+  const TOTAL_PLATA = /total\s*(de\s*)?plat[ăa]/i;
+  for(const linie of linii){
+    if(TOTAL_PLATA.test(linie)){
+      const numere = numereDinLinie(linie);
+      if(numere.length) return Math.max(...numere);
+    }
+  }
+
+  // 2) fallback: orice linie care conține "total" / "valoare totală" / "sumă totală"
+  const CUVANT_TOTAL = /(total|valoare\s*total[ăa]|sum[ăa]\s*total[ăa])/i;
   const candidati = [];
   linii.forEach(linie => {
-    if(CUVANT_TOTAL.test(linie)){
-      const numere = linie.match(/-?\d[\d.,]*\d|\d/g) || [];
-      numere.forEach(n => {
-        const v = parseNumRo(n);
-        if(!isNaN(v) && v > 0) candidati.push(v);
-      });
-    }
+    if(CUVANT_TOTAL.test(linie)) candidati.push(...numereDinLinie(linie));
   });
   if(candidati.length) return Math.max(...candidati);
-  const toate = (t.match(/-?\d[\d.,]*\d|\d/g) || []).map(parseNumRo).filter(v => !isNaN(v) && v > 0);
+
+  // 3) ultim fallback: cel mai mare număr găsit în tot textul
+  const toate = numereDinLinie(t);
   return toate.length ? Math.max(...toate) : null;
 }
 
@@ -734,6 +750,12 @@ function randuriProduse(){
   });
 }
 
+function actualizeazaMetaTema(){
+  const tema = TEME[stare.tema] || TEME.clasic;
+  const meta = document.getElementById("meta-theme-color");
+  if(meta) meta.setAttribute("content", tema.swatch[0]);
+}
+
 function randareTeme(){
   const tema = TEME[stare.tema] || TEME.clasic;
   document.getElementById("tema-nume").textContent = tema.nume;
@@ -748,6 +770,7 @@ function randareTeme(){
     btn.onclick = () => {
       stare.tema = cheie;
       document.documentElement.setAttribute("data-theme", cheie === "clasic" ? "" : cheie);
+      actualizeazaMetaTema();
       randareTeme();
       salveaza();
     };
@@ -1022,10 +1045,29 @@ function randFacturaTotal(total){
       <input type="text" class="f-nume" placeholder="Denumire (ex: Marfă furnizor X)">
       <div class="factura-sub">
         <div class="f-mini"><label>Total investit</label><input type="number" inputmode="decimal" class="f-pret" value="${total!=null?total.toFixed(2):""}"></div>
+        <div class="f-mini"><label>Vând cu</label><input type="number" inputmode="decimal" class="f-vanzare" placeholder="0"></div>
       </div>
+      <div class="factura-profit-preview" id="factura-profit-preview"></div>
     </div>
   `;
   rezultateFactura.appendChild(div);
+  div.querySelector(".f-pret").addEventListener("input", actualizeazaPreviewFactura);
+  div.querySelector(".f-vanzare").addEventListener("input", actualizeazaPreviewFactura);
+  actualizeazaPreviewFactura();
+}
+
+function actualizeazaPreviewFactura(){
+  const preview = document.getElementById("factura-profit-preview");
+  const rand = rezultateFactura.querySelector(".factura-rand");
+  if(!preview || !rand) return;
+  const vanzareStr = rand.querySelector(".f-vanzare").value;
+  if(vanzareStr === ""){ preview.innerHTML = ""; return; }
+  const achizitie = nr(rand.querySelector(".f-pret").value);
+  const vanzare = nr(vanzareStr);
+  const profit = vanzare - achizitie;
+  const marja = vanzare > 0 ? (profit/vanzare)*100 : 0;
+  const culoare = profit > 0 ? "var(--profit)" : profit < 0 ? "var(--pierdere)" : "var(--ink-soft)";
+  preview.innerHTML = `Profit estimat: <b class="mono" style="color:${culoare};">${profit>=0?"+":""}${lei(profit)}</b> <span style="color:var(--ink-faded);">(${marja.toFixed(1)}%)</span>`;
 }
 
 document.getElementById("btn-scaneaza-factura").onclick = () => {
@@ -1077,9 +1119,11 @@ document.getElementById("btn-factura-adauga").onclick = () => {
   if(!rand) return;
   const nume = rand.querySelector(".f-nume").value.trim() || "Marfă din factură";
   const pret = rand.querySelector(".f-pret").value || "";
+  const vanzare = rand.querySelector(".f-vanzare").value || "";
   const p = produsGol();
   p.nume = nume;
   p.pretAchizitie = pret;
+  p.pretVanzare = vanzare;
   p.cantitate = "1";
   p.stoc = "1";
   stare.produse.unshift(p);
@@ -1337,6 +1381,7 @@ function porneste_restaurare(fisierText){
     stare.tema = (parsate.tema && TEME[parsate.tema]) ? parsate.tema : "clasic";
     stare.curs = parsate.curs ? { eur: parsate.curs.eur || "", usd: parsate.curs.usd || "" } : { eur:"", usd:"" };
     document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
+    actualizeazaMetaTema();
     randareTot();
     salveaza();
     zona.innerHTML = zonaResetNormala();
@@ -1403,6 +1448,7 @@ function porneste_confirmare_reset(){
 // pornire
 incarca();
 document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
+actualizeazaMetaTema();
 randareTot();
 aplicaExtins();
 ataseazaReset();
