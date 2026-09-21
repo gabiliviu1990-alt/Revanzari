@@ -404,6 +404,12 @@ footer{
   flex-shrink:0; background:var(--footer-bg); color:var(--footer-text);
   border-top-left-radius:18px; border-top-right-radius:18px; box-shadow:0 -4px 20px rgba(0,0,0,.18);
   padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6px);
+  position:relative;
+}
+footer::after{
+  content:""; position:fixed; left:0; right:0; bottom:0;
+  height:calc(env(safe-area-inset-bottom, 0px) + 2px);
+  background:var(--footer-bg); pointer-events:none;
 }
 #toggle-sumar{
   width:100%; border:none; background:transparent; color:var(--footer-text); padding:8px 18px 1px;
