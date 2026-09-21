@@ -265,7 +265,7 @@ main{
   width:100%; border:none; background:transparent; outline:none; font-size:14.5px; font-weight:600;
   color:var(--ink); font-family:inherit; padding:0;
 }
-.factura-sub{ display:flex; gap:12px; margin-top:5px; }
+.factura-sub{ display:flex; flex-wrap:wrap; gap:10px 12px; margin-top:5px; }
 .f-mini{ display:flex; align-items:center; gap:5px; }
 .f-mini label{ font-size:10.5px; color:var(--ink-faded); }
 .f-mini input{
@@ -403,27 +403,27 @@ main{
 footer{
   flex-shrink:0; background:var(--footer-bg); color:var(--footer-text);
   border-top-left-radius:18px; border-top-right-radius:18px; box-shadow:0 -4px 20px rgba(0,0,0,.18);
-  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px);
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6px);
 }
 #toggle-sumar{
-  width:100%; border:none; background:transparent; color:var(--footer-text); padding:10px 18px 2px;
+  width:100%; border:none; background:transparent; color:var(--footer-text); padding:8px 18px 1px;
   display:flex; align-items:center; justify-content:space-between; font-family:inherit;
 }
-#eticheta-sumar{ font-size:11.5px; color:var(--footer-subtle); }
-.sumar-corp{ padding:0 18px 10px; }
-#profit-total{ font-size:23px; font-weight:700; margin-bottom:0; }
-#profit-total.cu-detalii{ margin-bottom:10px; }
-.sumar-mini{ display:flex; gap:14px; font-size:12px; color:var(--footer-subtle); margin-top:3px; }
+#eticheta-sumar{ font-size:11px; color:var(--footer-subtle); }
+.sumar-corp{ padding:0 18px 8px; }
+#profit-total{ font-size:20px; font-weight:700; margin-bottom:0; }
+#profit-total.cu-detalii{ margin-bottom:7px; }
+.sumar-mini{ display:flex; gap:14px; font-size:11.5px; color:var(--footer-subtle); margin-top:2px; }
 .sumar-mini span b{ color:var(--footer-text); font-weight:600; }
-.sumar-grid{ display:grid; grid-template-columns:1fr 1fr; gap:7px 14px; }
-.sumar-grid .lbl{ font-size:10.5px; color:var(--footer-subtle); }
-.sumar-grid .val{ font-size:13.5px; font-weight:600; }
+.sumar-grid{ display:grid; grid-template-columns:1fr 1fr; gap:5px 14px; }
+.sumar-grid .lbl{ font-size:10px; color:var(--footer-subtle); }
+.sumar-grid .val{ font-size:12.5px; font-weight:600; }
 .incasat-linie{
-  margin-top:9px; padding-top:9px; border-top:1px solid var(--footer-line);
+  margin-top:6px; padding-top:6px; border-top:1px solid var(--footer-line);
   display:flex; justify-content:space-between; align-items:center;
 }
-.incasat-linie .lbl{ font-size:11.5px; color:var(--footer-subtle); }
-.incasat-linie .val{ font-size:14.5px; font-weight:700; color:var(--footer-gold); }
+.incasat-linie .lbl{ font-size:11px; color:var(--footer-subtle); }
+.incasat-linie .val{ font-size:13.5px; font-weight:700; color:var(--footer-gold); }
 
 svg{ display:block; }
 
@@ -696,7 +696,7 @@ let stare = {
   curs:{ eur:"", usd:"" },
   datornici:[datornicGol()],
   tema:"clasic",
-  extins:true,
+  extins:false,
   parola:"",
 };
 
@@ -1045,13 +1045,15 @@ function randFacturaTotal(total){
       <input type="text" class="f-nume" placeholder="Denumire (ex: Marfă furnizor X)">
       <div class="factura-sub">
         <div class="f-mini"><label>Total investit</label><input type="number" inputmode="decimal" class="f-pret" value="${total!=null?total.toFixed(2):""}"></div>
-        <div class="f-mini"><label>Vând cu</label><input type="number" inputmode="decimal" class="f-vanzare" placeholder="0"></div>
+        <div class="f-mini"><label>Bucăți</label><input type="number" inputmode="decimal" class="f-bucati" value="1" min="1"></div>
+        <div class="f-mini"><label>Vând cu / buc</label><input type="number" inputmode="decimal" class="f-vanzare" placeholder="0"></div>
       </div>
       <div class="factura-profit-preview" id="factura-profit-preview"></div>
     </div>
   `;
   rezultateFactura.appendChild(div);
   div.querySelector(".f-pret").addEventListener("input", actualizeazaPreviewFactura);
+  div.querySelector(".f-bucati").addEventListener("input", actualizeazaPreviewFactura);
   div.querySelector(".f-vanzare").addEventListener("input", actualizeazaPreviewFactura);
   actualizeazaPreviewFactura();
 }
@@ -1062,12 +1064,14 @@ function actualizeazaPreviewFactura(){
   if(!preview || !rand) return;
   const vanzareStr = rand.querySelector(".f-vanzare").value;
   if(vanzareStr === ""){ preview.innerHTML = ""; return; }
-  const achizitie = nr(rand.querySelector(".f-pret").value);
-  const vanzare = nr(vanzareStr);
-  const profit = vanzare - achizitie;
-  const marja = vanzare > 0 ? (profit/vanzare)*100 : 0;
+  const achizitieTotal = nr(rand.querySelector(".f-pret").value);
+  const bucati = Math.max(1, nr(rand.querySelector(".f-bucati").value) || 1);
+  const pretVanzareBucata = nr(vanzareStr);
+  const vanzareTotal = pretVanzareBucata * bucati;
+  const profit = vanzareTotal - achizitieTotal;
+  const marja = vanzareTotal > 0 ? (profit/vanzareTotal)*100 : 0;
   const culoare = profit > 0 ? "var(--profit)" : profit < 0 ? "var(--pierdere)" : "var(--ink-soft)";
-  preview.innerHTML = `Profit estimat: <b class="mono" style="color:${culoare};">${profit>=0?"+":""}${lei(profit)}</b> <span style="color:var(--ink-faded);">(${marja.toFixed(1)}%)</span>`;
+  preview.innerHTML = `Vinzi tot cu <b class="mono">${lei(vanzareTotal)}</b> → Profit: <b class="mono" style="color:${culoare};">${profit>=0?"+":""}${lei(profit)}</b> <span style="color:var(--ink-faded);">(${marja.toFixed(1)}%)</span>`;
 }
 
 document.getElementById("btn-scaneaza-factura").onclick = () => {
@@ -1118,14 +1122,15 @@ document.getElementById("btn-factura-adauga").onclick = () => {
   const rand = rezultateFactura.querySelector(".factura-rand");
   if(!rand) return;
   const nume = rand.querySelector(".f-nume").value.trim() || "Marfă din factură";
-  const pret = rand.querySelector(".f-pret").value || "";
-  const vanzare = rand.querySelector(".f-vanzare").value || "";
+  const totalInvestit = nr(rand.querySelector(".f-pret").value);
+  const bucati = Math.max(1, nr(rand.querySelector(".f-bucati").value) || 1);
+  const vanzareBucata = rand.querySelector(".f-vanzare").value || "";
   const p = produsGol();
   p.nume = nume;
-  p.pretAchizitie = pret;
-  p.pretVanzare = vanzare;
-  p.cantitate = "1";
-  p.stoc = "1";
+  p.pretAchizitie = bucati > 0 ? String(+(totalInvestit / bucati).toFixed(4)) : String(totalInvestit);
+  p.pretVanzare = vanzareBucata;
+  p.cantitate = String(bucati);
+  p.stoc = String(bucati);
   stare.produse.unshift(p);
   randareTot();
   salveaza();
