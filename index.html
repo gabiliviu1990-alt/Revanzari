@@ -307,6 +307,8 @@ main{
   display:flex; justify-content:space-between; align-items:baseline; padding-top:10px;
   border-top:1px solid var(--card-border);
 }
+.produs-mini{ display:flex; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px; }
+.produs-mini b{ color:var(--ink); font-weight:600; }
 .marja{ font-size:12.5px; color:var(--ink-soft); }
 .profit-val{ font-size:18px; font-weight:700; }
 
@@ -332,6 +334,46 @@ main{
   align-items:center; justify-content:center; background:var(--segment-bg);
 }
 .bifa.platit{ background:var(--profit); }
+
+.notite-card{
+  background:var(--card); border:1px solid var(--card-border); border-radius:16px;
+  overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.06);
+}
+.notita-rand{
+  display:flex; align-items:flex-start; gap:11px; padding:13px 15px;
+  border-bottom:1px solid var(--card-border); transition:opacity .2s ease;
+}
+.notita-rand:last-child{ border-bottom:none; }
+.notita-rand.platit{ opacity:.5; }
+.notita-bifa{
+  border:1.5px solid var(--ink-soft); background:transparent; color:transparent;
+  width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;
+  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;
+}
+.notita-bifa.platit{ background:var(--profit); border-color:var(--profit); color:#fff; }
+.notita-continut{ flex:1; min-width:0; }
+.notita-nume-rand{ display:flex; align-items:baseline; gap:8px; }
+.notita-nume{
+  flex:1; min-width:0; border:none; background:transparent; outline:none;
+  font-size:16px; font-weight:600; color:var(--ink); font-family:inherit; padding:0;
+}
+.notita-suma{
+  flex-shrink:0; width:92px; border:none; background:transparent; outline:none;
+  font-size:15.5px; font-weight:700; color:var(--accent); text-align:right;
+  font-family:ui-monospace,'SF Mono',Menlo,monospace; padding:0;
+}
+.notita-rand.platit .notita-suma{ color:var(--ink-faded); }
+.notita-detaliu-rand{ display:flex; align-items:center; gap:8px; margin-top:2px; }
+.notita-detaliu{
+  flex:1; min-width:0; border:none; background:transparent; outline:none;
+  font-size:12.5px; color:var(--ink-faded); font-family:inherit; padding:0;
+}
+.notita-rand.platit .notita-nume, .notita-rand.platit .notita-detaliu{ text-decoration:line-through; }
+.notita-sterge{
+  flex-shrink:0; border:none; background:transparent; color:var(--ink-soft);
+  width:18px; height:18px; display:flex; align-items:center; justify-content:center;
+  font-size:13px; padding:0; opacity:.7;
+}
 .suma-rand{ margin-top:12px; }
 .suma-rand label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:4px; }
 .suma-rand input{
@@ -354,10 +396,10 @@ footer{
 }
 #eticheta-sumar{ font-size:11.5px; color:var(--footer-subtle); }
 .sumar-corp{ padding:0 18px 10px; }
-#profit-total{ font-size:23px; font-weight:700; margin-bottom:3px; }
-#profit-total.cu-detalii{ margin-bottom:3px; }
-.investit-linie{ font-size:12px; color:var(--footer-subtle); margin-bottom:10px; }
-.investit-linie .mono{ color:var(--footer-text); font-weight:600; }
+#profit-total{ font-size:23px; font-weight:700; margin-bottom:0; }
+#profit-total.cu-detalii{ margin-bottom:10px; }
+.sumar-mini{ display:flex; gap:14px; font-size:12px; color:var(--footer-subtle); margin-top:3px; }
+.sumar-mini span b{ color:var(--footer-text); font-weight:600; }
 .sumar-grid{ display:grid; grid-template-columns:1fr 1fr; gap:7px 14px; }
 .sumar-grid .lbl{ font-size:10.5px; color:var(--footer-subtle); }
 .sumar-grid .val{ font-size:13.5px; font-weight:600; }
@@ -477,11 +519,14 @@ svg{ display:block; }
   </button>
   <div class="sumar-corp">
     <div id="profit-total" class="mono">+0,00 lei</div>
-    <div id="investit-linie" class="investit-linie">Ai investit <span class="mono" id="s-investit-mic">0 lei</span> — ești pe plus cu <span class="mono" id="s-plus-mic">0 lei</span></div>
+    <div class="sumar-mini" id="sumar-mini">
+      <span>Investit <b id="s-investit-mic" class="mono">0 lei</b></span>
+      <span>Încasat <b id="s-vanzari-mic" class="mono">0 lei</b></span>
+    </div>
     <div id="sumar-detalii">
       <div class="sumar-grid">
         <div><div class="lbl">Vânzări</div><div class="val mono" id="s-vanzari">0 lei</div></div>
-        <div><div class="lbl">Costuri</div><div class="val mono" id="s-costuri">0 lei</div></div>
+        <div><div class="lbl">Investit</div><div class="val mono" id="s-costuri">0 lei</div></div>
         <div><div class="lbl">Marjă medie</div><div class="val mono" id="s-marja">0.0%</div></div>
         <div><div class="lbl">Produse</div><div class="val mono" id="s-produse">0</div></div>
       </div>
@@ -570,7 +615,7 @@ let stare = {
   curs:{ eur:"", usd:"" },
   datornici:[datornicGol()],
   tema:"clasic",
-  extins:false,
+  extins:true,
   parola:"",
 };
 
@@ -672,6 +717,10 @@ function randareProduse(){
         <div class="camp"><label>Bucăți</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cantitate}" data-field="cantitate"></div>
         <div class="camp"><label>Transport/taxe</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cheltuieli}" data-field="cheltuieli"></div>
       </div>
+      <div class="produs-mini">
+        <span>Investesc <b class="mono">${lei(p.achizitie + p.cheltuieli)}</b></span>
+        <span>Încasez <b class="mono">${lei(p.vanzare)}</b></span>
+      </div>
       <div class="linie-total">
         <span class="marja">${p.vanzare > 0 ? "marjă " + p.marja.toFixed(0) + "%" : "—"}</span>
         <span class="profit-val mono" style="color:${p.profit>0 ? "var(--profit)" : p.profit<0 ? "var(--pierdere)" : "var(--ink-soft)"};">${p.profit>=0?"+":""}${lei(p.profit)}</span>
@@ -694,6 +743,9 @@ function randareProduse(){
         const randCurent = randuriProduse().find(x => x.id === p.id);
         const marjaEl = div.querySelector(".marja");
         const profitEl = div.querySelector(".profit-val");
+        const miniEls = div.querySelectorAll(".produs-mini b");
+        miniEls[0].textContent = lei(randCurent.achizitie + randCurent.cheltuieli);
+        miniEls[1].textContent = lei(randCurent.vanzare);
         marjaEl.textContent = randCurent.vanzare > 0 ? "marjă " + randCurent.marja.toFixed(0) + "%" : "—";
         profitEl.textContent = (randCurent.profit>=0?"+":"") + lei(randCurent.profit);
         profitEl.style.color = randCurent.profit>0 ? "var(--profit)" : randCurent.profit<0 ? "var(--pierdere)" : "var(--ink-soft)";
@@ -750,27 +802,25 @@ function actualizeazaStocStatus(id, valoare, areValoare){
 function randareDatornici(){
   const cont = document.getElementById("lista-datornici");
   cont.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "notite-card";
   stare.datornici.forEach(d => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.style.opacity = d.platit ? "0.55" : "1";
-    div.innerHTML = `
-      <div class="datornic-row">
-        <button class="bifa ${d.platit ? "platit" : ""}" aria-label="Marchează plătit">${d.platit ? "✓" : ""}</button>
-        <input class="input-nume" style="font-size:16px;text-decoration:${d.platit ? "line-through" : "none"};" placeholder="Nume" value="${escHtml(d.nume)}" data-field="nume">
-        <button class="buton-sterge" aria-label="Șterge">✕</button>
+    const rand = document.createElement("div");
+    rand.className = `notita-rand ${d.platit ? "platit" : ""}`;
+    rand.innerHTML = `
+      <button class="notita-bifa ${d.platit ? "platit" : ""}" aria-label="Marchează plătit">✓</button>
+      <div class="notita-continut">
+        <div class="notita-nume-rand">
+          <input class="notita-nume" placeholder="Nume" value="${escHtml(d.nume)}" data-field="nume">
+          <input class="notita-suma" type="number" inputmode="decimal" placeholder="0" value="${d.suma}" data-field="suma">
+        </div>
+        <div class="notita-detaliu-rand">
+          <input class="notita-detaliu" placeholder="pentru ce" value="${escHtml(d.pentruCe)}" data-field="pentruCe">
+          <button class="notita-sterge" aria-label="Șterge">✕</button>
+        </div>
       </div>
-      <div class="suma-rand">
-        <label>Pentru ce</label>
-        <input type="text" placeholder="ex: parfum, haine" value="${escHtml(d.pentruCe)}" data-field="pentruCe">
-      </div>
-      <div class="suma-rand">
-        <label>Suma datorată</label>
-        <input type="number" inputmode="decimal" placeholder="0" value="${d.suma}" data-field="suma">
-      </div>
-      ${d.platit ? '<div class="platit-label">✓ Plătit</div>' : ""}
     `;
-    div.querySelectorAll("input").forEach(inp => {
+    rand.querySelectorAll("input").forEach(inp => {
       inp.addEventListener("input", e => {
         const item = stare.datornici.find(x => x.id === d.id);
         item[e.target.dataset.field] = e.target.value;
@@ -779,19 +829,20 @@ function randareDatornici(){
         salveaza();
       });
     });
-    div.querySelector(".bifa").addEventListener("click", () => {
+    rand.querySelector(".notita-bifa").addEventListener("click", () => {
       const item = stare.datornici.find(x => x.id === d.id);
       item.platit = !item.platit;
       randareTot();
       salveaza();
     });
-    div.querySelector(".buton-sterge").addEventListener("click", () => {
+    rand.querySelector(".notita-sterge").addEventListener("click", () => {
       stare.datornici = stare.datornici.length > 1 ? stare.datornici.filter(x => x.id !== d.id) : [datornicGol()];
       randareTot();
       salveaza();
     });
-    cont.appendChild(div);
+    card.appendChild(rand);
   });
+  cont.appendChild(card);
   randareTotaluriPersoane();
 }
 
@@ -840,13 +891,11 @@ function randareSumar(){
   const pt = document.getElementById("profit-total");
   pt.textContent = (totalProfit>=0?"+":"") + lei(totalProfit);
   pt.style.color = totalProfit >= 0 ? "var(--footer-profit)" : "var(--footer-pierdere)";
-  document.getElementById("investit-linie").style.display = areDate ? "block" : "none";
-  document.getElementById("s-investit-mic").textContent = leiScurt(totalCosturi);
-  const elPlusMic = document.getElementById("s-plus-mic");
-  elPlusMic.textContent = (totalProfit>=0?"+":"") + leiScurt(totalProfit);
-  elPlusMic.style.color = totalProfit >= 0 ? "var(--footer-profit)" : "var(--footer-pierdere)";
   document.getElementById("s-vanzari").textContent = leiScurt(totalVanzari);
   document.getElementById("s-costuri").textContent = leiScurt(totalCosturi);
+  document.getElementById("s-investit-mic").textContent = leiScurt(totalCosturi);
+  document.getElementById("s-vanzari-mic").textContent = leiScurt(totalVanzari);
+  document.getElementById("sumar-mini").style.display = areDate ? "flex" : "none";
   document.getElementById("s-marja").textContent = marjaMedie.toFixed(1) + "%";
   document.getElementById("s-produse").textContent = stare.produse.length;
   const incasatEl = document.getElementById("incasat-linie");
@@ -916,8 +965,8 @@ document.getElementById("btn-curs-auto").onclick = async () => {
   status.textContent = "se actualizează…";
   try{
     const [rEur, rUsd] = await Promise.all([
-      fetch("https://api.frankfurter.app/latest?from=EUR&to=RON").then(r => r.json()),
-      fetch("https://api.frankfurter.app/latest?from=USD&to=RON").then(r => r.json()),
+      fetch("https://api.frankfurter.dev/v1/latest?from=EUR&to=RON").then(r => r.json()),
+      fetch("https://api.frankfurter.dev/v1/latest?from=USD&to=RON").then(r => r.json()),
     ]);
     const eur = rEur && rEur.rates && rEur.rates.RON;
     const usd = rUsd && rUsd.rates && rUsd.rates.RON;
