@@ -594,13 +594,12 @@ svg{ display:block; }
 <div class="overlay" id="overlay-factura">
   <div class="sheet">
     <h2>Scanează factură</h2>
-    <p class="sub">Fă o poză facturii sau alege una din galerie. Verifică rândurile de mai jos (nume, bucăți, preț) înainte să le adaugi — recunoașterea automată a textului poate greși unele cifre. Prima scanare are nevoie de internet; după aceea funcționează și offline.</p>
+    <p class="sub">Fă o poză facturii sau alege una din galerie. Caut doar totalul de pe factură — îl adaugi ca un singur produs, apoi pui tu denumirea și, dacă vrei, prețul de vânzare, ca să vezi câștigul. Prima scanare are nevoie de internet; după aceea funcționează și offline.</p>
     <div class="factura-status" id="factura-status"></div>
     <div class="factura-rezultate" id="factura-rezultate"></div>
-    <button class="buton-secundar" id="btn-factura-manual" style="display:none;">+ Adaugă rând manual</button>
     <div class="factura-actiuni" id="factura-actiuni" style="display:none;">
       <button class="buton-secundar" id="btn-factura-alta">↺ Altă poză</button>
-      <button class="sheet-inchide" id="btn-factura-adauga">Adaugă produsele</button>
+      <button class="sheet-inchide" id="btn-factura-adauga">Adaugă produsul</button>
     </div>
   </div>
 </div>
@@ -657,38 +656,23 @@ function parseNumRo(str){
   return parseFloat(str);
 }
 
-function parseFacturaText(text){
-  const ZGOMOT = /(total|subtotal|\btva\b|cota|factur|serie|scaden|\biban\b|\bcont\b|banc|\bcui\b|semn[ăa]tur|beneficiar|furnizor|adres|telefon|e-?mail|pagina|de plat|discount|nr\.\s*crt|denumire produs)/i;
-  const UNITATI = /\b(buc|bucati|bucăți|buc\.|kg|gr|ml|litri|\bl\b|cutie|cutii|pcs|um|set)\b/gi;
-  const linii = String(text||"").split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  const rezultate = [];
-  for(const linie of linii){
-    if(ZGOMOT.test(linie)) continue;
-    if(linie.length < 3) continue;
-    const numere = linie.match(/-?\d[\d.,]*\d|\d/g) || [];
-    if(numere.length < 2) continue;
-    let denumire = linie;
-    numere.forEach(n => { denumire = denumire.replace(n, " "); });
-    denumire = denumire.replace(UNITATI, " ").replace(/[|_/\\;:*#]+/g," ").replace(/\s{2,}/g," ").trim();
-    denumire = denumire.replace(/^[-–.,\s]+|[-–.,\s]+$/g, "");
-    if(denumire.replace(/[^a-zA-ZăâîșțĂÂÎȘȚ]/g,"").length < 2) continue;
-    const valori = numere.map(parseNumRo).filter(v => !isNaN(v) && v > 0);
-    if(valori.length < 2) continue;
-    const total = valori[valori.length-1];
-    const candidatiCant = valori.slice(0,-1).filter(v => Number.isInteger(v) && v < 10000);
-    let cantitate, pretUnitar;
-    if(candidatiCant.length){
-      cantitate = candidatiCant[0];
-      const rest = valori.slice(0,-1).filter(v => v !== cantitate);
-      pretUnitar = rest.length ? rest[rest.length-1] : (total / cantitate);
-    } else {
-      cantitate = 1;
-      pretUnitar = valori[valori.length-2];
+function parseFacturaTotal(text){
+  const t = String(text||"");
+  const linii = t.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const CUVANT_TOTAL = /(total\s*(de\s*plat[ăa])?|valoare\s*total[ăa]|sum[ăa]\s*total[ăa]|de\s*plat[ăa]|total\s*factur[ăa])/i;
+  const candidati = [];
+  linii.forEach(linie => {
+    if(CUVANT_TOTAL.test(linie)){
+      const numere = linie.match(/-?\d[\d.,]*\d|\d/g) || [];
+      numere.forEach(n => {
+        const v = parseNumRo(n);
+        if(!isNaN(v) && v > 0) candidati.push(v);
+      });
     }
-    if(!pretUnitar || pretUnitar <= 0) continue;
-    rezultate.push({ nume: denumire, cantitate: String(cantitate), pretUnitar: pretUnitar.toFixed(2) });
-  }
-  return rezultate.slice(0, 40);
+  });
+  if(candidati.length) return Math.max(...candidati);
+  const toate = (t.match(/-?\d[\d.,]*\d|\d/g) || []).map(parseNumRo).filter(v => !isNaN(v) && v > 0);
+  return toate.length ? Math.max(...toate) : null;
 }
 
 let stare = {
@@ -1028,37 +1012,30 @@ const inputFactura = document.getElementById("input-factura");
 const statusFactura = document.getElementById("factura-status");
 const rezultateFactura = document.getElementById("factura-rezultate");
 const actiuniFactura = document.getElementById("factura-actiuni");
-const btnFacturaManual = document.getElementById("btn-factura-manual");
 
-function randFactura(item){
-  const it = item || { nume:"", cantitate:"1", pretUnitar:"" };
+function randFacturaTotal(total){
+  rezultateFactura.innerHTML = "";
   const div = document.createElement("div");
   div.className = "factura-rand";
   div.innerHTML = `
-    <input type="checkbox" class="f-inc" checked>
     <div class="factura-camp-nume">
-      <input type="text" class="f-nume" placeholder="Denumire produs" value="${escHtml(it.nume||"")}">
+      <input type="text" class="f-nume" placeholder="Denumire (ex: Marfă furnizor X)">
       <div class="factura-sub">
-        <div class="f-mini"><label>Buc</label><input type="number" inputmode="decimal" class="f-cant" value="${it.cantitate||"1"}"></div>
-        <div class="f-mini"><label>Preț/buc</label><input type="number" inputmode="decimal" class="f-pret" value="${it.pretUnitar||""}"></div>
+        <div class="f-mini"><label>Total investit</label><input type="number" inputmode="decimal" class="f-pret" value="${total!=null?total.toFixed(2):""}"></div>
       </div>
     </div>
-    <button class="factura-sterge" aria-label="Elimină">✕</button>
   `;
-  div.querySelector(".factura-sterge").onclick = () => div.remove();
-  return div;
+  rezultateFactura.appendChild(div);
 }
 
 document.getElementById("btn-scaneaza-factura").onclick = () => {
   rezultateFactura.innerHTML = "";
   actiuniFactura.style.display = "none";
-  btnFacturaManual.style.display = "none";
   statusFactura.textContent = "";
   inputFactura.value = "";
   inputFactura.click();
 };
 document.getElementById("btn-factura-alta").onclick = () => inputFactura.click();
-btnFacturaManual.onclick = () => rezultateFactura.appendChild(randFactura());
 overlayFactura.onclick = (e) => {
   if(e.target.id === "overlay-factura") e.target.classList.remove("deschis");
 };
@@ -1069,7 +1046,6 @@ inputFactura.onchange = async () => {
   overlayFactura.classList.add("deschis");
   rezultateFactura.innerHTML = "";
   actiuniFactura.style.display = "none";
-  btnFacturaManual.style.display = "none";
   statusFactura.textContent = "Se pregătește recunoașterea textului…";
   try{
     const { data } = await Tesseract.recognize(fisier, "ron", {
@@ -1083,39 +1059,32 @@ inputFactura.onchange = async () => {
         }
       }
     });
-    const itemi = parseFacturaText(data.text || "");
-    itemi.forEach(it => rezultateFactura.appendChild(randFactura(it)));
-    if(!itemi.length) rezultateFactura.appendChild(randFactura());
-    statusFactura.textContent = itemi.length
-      ? "Verifică rândurile de mai jos, apoi apasă Adaugă."
-      : "Nu am detectat automat produse — completează manual mai jos.";
+    const total = parseFacturaTotal(data.text || "");
+    randFacturaTotal(total);
+    statusFactura.textContent = total != null
+      ? "Verifică suma și pune o denumire, apoi apasă Adaugă."
+      : "Nu am găsit automat un total — completează-l tu mai jos.";
     actiuniFactura.style.display = "flex";
-    btnFacturaManual.style.display = "flex";
   } catch(err){
-    statusFactura.textContent = "Nu am putut citi factura (verifică și conexiunea la internet, e nevoie de ea la prima scanare). Încearcă o poză mai clară sau adaugă manual.";
-    rezultateFactura.appendChild(randFactura());
+    statusFactura.textContent = "Nu am putut citi factura (verifică și conexiunea la internet, e nevoie de ea la prima scanare). Încearcă o poză mai clară sau completează manual.";
+    randFacturaTotal(null);
     actiuniFactura.style.display = "flex";
-    btnFacturaManual.style.display = "flex";
   }
 };
 
 document.getElementById("btn-factura-adauga").onclick = () => {
-  let adaugate = 0;
-  rezultateFactura.querySelectorAll(".factura-rand").forEach(rand => {
-    const inclus = rand.querySelector(".f-inc").checked;
-    const nume = rand.querySelector(".f-nume").value.trim();
-    if(!inclus || !nume) return;
-    const cant = rand.querySelector(".f-cant").value || "1";
-    const pret = rand.querySelector(".f-pret").value || "";
-    const p = produsGol();
-    p.nume = nume;
-    p.pretAchizitie = pret;
-    p.cantitate = cant;
-    p.stoc = cant;
-    stare.produse.unshift(p);
-    adaugate++;
-  });
-  if(adaugate){ randareTot(); salveaza(); }
+  const rand = rezultateFactura.querySelector(".factura-rand");
+  if(!rand) return;
+  const nume = rand.querySelector(".f-nume").value.trim() || "Marfă din factură";
+  const pret = rand.querySelector(".f-pret").value || "";
+  const p = produsGol();
+  p.nume = nume;
+  p.pretAchizitie = pret;
+  p.cantitate = "1";
+  p.stoc = "1";
+  stare.produse.unshift(p);
+  randareTot();
+  salveaza();
   overlayFactura.classList.remove("deschis");
 };
 
