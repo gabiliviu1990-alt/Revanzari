@@ -3,1474 +3,385 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Revânzări</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#F4F0E6" id="meta-theme-color">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#FAF6EC" id="meta-theme-color">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Revânzări">
+<meta name="apple-mobile-web-app-title" content="Notițe">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<title>Notițe</title>
 <style>
 :root{
-  --bg:#FAF6EC; --card:#FFFFFF; --card-border:#EDE3C8;
-  --ink:#20242B; --ink-soft:#A79F86; --ink-faded:#7D735A;
-  --accent:#E3A518; --profit:#1A9850; --pierdere:#E43D3D;
-  --footer-bg:#20242B; --footer-text:#FAF6EC; --footer-subtle:#B7AF95;
-  --footer-line:#3A3F49; --footer-gold:#F2C94C; --footer-profit:#5FE8A0; --footer-pierdere:#FF8A75;
-  --input-bg:#FFFDF7; --input-border:#EDE3C8; --segment-bg:#F0E7CB; --danger-soft:#FBF6E9;
+  --bg:#FAF6EC; --ink:#2B2620; --ink-soft:#8A8172; --ink-faded:#B7AF9E;
+  --card-bg:#FFFFFF; --card-border:#EFE7D6;
+  --accent:#F2A93B; --accent-ink:#7A4A00;
+  --footer-bg:#2B2620; --footer-text:#F4EFE3; --footer-subtle:#9C9484;
+  --danger:#D9534F; --divider:#EFE7D6;
+  --search-bg:#F0EAD9;
 }
-[data-theme="verde"]{
-  --bg:#EAF9EE; --card:#FFFFFF; --card-border:#C7ECD3;
-  --ink:#0B3D22; --ink-soft:#6FB98D; --ink-faded:#3E8863;
-  --accent:#12B45A; --profit:#0EA858; --pierdere:#E43D3D;
-  --footer-bg:#0B3D22; --footer-text:#EAF9EE; --footer-subtle:#8FCBAA;
-  --footer-line:#175937; --footer-gold:#F2C94C; --footer-profit:#6CF0A6; --footer-pierdere:#FF8A75;
-  --input-bg:#F3FCF5; --input-border:#C7ECD3; --segment-bg:#D6F2DF; --danger-soft:#EFFBF2;
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17140F; --ink:#F1ECE0; --ink-soft:#9C9484; --ink-faded:#6B6455;
+    --card-bg:#221E17; --card-border:#332C20;
+    --accent:#F2A93B; --accent-ink:#2B1900;
+    --footer-bg:#000000; --footer-text:#F4EFE3; --footer-subtle:#8A8172;
+    --danger:#E5776F; --divider:#332C20;
+    --search-bg:#221E17;
+  }
 }
-[data-theme="ocean"]{
-  --bg:#E6F5FC; --card:#FFFFFF; --card-border:#BFE4F5;
-  --ink:#053050; --ink-soft:#6FA9C7; --ink-faded:#3A7DA0;
-  --accent:#0EA5E9; --profit:#0FAF6F; --pierdere:#E43D3D;
-  --footer-bg:#053050; --footer-text:#E6F5FC; --footer-subtle:#8DBEDA;
-  --footer-line:#0E4A75; --footer-gold:#F2C94C; --footer-profit:#5EE0C4; --footer-pierdere:#FF8A75;
-  --input-bg:#F1FAFE; --input-border:#BFE4F5; --segment-bg:#D3EDF9; --danger-soft:#EBF8FD;
+:root[data-theme="dark"]{
+  --bg:#17140F; --ink:#F1ECE0; --ink-soft:#9C9484; --ink-faded:#6B6455;
+  --card-bg:#221E17; --card-border:#332C20;
+  --accent:#F2A93B; --accent-ink:#2B1900;
+  --footer-bg:#000000; --footer-text:#F4EFE3; --footer-subtle:#8A8172;
+  --danger:#E5776F; --divider:#332C20;
+  --search-bg:#221E17;
 }
-[data-theme="intunecat"]{
-  --bg:#12151A; --card:#1C2129; --card-border:#2B323C;
-  --ink:#F1F3F6; --ink-soft:#7E8B9B; --ink-faded:#A6B0BC;
-  --accent:#F2B705; --profit:#2FD97C; --pierdere:#FF5C4D;
-  --footer-bg:#0A0D11; --footer-text:#F1F3F6; --footer-subtle:#8492A2;
-  --footer-line:#262E38; --footer-gold:#F2C94C; --footer-profit:#54F0A0; --footer-pierdere:#FF8A75;
-  --input-bg:#171B21; --input-border:#2B323C; --segment-bg:#20262E; --danger-soft:#20262E;
-}
-[data-theme="mov"]{
-  --bg:#F3EBFC; --card:#FFFFFF; --card-border:#E1CCF7;
-  --ink:#2E1065; --ink-soft:#AD8FD6; --ink-faded:#7E56B8;
-  --accent:#9333EA; --profit:#12A452; --pierdere:#E43D3D;
-  --footer-bg:#2E1065; --footer-text:#F3EBFC; --footer-subtle:#C0A7E3;
-  --footer-line:#46208A; --footer-gold:#F2C94C; --footer-profit:#78EBAE; --footer-pierdere:#FF8A75;
-  --input-bg:#F9F4FE; --input-border:#E1CCF7; --segment-bg:#EBDBFA; --danger-soft:#F7F0FD;
-}
-[data-theme="grafit"]{
-  --bg:#EEF1F5; --card:#FFFFFF; --card-border:#D6DCE5;
-  --ink:#161B22; --ink-soft:#8D97A6; --ink-faded:#5B6675;
-  --accent:#2563EB; --profit:#12A452; --pierdere:#E43D3D;
-  --footer-bg:#161B22; --footer-text:#EEF1F5; --footer-subtle:#96A1B0;
-  --footer-line:#2A323D; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
-  --input-bg:#F7F9FB; --input-border:#D6DCE5; --segment-bg:#E3E7EC; --danger-soft:#F2EDEC;
-}
-[data-theme="noapte"]{
-  --bg:#0C1526; --card:#16223A; --card-border:#233252;
-  --ink:#E7EDFB; --ink-soft:#6E85AC; --ink-faded:#93A6C6;
-  --accent:#3B82F6; --profit:#2FD97C; --pierdere:#FF5C4D;
-  --footer-bg:#080E1C; --footer-text:#E7EDFB; --footer-subtle:#7387AD;
-  --footer-line:#1D2C4B; --footer-gold:#F2C94C; --footer-profit:#54F0A0; --footer-pierdere:#FF8A75;
-  --input-bg:#111B30; --input-border:#233252; --segment-bg:#192544; --danger-soft:#192544;
-}
-[data-theme="padure"]{
-  --bg:#0B1712; --card:#15251C; --card-border:#22392C;
-  --ink:#E4F3E9; --ink-soft:#6C9179; --ink-faded:#93B49F;
-  --accent:#22C55E; --profit:#2FD97C; --pierdere:#FF5C4D;
-  --footer-bg:#08120D; --footer-text:#E4F3E9; --footer-subtle:#729480;
-  --footer-line:#1D3226; --footer-gold:#F2C94C; --footer-profit:#5FF0A6; --footer-pierdere:#FF8A75;
-  --input-bg:#101E17; --input-border:#22392C; --segment-bg:#182B21; --danger-soft:#182B21;
-}
-[data-theme="rosu"]{
-  --bg:#FDECEA; --card:#FFFFFF; --card-border:#F7CEC7;
-  --ink:#420E08; --ink-soft:#C98A7C; --ink-faded:#A15243;
-  --accent:#EF4444; --profit:#12A452; --pierdere:#DC2626;
-  --footer-bg:#2E0A06; --footer-text:#FDECEA; --footer-subtle:#CB9A8E;
-  --footer-line:#4E1912; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
-  --input-bg:#FFF4F2; --input-border:#F7CEC7; --segment-bg:#FBDAD3; --danger-soft:#FDF0EE;
-}
-[data-theme="portocaliu"]{
-  --bg:#FFF1E2; --card:#FFFFFF; --card-border:#FAD9AC;
-  --ink:#421F02; --ink-soft:#CBA26A; --ink-faded:#A87536;
-  --accent:#FB923C; --profit:#12A452; --pierdere:#E43D3D;
-  --footer-bg:#301A05; --footer-text:#FFF1E2; --footer-subtle:#D3AC80;
-  --footer-line:#4E2E0C; --footer-gold:#FFD166; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
-  --input-bg:#FFF8ED; --input-border:#FAD9AC; --segment-bg:#FCE4C0; --danger-soft:#FEF3E5;
-}
-[data-theme="turcoaz"]{
-  --bg:#DEFAF5; --card:#FFFFFF; --card-border:#AEEEE1;
-  --ink:#04332E; --ink-soft:#6BB7A9; --ink-faded:#358C7C;
-  --accent:#06D6A0; --profit:#0FA968; --pierdere:#E43D3D;
-  --footer-bg:#04332E; --footer-text:#DEFAF5; --footer-subtle:#7AC0B0;
-  --footer-line:#0B4F46; --footer-gold:#F2C94C; --footer-profit:#5FF0C0; --footer-pierdere:#FF8A75;
-  --input-bg:#EAFBF8; --input-border:#AEEEE1; --segment-bg:#C4F2E7; --danger-soft:#E7FAF6;
-}
-[data-theme="electric"]{
-  --bg:#EEEAFE; --card:#FFFFFF; --card-border:#D2C2FB;
-  --ink:#1B1140; --ink-soft:#9C8CD9; --ink-faded:#6E56C4;
-  --accent:#7C3AED; --profit:#12A452; --pierdere:#E43D3D;
-  --footer-bg:#160C33; --footer-text:#EEEAFE; --footer-subtle:#A996E0;
-  --footer-line:#2A1C57; --footer-gold:#F2C94C; --footer-profit:#7BEBB2; --footer-pierdere:#FF8A75;
-  --input-bg:#F5F2FE; --input-border:#D2C2FB; --segment-bg:#E2D8FC; --danger-soft:#F2EEFE;
-}
-[data-theme="fucsia"]{
-  --bg:#FDEAF3; --card:#FFFFFF; --card-border:#F8C9E1;
-  --ink:#420A28; --ink-soft:#CB84A9; --ink-faded:#A14E7A;
-  --accent:#EC4899; --profit:#12A452; --pierdere:#E43D3D;
-  --footer-bg:#33071F; --footer-text:#FDEAF3; --footer-subtle:#D392B4;
-  --footer-line:#4F1132; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
-  --input-bg:#FFF4F9; --input-border:#F8C9E1; --segment-bg:#FBD9EB; --danger-soft:#FDF0F6;
-}
-[data-theme="lime"]{
-  --bg:#F3FBDC; --card:#FFFFFF; --card-border:#DFEFA3;
-  --ink:#273107; --ink-soft:#A3B266; --ink-faded:#748239;
-  --accent:#A3E635; --profit:#12A452; --pierdere:#E43D3D;
-  --footer-bg:#232B08; --footer-text:#F3FBDC; --footer-subtle:#B9C784;
-  --footer-line:#3A4611; --footer-gold:#F2C94C; --footer-profit:#6CE3A8; --footer-pierdere:#FF8A75;
-  --input-bg:#F9FDEE; --input-border:#DFEFA3; --segment-bg:#ECF7C3; --danger-soft:#F7FBE9;
-}
-
-*{box-sizing:border-box; max-width:100%;}
-html,body{margin:0;padding:0;}
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html,body{
   height:100%; overflow:hidden; overscroll-behavior:none;
-  width:100%; position:fixed; top:0; left:0;
+  width:100%; position:fixed; top:0; left:0; margin:0; padding:0;
 }
 body{
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
   background:var(--bg); color:var(--ink);
   -webkit-font-smoothing:antialiased;
-  height:100vh; height:100dvh;
   display:flex; flex-direction:column;
-  transition:background .25s ease,color .25s ease;
+  padding-top:env(safe-area-inset-top,0px);
 }
-.mono{ font-family: ui-monospace,'SF Mono',Menlo,monospace; }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 
-header{
-  flex-shrink:0; background:var(--bg);
-  padding:calc(env(safe-area-inset-top, 0px) + 10px) 20px 9px;
-  padding-left:calc(env(safe-area-inset-left, 0px) + 18px);
-  padding-right:calc(env(safe-area-inset-right, 0px) + 18px);
-  border-bottom:1px solid var(--card-border);
-}
-.badge-row{ display:flex; flex-direction:row; align-items:center; justify-content:center; gap:9px; margin-bottom:9px; flex-wrap:wrap; row-gap:6px; }
-.badge{
-  width:32px; height:32px; border-radius:10px; background:var(--accent);
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  box-shadow:0 2px 6px color-mix(in srgb, var(--accent) 35%, transparent);
-}
-.badge svg{ width:18px; height:18px; }
-h1{ font-size:17px; font-weight:700; margin:0; letter-spacing:-0.2px; }
-.status{ font-size:10.5px; color:var(--ink-soft); }
-.status.err{ color:var(--pierdere); }
-
-.tema-bar{ display:flex; justify-content:center; margin-bottom:12px; }
-.btn-teme{
-  display:flex; align-items:center; gap:7px; border:1px solid var(--card-border);
-  background:var(--card); color:var(--ink-faded); border-radius:20px;
-  padding:6px 13px; font-size:12.5px; font-weight:600; font-family:inherit;
-}
-.tema-punct{ width:13px; height:13px; border-radius:50%; display:block; border:1px solid var(--card-border); }
-
-.overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:50;
-  display:none; align-items:flex-end;
-}
-.overlay.deschis{ display:flex; }
-.sheet{
-  background:var(--bg); width:100%; border-top-left-radius:22px; border-top-right-radius:22px;
-  padding:18px 18px calc(env(safe-area-inset-bottom, 0px) + 18px);
-  max-height:75vh; overflow-y:auto;
-}
-.sheet h2{ font-size:16px; margin:0 0 4px; font-weight:700; color:var(--ink); }
-.sheet .sub{ font-size:12.5px; color:var(--ink-faded); margin:0 0 14px; }
-.teme-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.tema-optiune{
-  display:flex; align-items:center; gap:10px; border:1.5px solid var(--card-border);
-  background:var(--card); border-radius:13px; padding:11px 12px; font-family:inherit;
-  font-size:13.5px; font-weight:600; color:var(--ink); text-align:left;
-}
-.tema-optiune.activ{ border-color:var(--accent); }
-.tema-optiune .swatch{
-  width:24px; height:24px; border-radius:50%; flex-shrink:0; border:1px solid var(--card-border);
-}
-.sheet-inchide{
-  width:100%; margin-top:14px; border:none; background:var(--ink); color:var(--bg);
-  border-radius:13px; padding:12px 0; font-size:14.5px; font-weight:600; font-family:inherit;
-}
-.curs-auto{
-  width:100%; border:1px solid var(--card-border); background:transparent; color:var(--accent);
-  border-radius:11px; padding:10px 0; font-size:13.5px; font-weight:600; font-family:inherit; margin-top:2px;
-}
-.curs-auto-status{ font-size:11.5px; color:var(--ink-faded); text-align:center; margin-top:6px; min-height:14px; }
-
-.convertor{ margin-top:20px; padding-top:16px; border-top:1px solid var(--card-border); }
-.convertor-titlu{ font-size:12.5px; font-weight:700; color:var(--ink-faded); margin-bottom:8px; }
-.convertor-rand{ display:flex; gap:8px; margin-bottom:10px; }
-.convertor-rand input{
-  flex:1; min-width:0; border:1px solid var(--input-border); background:var(--input-bg);
-  border-radius:10px; padding:10px; font-size:15.5px; color:var(--ink); outline:none; font-family:inherit;
-}
-.convertor-rand select{
-  border:1px solid var(--input-border); background:var(--input-bg); border-radius:10px;
-  padding:0 8px; font-size:14px; color:var(--ink); font-family:inherit; font-weight:600;
-}
-.convertor-rezultate{ display:flex; flex-direction:column; gap:6px; }
-.convertor-rezultate .cr-rand{
-  display:flex; justify-content:space-between; align-items:baseline;
-  background:var(--input-bg); border:1px solid var(--input-border); border-radius:10px;
-  padding:9px 12px; font-size:14px;
-}
-.convertor-rezultate .cr-eticheta{ color:var(--ink-faded); }
-.convertor-rezultate .cr-val{ font-weight:700; color:var(--accent); }
-.convertor-rezultate .cr-lipsa{ font-size:11.5px; color:var(--ink-soft); font-weight:400; }
-
-.segment{ display:flex; background:var(--segment-bg); border-radius:11px; padding:3px; gap:3px; }
-.segment button{
-  flex:1; border:none; background:transparent; border-radius:8px; padding:8px 6px;
-  font-size:13.5px; font-weight:600; color:var(--ink-soft); display:flex; align-items:center;
-  justify-content:center; gap:6px; font-family:inherit;
-}
-.segment button.activ{ background:var(--card); color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.12); }
-
-main{
+/* ---------- Ecran listă ---------- */
+#ecran-lista{
   flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;
-  padding-left:calc(env(safe-area-inset-left, 0px) + 16px);
-  padding-right:calc(env(safe-area-inset-right, 0px) + 16px);
 }
-.tab-panel{ display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden; }
-.tab-panel.activ{ display:flex; }
-.zona-fixa{ flex-shrink:0; display:flex; flex-direction:column; gap:10px; padding:16px 0 12px; }
-.zona-scroll{
+.lista-header{
+  padding:14px 18px 10px;
+  padding-left:calc(env(safe-area-inset-left,0px) + 18px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
+}
+.lista-titlu{ font-size:30px; font-weight:800; margin:0 0 12px; }
+.cautare{
+  background:var(--search-bg); border-radius:11px; padding:9px 12px;
+  display:flex; align-items:center; gap:6px;
+}
+.cautare svg{ flex-shrink:0; opacity:.55; }
+.cautare input{
+  border:none; background:transparent; outline:none; font-size:16px;
+  color:var(--ink); width:100%; font-family:inherit;
+}
+.cautare input::placeholder{ color:var(--ink-faded); }
+
+#lista-note{
   flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
-  display:flex; flex-direction:column; gap:12px; padding-bottom:16px;
+  padding:4px 18px calc(env(safe-area-inset-bottom,0px) + 90px);
+  padding-left:calc(env(safe-area-inset-left,0px) + 18px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
 }
-#lista-produse, #lista-datornici{ display:flex; flex-direction:column; gap:12px; }
+.nota-rand{
+  padding:12px 2px; border-bottom:1px solid var(--divider);
+  display:flex; flex-direction:column; gap:3px; cursor:pointer;
+}
+.nota-rand:active{ opacity:.6; }
+.nota-titlu{ font-size:17px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nota-sub{ font-size:14px; color:var(--ink-soft); display:flex; gap:6px; white-space:nowrap; overflow:hidden; align-items:center; }
+.nota-data{ flex-shrink:0; }
+.nota-preview{ overflow:hidden; text-overflow:ellipsis; flex:1; }
+.nota-total{ flex-shrink:0; font-weight:700; font-variant-numeric:tabular-nums; }
+.nota-total.pozitiv{ color:#2E8B57; }
+.nota-total.negativ{ color:var(--danger); }
 
-.buton-principal{
-  width:100%; border:none; background:var(--ink); color:var(--bg); border-radius:14px;
-  padding:14px 0; font-size:15.5px; font-weight:600; display:flex; align-items:center;
-  justify-content:center; gap:8px; font-family:inherit;
+.gol{
+  flex:1; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:8px; color:var(--ink-faded); text-align:center; padding:0 30px;
 }
-.buton-secundar{
-  width:100%; border:1.5px solid var(--card-border); background:var(--card); color:var(--ink);
-  border-radius:14px; padding:12px 0; font-size:14.5px; font-weight:600; display:flex; align-items:center;
-  justify-content:center; gap:8px; font-family:inherit;
-}
-.hint{ margin:0 4px; font-size:13px; color:var(--ink-faded); line-height:1.5; }
+.gol svg{ opacity:.35; margin-bottom:4px; }
+.gol b{ font-size:17px; color:var(--ink-soft); font-weight:600; }
+.gol span{ font-size:14px; }
 
-.factura-status{ font-size:13px; color:var(--ink-faded); text-align:center; padding:16px 0; }
-.factura-rezultate{ display:flex; flex-direction:column; }
-.factura-rand{
-  display:flex; align-items:flex-start; gap:10px; padding:11px 0; border-bottom:1px solid var(--card-border);
+.buton-nou{
+  position:fixed; right:calc(env(safe-area-inset-right,0px) + 20px);
+  bottom:calc(env(safe-area-inset-bottom,0px) + 24px);
+  width:58px; height:58px; border-radius:50%; border:none;
+  background:var(--accent); color:var(--accent-ink);
+  font-size:28px; font-weight:400; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.25); z-index:5;
 }
-.factura-rand input[type="checkbox"]{ width:19px; height:19px; flex-shrink:0; margin-top:2px; accent-color:var(--accent); }
-.factura-camp-nume{ flex:1; min-width:0; }
-.factura-camp-nume .f-nume{
-  width:100%; border:none; background:transparent; outline:none; font-size:14.5px; font-weight:600;
-  color:var(--ink); font-family:inherit; padding:0;
-}
-.factura-sub{ display:flex; flex-wrap:wrap; gap:10px 12px; margin-top:5px; }
-.f-mini{ display:flex; align-items:center; gap:5px; }
-.f-mini label{ font-size:10.5px; color:var(--ink-faded); }
-.f-mini input{
-  width:60px; border:1px solid var(--input-border); background:var(--input-bg); border-radius:8px;
-  padding:5px 7px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none;
-}
-.factura-profit-preview{ font-size:13px; margin-top:9px; min-height:17px; }
-.factura-sterge{
-  flex-shrink:0; border:none; background:transparent; color:var(--ink-soft); font-size:14px;
-  width:20px; height:20px; margin-top:2px;
-}
-.factura-actiuni{ display:flex; gap:10px; margin-top:14px; }
-.factura-actiuni button{ margin-top:0; flex:1; }
+.buton-nou:active{ transform:scale(.94); }
 
-.totaluri-persoane{
-  background:var(--card); border:1px solid var(--card-border); border-radius:13px;
-  padding:11px 14px;
+/* ---------- Ecran editor ---------- */
+#ecran-editor{
+  position:fixed; inset:0; z-index:20; background:var(--bg); color:var(--ink);
+  display:none; flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
 }
-.tp-titlu{ font-size:11px; font-weight:700; color:var(--ink-faded); margin-bottom:6px; }
-.tp-rand{
-  display:flex; justify-content:space-between; align-items:baseline;
-  padding:4px 0; font-size:13.5px;
+#ecran-editor.deschis{ display:flex; }
+.editor-bara{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px;
+  padding-left:calc(env(safe-area-inset-left,0px) + 14px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 14px);
 }
-.tp-nume{ color:var(--ink); font-weight:600; }
-.tp-count{ color:var(--ink-soft); font-weight:400; font-size:12px; }
-.tp-suma{ color:var(--accent); font-weight:700; font-size:14px; }
+.editor-bara button{
+  border:none; background:transparent; color:var(--accent); font-size:17px;
+  font-family:inherit; padding:6px 8px; display:flex; align-items:center; gap:3px;
+}
+.editor-bara button:active{ opacity:.5; }
+.editor-sterge{ color:var(--danger) !important; }
+.editor-data{
+  text-align:center; font-size:12px; color:var(--ink-faded); padding:2px 0 6px;
+}
+.editor-total{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 18px; margin:0 14px 8px; border-radius:12px;
+  background:var(--search-bg);
+  padding-left:calc(env(safe-area-inset-left,0px) + 18px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
+}
+.editor-total.ascuns{ display:none; }
+.editor-total .lbl{ font-size:13px; color:var(--ink-soft); }
+.editor-total .val{ font-size:17px; font-weight:700; font-variant-numeric:tabular-nums; }
+.editor-total .val.pozitiv{ color:#2E8B57; }
+.editor-total .val.negativ{ color:var(--danger); }
+#editor-text{
+  flex:1; min-height:0; border:none; outline:none; background:transparent; color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
+  font-size:17px; line-height:1.5; resize:none;
+  padding:4px 18px calc(env(safe-area-inset-bottom,0px) + 24px);
+  padding-left:calc(env(safe-area-inset-left,0px) + 18px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
+  -webkit-overflow-scrolling:touch;
+}
+#editor-text::placeholder{ color:var(--ink-faded); }
 
-.card{
-  background:var(--card); border:1px solid var(--card-border); border-radius:16px;
-  padding:16px 16px 14px; box-shadow:0 1px 2px rgba(0,0,0,.06);
+/* ---------- Confirmare ștergere ---------- */
+.confirm-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:60;
+  display:none; align-items:flex-end; justify-content:center;
 }
-.card-top{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-.input-nume{
-  flex:1; border:none; background:transparent; font-size:17px; font-weight:700;
-  color:var(--ink); outline:none; padding:4px 0; min-width:0; font-family:inherit;
+.confirm-overlay.deschis{ display:flex; }
+.confirm-card{
+  background:var(--card-bg); width:100%; max-width:520px;
+  border-radius:16px 16px 0 0; padding:14px 14px calc(env(safe-area-inset-bottom,0px) + 14px);
+  box-shadow:0 -6px 24px rgba(0,0,0,.2);
 }
-.buton-sterge{
-  border:none; background:var(--danger-soft); color:var(--pierdere); width:32px; height:32px;
-  border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+.confirm-card p{ text-align:center; color:var(--ink-soft); font-size:13px; margin:4px 0 12px; }
+.confirm-card button{
+  width:100%; padding:14px; border:none; border-radius:12px; font-size:17px;
+  font-family:inherit; margin-bottom:8px;
 }
-.grid4{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-.camp label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:4px; }
-.camp input{
-  width:100%; border:1px solid var(--input-border); background:var(--input-bg); border-radius:10px;
-  padding:10px; font-size:15.5px; color:var(--ink); outline:none; font-family:inherit;
-}
-.camp-cu-moneda{ display:flex; gap:5px; }
-.camp-cu-moneda input{ flex:1; min-width:0; }
-.camp-cu-moneda select{
-  border:1px solid var(--input-border); background:var(--input-bg); color:var(--ink-faded);
-  border-radius:10px; padding:0 4px; font-size:12px; font-family:inherit; flex-shrink:0; width:58px;
-}
-.linie-total{
-  display:flex; justify-content:space-between; align-items:baseline; padding-top:10px;
-  border-top:1px solid var(--card-border);
-}
-.produs-mini{ display:flex; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px; }
-.produs-mini b{ color:var(--ink); font-weight:600; }
-.marja{ font-size:12.5px; color:var(--ink-soft); }
-.profit-val{ font-size:18px; font-weight:700; }
-
-.stoc-rand{ display:flex; align-items:center; gap:8px; margin-top:10px; }
-.stoc-eticheta{ font-size:11.5px; color:var(--ink-soft); flex-shrink:0; }
-.stoc-btn{
-  width:26px; height:26px; border-radius:8px; border:1px solid var(--input-border);
-  background:var(--input-bg); color:var(--ink); font-size:15px; font-weight:700;
-  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:inherit;
-}
-.stoc-input{
-  width:48px; flex-shrink:0; text-align:center; border:1px solid var(--input-border);
-  background:var(--input-bg); border-radius:8px; padding:5px 2px; font-size:14px;
-  color:var(--ink); outline:none; font-family:inherit;
-}
-.stoc-status{ font-size:11px; font-weight:700; margin-left:2px; }
-.stoc-status.stoc-rosu{ color:var(--pierdere); }
-.stoc-status.stoc-portocaliu{ color:#C98A2C; }
-
-.datornic-row{ display:flex; align-items:center; gap:10px; }
-.bifa{
-  border:none; width:30px; height:30px; border-radius:9px; flex-shrink:0; display:flex;
-  align-items:center; justify-content:center; background:var(--segment-bg);
-}
-.bifa.platit{ background:var(--profit); }
-
-.notite-card{
-  background:var(--card); border:1px solid var(--card-border); border-radius:16px;
-  overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.06);
-}
-.notita-rand{
-  display:flex; align-items:flex-start; gap:11px; padding:13px 15px;
-  border-bottom:1px solid var(--card-border); transition:opacity .2s ease;
-}
-.notita-rand:last-child{ border-bottom:none; }
-.notita-rand.platit{ opacity:.5; }
-.notita-bifa{
-  border:1.5px solid var(--ink-soft); background:transparent; color:transparent;
-  width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;
-  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;
-}
-.notita-bifa.platit{ background:var(--profit); border-color:var(--profit); color:#fff; }
-.notita-continut{ flex:1; min-width:0; }
-.notita-nume-rand{ display:flex; align-items:baseline; gap:8px; }
-.notita-nume{
-  flex:1; min-width:0; border:none; background:transparent; outline:none;
-  font-size:16px; font-weight:600; color:var(--ink); font-family:inherit; padding:0;
-}
-.notita-suma{
-  flex-shrink:0; width:92px; border:none; background:transparent; outline:none;
-  font-size:15.5px; font-weight:700; color:var(--accent); text-align:right;
-  font-family:ui-monospace,'SF Mono',Menlo,monospace; padding:0;
-}
-.notita-rand.platit .notita-suma{ color:var(--ink-faded); }
-.notita-detaliu-rand{ display:flex; align-items:center; gap:8px; margin-top:2px; }
-.notita-detaliu{
-  flex:1; min-width:0; border:none; background:transparent; outline:none;
-  font-size:12.5px; color:var(--ink-faded); font-family:inherit; padding:0;
-}
-.notita-rand.platit .notita-nume, .notita-rand.platit .notita-detaliu{ text-decoration:line-through; }
-.notita-sterge{
-  flex-shrink:0; border:none; background:transparent; color:var(--ink-soft);
-  width:18px; height:18px; display:flex; align-items:center; justify-content:center;
-  font-size:13px; padding:0; opacity:.7;
-}
-.suma-rand{ margin-top:12px; }
-.suma-rand label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:4px; }
-.suma-rand input{
-  width:100%; border:1px solid var(--input-border); background:var(--input-bg); border-radius:10px;
-  padding:10px; font-size:16px; color:var(--ink); outline:none; font-family:inherit;
-}
-.platit-label{ margin-top:8px; font-size:12px; color:var(--profit); font-weight:600; }
-
-.reset-zona{ flex-shrink:0; padding:10px 0 12px; display:flex; flex-wrap:wrap; justify-content:center; gap:8px; align-items:center; }
-.buton-mic{ border:none; border-radius:8px; padding:7px 12px; font-size:12.5px; font-weight:600; font-family:inherit; }
-
-footer{
-  flex-shrink:0; background:var(--footer-bg); color:var(--footer-text);
-  border-top-left-radius:18px; border-top-right-radius:18px; box-shadow:0 -4px 20px rgba(0,0,0,.18);
-  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6px);
-  position:relative;
-}
-footer::after{
-  content:""; position:fixed; left:0; right:0; bottom:0;
-  height:calc(env(safe-area-inset-bottom, 0px) + 40px);
-  background:var(--footer-bg); pointer-events:none; z-index:-1;
-}
-#toggle-sumar{
-  width:100%; border:none; background:transparent; color:var(--footer-text); padding:8px 18px 1px;
-  display:flex; align-items:center; justify-content:space-between; font-family:inherit;
-}
-#eticheta-sumar{ font-size:11px; color:var(--footer-subtle); }
-.sumar-corp{ padding:0 18px 8px; }
-#profit-total{ font-size:20px; font-weight:700; margin-bottom:0; }
-#profit-total.cu-detalii{ margin-bottom:7px; }
-.sumar-mini{ display:flex; gap:14px; font-size:11.5px; color:var(--footer-subtle); margin-top:2px; }
-.sumar-mini span b{ color:var(--footer-text); font-weight:600; }
-.sumar-grid{ display:grid; grid-template-columns:1fr 1fr; gap:5px 14px; }
-.sumar-grid .lbl{ font-size:10px; color:var(--footer-subtle); }
-.sumar-grid .val{ font-size:12.5px; font-weight:600; }
-.incasat-linie{
-  margin-top:6px; padding-top:6px; border-top:1px solid var(--footer-line);
-  display:flex; justify-content:space-between; align-items:center;
-}
-.incasat-linie .lbl{ font-size:11px; color:var(--footer-subtle); }
-.incasat-linie .val{ font-size:13.5px; font-weight:700; color:var(--footer-gold); }
-
-svg{ display:block; }
-
-.ecran-blocare{
-  position:fixed; inset:0; z-index:100; background:var(--bg); color:var(--ink);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:24px; text-align:center;
-}
-.blocare-badge{
-  width:52px; height:52px; border-radius:15px; background:var(--accent);
-  display:flex; align-items:center; justify-content:center; margin-bottom:14px;
-}
-.blocare-input{
-  width:100%; max-width:260px; border:1px solid var(--input-border); background:var(--input-bg);
-  border-radius:12px; padding:13px 14px; font-size:16px; color:var(--ink); outline:none;
-  font-family:inherit; text-align:center; margin-bottom:12px;
-}
-.blocare-eroare{ min-height:16px; font-size:12.5px; color:var(--pierdere); margin-top:10px; }
-
-.parola-camp{ margin-bottom:12px; }
-.parola-camp label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:4px; }
-.parola-camp input{
-  width:100%; box-sizing:border-box; border:1px solid var(--input-border); background:var(--input-bg);
-  border-radius:10px; padding:10px; font-size:15.5px; color:var(--ink); outline:none; font-family:inherit;
-}
-.parola-eroare{ font-size:12px; color:var(--pierdere); margin-bottom:8px; min-height:15px; }
-.parola-activa{
-  display:flex; align-items:center; gap:8px; background:var(--input-bg); border:1px solid var(--input-border);
-  border-radius:11px; padding:11px 13px; font-size:13.5px; color:var(--ink); margin-bottom:14px;
-}
-.parola-secundar{
-  width:100%; border:1px solid var(--card-border); background:transparent; color:var(--ink-faded);
-  border-radius:11px; padding:11px 0; font-size:13.5px; font-weight:600; font-family:inherit; margin-top:8px;
-}
+.confirm-sterge{ background:var(--danger); color:#fff; font-weight:600; }
+.confirm-anuleaza{ background:var(--search-bg); color:var(--ink); }
 </style>
 </head>
 <body>
 
-<div id="ecran-blocare" class="ecran-blocare" style="display:none;">
-  <div class="blocare-badge">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+<div id="ecran-lista">
+  <div class="lista-header">
+    <h1 class="lista-titlu">Notițe</h1>
+    <div class="cautare">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="camp-cautare" placeholder="Caută">
+    </div>
   </div>
-  <h1 style="margin:0 0 4px;">Revânzări</h1>
-  <p style="margin:0 0 18px;font-size:13px;color:var(--ink-faded);">Introdu parola ca să continui</p>
-  <input type="password" id="blocare-input" class="blocare-input" inputmode="text" placeholder="Parolă" autocomplete="off">
-  <button id="btn-deblocheaza" class="sheet-inchide" style="max-width:260px;">Deblochează</button>
-  <div id="blocare-eroare" class="blocare-eroare"></div>
+  <div id="lista-note"></div>
 </div>
 
-<header>
-  <div class="badge-row">
-    <div class="badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-    </div>
-    <h1>Revânzări</h1>
-    <span id="status" class="status">salvat</span>
-    <div style="display:flex; gap:6px; margin-left:auto;">
-      <button id="btn-teme" class="btn-teme">
-        <span class="tema-punct" id="tema-punct"></span>
-        <span id="tema-nume">Clasic</span>
-        <span style="opacity:.5;">▾</span>
-      </button>
-      <button id="btn-curs" class="btn-teme">💱 Curs</button>
-      <button id="btn-parola" class="btn-teme">🔒</button>
-    </div>
+<button class="buton-nou" id="btn-nota-noua" aria-label="Notiță nouă">＋</button>
+
+<div id="ecran-editor">
+  <div class="editor-bara">
+    <button id="btn-inapoi">‹ Notițe</button>
+    <button id="btn-sterge-nota" class="editor-sterge">Șterge</button>
   </div>
-
-  <div class="segment">
-    <button data-tab="produse" class="activ"><span>Produse</span></button>
-    <button data-tab="datornici"><span>De încasat</span></button>
+  <div class="editor-data" id="editor-data"></div>
+  <div class="editor-total ascuns" id="editor-total">
+    <span class="lbl">Total sume din notiță</span>
+    <span class="val" id="editor-total-val">0,00 lei</span>
   </div>
-</header>
+  <textarea id="editor-text" placeholder="Ex: Ana îmi datorează 150 lei pentru 3 parfumuri..." autocapitalize="sentences"></textarea>
+</div>
 
-<main>
-  <div class="tab-panel activ" id="panel-produse">
-    <div class="zona-fixa">
-      <button class="buton-principal" id="btn-adauga-produs">+ Produs nou</button>
-      <button class="buton-secundar" id="btn-scaneaza-factura">📷 Scanează factură</button>
-    </div>
-    <div class="zona-scroll">
-      <div id="lista-produse"></div>
-    </div>
-  </div>
-
-  <div class="tab-panel" id="panel-datornici">
-    <div class="zona-fixa">
-      <button class="buton-principal" id="btn-adauga-datornic">+ Persoană nouă</button>
-      <p class="hint">Notează cine îți mai datorează bani. Apasă bifa când ți-a dat banii — suma iese automat din totalul de încasat.</p>
-      <div class="totaluri-persoane" id="totaluri-persoane" style="display:none;"></div>
-    </div>
-    <div class="zona-scroll">
-      <div id="lista-datornici"></div>
-    </div>
-  </div>
-
-  <div class="reset-zona" id="reset-zona">
-    <button class="buton-mic" id="btn-export" style="background:var(--segment-bg);color:var(--ink-faded);">⬇ Exportă CSV</button>
-    <button class="buton-mic" id="btn-backup" style="background:var(--segment-bg);color:var(--ink-faded);">💾 Backup complet</button>
-    <button class="buton-mic" id="btn-restaurare" style="background:var(--segment-bg);color:var(--ink-faded);">⤴ Restaurează backup</button>
-    <button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>
-  </div>
-  <input type="file" id="input-restaurare" accept="application/json,.json" style="display:none;">
-</main>
-
-<footer>
-  <button id="toggle-sumar">
-    <span id="eticheta-sumar">Profit net total</span>
-    <span id="chevron">▾</span>
-  </button>
-  <div class="sumar-corp">
-    <div id="profit-total" class="mono">+0,00 lei</div>
-    <div class="sumar-mini" id="sumar-mini">
-      <span>Investit <b id="s-investit-mic" class="mono">0 lei</b></span>
-      <span>Încasat <b id="s-vanzari-mic" class="mono">0 lei</b></span>
-    </div>
-    <div id="sumar-detalii">
-      <div class="sumar-grid">
-        <div><div class="lbl">Marjă medie</div><div class="val mono" id="s-marja">0.0%</div></div>
-        <div><div class="lbl">Produse</div><div class="val mono" id="s-produse">0</div></div>
-      </div>
-      <div class="incasat-linie" id="incasat-linie" style="display:none;">
-        <span class="lbl">Mai am de încasat</span>
-        <span class="val mono" id="s-incasat">0,00 lei</span>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<div class="overlay" id="overlay-curs">
-  <div class="sheet">
-    <h2>Curs valutar</h2>
-    <p class="sub">Prețul de cumpărare poate fi introdus în EUR sau USD — se convertește automat în lei, după cursul de aici. Verifică-l din când în când (ex. cursul BNR).</p>
-    <div class="curs-camp">
-      <label>1 EUR = ? RON</label>
-      <input type="number" inputmode="decimal" id="curs-eur" placeholder="ex: 5.05">
-    </div>
-    <div class="curs-camp">
-      <label>1 USD = ? RON</label>
-      <input type="number" inputmode="decimal" id="curs-usd" placeholder="ex: 4.65">
-    </div>
-    <button class="curs-auto" id="btn-curs-auto">⟳ Actualizează automat</button>
-    <div class="curs-auto-status" id="curs-auto-status"></div>
-    <button class="sheet-inchide" id="btn-inchide-curs">Salvează</button>
-
-    <div class="convertor">
-      <div class="convertor-titlu">Convertor rapid</div>
-      <div class="convertor-rand">
-        <input type="number" inputmode="decimal" id="conv-suma" placeholder="0" value="1">
-        <select id="conv-moneda">
-          <option value="RON">RON</option>
-          <option value="EUR" selected>EUR</option>
-          <option value="USD">USD</option>
-        </select>
-      </div>
-      <div class="convertor-rezultate" id="conv-rezultate"></div>
-    </div>
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-card">
+    <p>Notița se șterge definitiv.</p>
+    <button class="confirm-sterge" id="confirm-sterge-btn">Șterge notița</button>
+    <button class="confirm-anuleaza" id="confirm-anuleaza-btn">Anulează</button>
   </div>
 </div>
 
-<div class="overlay" id="overlay-teme">
-  <div class="sheet">
-    <h2>Alege o temă</h2>
-    <p class="sub">Culorile se aplică imediat și se salvează.</p>
-    <div class="teme-grid" id="teme-grid"></div>
-    <button class="sheet-inchide" id="btn-inchide-teme">Gata</button>
-  </div>
-</div>
-
-<div class="overlay" id="overlay-factura">
-  <div class="sheet">
-    <h2>Scanează factură</h2>
-    <p class="sub">Fă o poză facturii sau alege una din galerie. Caut doar totalul de plată — pui denumirea și cu cât vinzi marfa, ca să vezi profitul pe loc. Prima scanare are nevoie de internet; după aceea funcționează și offline.</p>
-    <div class="factura-status" id="factura-status"></div>
-    <div class="factura-rezultate" id="factura-rezultate"></div>
-    <div class="factura-actiuni" id="factura-actiuni" style="display:none;">
-      <button class="buton-secundar" id="btn-factura-alta">↺ Altă poză</button>
-      <button class="sheet-inchide" id="btn-factura-adauga">Adaugă produsul</button>
-    </div>
-  </div>
-</div>
-<input type="file" id="input-factura" accept="image/*" style="position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; pointer-events:none;">
-
-<div class="overlay" id="overlay-parola">
-  <div class="sheet" id="sheet-parola"></div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js"></script>
 <script>
-const CHEIE = "revanzari-date";
-const TEME = {
-  clasic:{ nume:"Clasic", swatch:["#FAF6EC","#20242B","#E3A518"] },
-  verde:{ nume:"Verde", swatch:["#EAF9EE","#0B3D22","#12B45A"] },
-  ocean:{ nume:"Ocean", swatch:["#E6F5FC","#053050","#0EA5E9"] },
-  mov:{ nume:"Mov", swatch:["#F3EBFC","#2E1065","#9333EA"] },
-  grafit:{ nume:"Grafit", swatch:["#EEF1F5","#161B22","#2563EB"] },
-  intunecat:{ nume:"Întunecat", swatch:["#12151A","#F1F3F6","#F2B705"] },
-  noapte:{ nume:"Noapte", swatch:["#0C1526","#E7EDFB","#3B82F6"] },
-  padure:{ nume:"Pădure", swatch:["#0B1712","#E4F3E9","#22C55E"] },
-  rosu:{ nume:"Roșu", swatch:["#FDECEA","#420E08","#EF4444"] },
-  portocaliu:{ nume:"Portocaliu", swatch:["#FFF1E2","#421F02","#FB923C"] },
-  turcoaz:{ nume:"Turcoaz", swatch:["#DEFAF5","#04332E","#06D6A0"] },
-  electric:{ nume:"Electric", swatch:["#EEEAFE","#1B1140","#7C3AED"] },
-  fucsia:{ nume:"Fucsia", swatch:["#FDEAF3","#420A28","#EC4899"] },
-  lime:{ nume:"Lime", swatch:["#F3FBDC","#273107","#A3E635"] },
-};
-
-const uid = () => Math.random().toString(36).slice(2,9);
-const produsGol = () => ({ id:uid(), nume:"", pretAchizitie:"", moneda:"RON", pretVanzare:"", cantitate:"1", cheltuieli:"", stoc:"" });
-const datornicGol = () => ({ id:uid(), nume:"", pentruCe:"", suma:"", platit:false });
-const nr = v => (v==="" || isNaN(parseFloat(v))) ? 0 : parseFloat(v);
-const lei = n => n.toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2}) + " lei";
-const leiScurt = n => n.toLocaleString("ro-RO",{minimumFractionDigits:0,maximumFractionDigits:0}) + " lei";
-
-function parseNumRo(str){
-  str = String(str).trim();
-  if(!str) return NaN;
-  const areVirgula = str.includes(","), areBpunct = str.includes(".");
-  if(areVirgula && areBpunct){
-    str = str.lastIndexOf(",") > str.lastIndexOf(".")
-      ? str.replace(/\./g,"").replace(",",".")
-      : str.replace(/,/g,"");
-  } else if(areVirgula){
-    str = str.replace(",",".");
-  }
-  const puncte = (str.match(/\./g)||[]).length;
-  if(puncte > 1){
-    const parti = str.split(".");
-    const ultima = parti.pop();
-    str = parti.join("") + "." + ultima;
-  }
-  return parseFloat(str);
-}
-
-function numereDinLinie(linie){
-  return (linie.match(/-?\d[\d.,]*\d|\d/g) || [])
-    .map(parseNumRo)
-    .filter(v => !isNaN(v) && v > 0);
-}
-
-function parseFacturaTotal(text){
-  const t = String(text||"");
-  const linii = t.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-
-  // 1) prioritate maximă: linia cu "total plată / total de plată" —
-  // e suma pe care chiar ai achitat-o, indiferent câte alte "total"-uri
-  // (subtotal fără TVA, valoare TVA etc.) mai apar pe factură.
-  const TOTAL_PLATA = /total\s*(de\s*)?plat[ăa]/i;
-  for(const linie of linii){
-    if(TOTAL_PLATA.test(linie)){
-      const numere = numereDinLinie(linie);
-      if(numere.length) return Math.max(...numere);
-    }
-  }
-
-  // 2) fallback: orice linie care conține "total" / "valoare totală" / "sumă totală"
-  const CUVANT_TOTAL = /(total|valoare\s*total[ăa]|sum[ăa]\s*total[ăa])/i;
-  const candidati = [];
-  linii.forEach(linie => {
-    if(CUVANT_TOTAL.test(linie)) candidati.push(...numereDinLinie(linie));
-  });
-  if(candidati.length) return Math.max(...candidati);
-
-  // 3) ultim fallback: cel mai mare număr găsit în tot textul
-  const toate = numereDinLinie(t);
-  return toate.length ? Math.max(...toate) : null;
-}
-
-let stare = {
-  produse:[produsGol()],
-  curs:{ eur:"", usd:"" },
-  datornici:[datornicGol()],
-  tema:"clasic",
-  extins:false,
-  parola:"",
-};
+const CHEIE = "notite_v1";
+let note = [];
+let notaCurentaId = null;
+let debounceSalvare = null;
 
 function incarca(){
   try{
     const raw = localStorage.getItem(CHEIE);
-    if(raw){
-      const parsate = JSON.parse(raw);
-      if(Array.isArray(parsate.produse) && parsate.produse.length) stare.produse = parsate.produse;
-      if(Array.isArray(parsate.datornici) && parsate.datornici.length) stare.datornici = parsate.datornici;
-      if(parsate.tema && TEME[parsate.tema]) stare.tema = parsate.tema;
-      if(parsate.curs) stare.curs = { eur: parsate.curs.eur || "", usd: parsate.curs.usd || "" };
-      if(typeof parsate.parola === "string") stare.parola = parsate.parola;
-    }
-  }catch(e){}
+    note = raw ? JSON.parse(raw) : [];
+  }catch(e){ note = []; }
 }
-
-let salvTimer = null;
 function salveaza(){
-  const statusEl = document.getElementById("status");
-  statusEl.textContent = "salvez…";
-  statusEl.classList.remove("err");
-  clearTimeout(salvTimer);
-  salvTimer = setTimeout(() => {
-    try{
-      localStorage.setItem(CHEIE, JSON.stringify({produse:stare.produse, datornici:stare.datornici, tema:stare.tema, curs:stare.curs, parola:stare.parola}));
-      statusEl.textContent = "salvat";
-    }catch(e){
-      statusEl.textContent = "eroare";
-      statusEl.classList.add("err");
-    }
-  }, 400);
+  try{ localStorage.setItem(CHEIE, JSON.stringify(note)); }catch(e){}
+}
+function idNou(){
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+function formatDataScurta(ts){
+  const d = new Date(ts);
+  const azi = new Date();
+  const eAzi = d.toDateString() === azi.toDateString();
+  if(eAzi) return d.toLocaleTimeString("ro-RO", {hour:"2-digit", minute:"2-digit"});
+  const ieri = new Date(azi); ieri.setDate(azi.getDate()-1);
+  if(d.toDateString() === ieri.toDateString()) return "Ieri";
+  const diffZile = Math.floor((azi - d) / 86400000);
+  if(diffZile < 6) return d.toLocaleDateString("ro-RO", {weekday:"long"});
+  return d.toLocaleDateString("ro-RO", {day:"numeric", month:"short", year: d.getFullYear()!==azi.getFullYear() ? "numeric" : undefined});
+}
+function formatDataLunga(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString("ro-RO", {day:"numeric", month:"long", year:"numeric"}) + " · " +
+         d.toLocaleTimeString("ro-RO", {hour:"2-digit", minute:"2-digit"});
+}
+function titluSiPreview(text){
+  const linii = (text||"").split("\n");
+  const titlu = (linii[0] || "").trim() || "Notiță nouă";
+  const rest = linii.slice(1).join(" ").replace(/\s+/g," ").trim();
+  return {titlu, preview: rest};
+}
+function formatLei(n){
+  return n.toLocaleString("ro-RO", {minimumFractionDigits:2, maximumFractionDigits:2}) + " lei";
+}
+function calculeazaTotal(text){
+  // ia fiecare sumă scrisă (ex: 150, 45.50, 30,5, -20 pentru o plată scăzută din datorie)
+  // dar ignoră numerele lipite de o dată (12.05.2024) sau de o oră (14:30)
+  const curatat = String(text||"")
+    .replace(/\b\d{1,2}[:.]\d{2}\b/g, " ")
+    .replace(/\b\d{1,2}[./]\d{1,2}[./]\d{2,4}\b/g, " ");
+  const numere = curatat.match(/-?\b\d+(?:[.,]\d{1,2})?\b/g) || [];
+  return numere.reduce((sum, n) => sum + parseFloat(n.replace(",", ".")), 0);
 }
 
-function curs(moneda){
-  if(moneda === "EUR") return nr(stare.curs.eur) || 0;
-  if(moneda === "USD") return nr(stare.curs.usd) || 0;
-  return 1;
-}
-
-function randuriProduse(){
-  return stare.produse.map(p => {
-    const cant = nr(p.cantitate) || 0;
-    const rataCurs = curs(p.moneda);
-    const achizitie = nr(p.pretAchizitie) * rataCurs * cant;
-    const vanzare = nr(p.pretVanzare) * cant;
-    const cheltuieli = nr(p.cheltuieli);
-    const profit = vanzare - achizitie - cheltuieli;
-    const marja = vanzare > 0 ? (profit/vanzare)*100 : 0;
-    return {...p, achizitie, vanzare, cheltuieli, profit, marja};
-  });
-}
-
-function actualizeazaMetaTema(){
-  const tema = TEME[stare.tema] || TEME.clasic;
-  const meta = document.getElementById("meta-theme-color");
-  if(meta) meta.setAttribute("content", tema.swatch[0]);
-}
-
-function randareTeme(){
-  const tema = TEME[stare.tema] || TEME.clasic;
-  document.getElementById("tema-nume").textContent = tema.nume;
-  document.getElementById("tema-punct").style.background = tema.swatch[2];
-
-  const grid = document.getElementById("teme-grid");
-  grid.innerHTML = "";
-  Object.entries(TEME).forEach(([cheie, t]) => {
-    const btn = document.createElement("button");
-    btn.className = "tema-optiune" + (stare.tema === cheie ? " activ" : "");
-    btn.innerHTML = `<span class="swatch" style="background:conic-gradient(${t.swatch[0]} 0deg 120deg, ${t.swatch[1]} 120deg 240deg, ${t.swatch[2]} 240deg 360deg);"></span><span>${t.nume}</span>`;
-    btn.onclick = () => {
-      stare.tema = cheie;
-      document.documentElement.setAttribute("data-theme", cheie === "clasic" ? "" : cheie);
-      actualizeazaMetaTema();
-      randareTeme();
-      salveaza();
-    };
-    grid.appendChild(btn);
-  });
-}
-
-function randareProduse(){
-  const cont = document.getElementById("lista-produse");
-  cont.innerHTML = "";
-  randuriProduse().forEach((p, idx) => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <div class="card-top">
-        <input class="input-nume" placeholder="Produs ${idx+1}" value="${escHtml(p.nume)}" data-field="nume">
-        <button class="buton-sterge" aria-label="Șterge">✕</button>
-      </div>
-      <div class="grid4">
-        <div class="camp">
-          <label>Cumpărare</label>
-          <div class="camp-cu-moneda">
-            <input type="number" inputmode="decimal" placeholder="0" value="${p.pretAchizitie}" data-field="pretAchizitie">
-            <select data-field="moneda">
-              <option value="RON" ${p.moneda==="RON"?"selected":""}>RON</option>
-              <option value="EUR" ${p.moneda==="EUR"?"selected":""}>EUR</option>
-              <option value="USD" ${p.moneda==="USD"?"selected":""}>USD</option>
-            </select>
-          </div>
-        </div>
-        <div class="camp"><label>Vânzare</label><input type="number" inputmode="decimal" placeholder="0" value="${p.pretVanzare}" data-field="pretVanzare"></div>
-        <div class="camp"><label>Bucăți</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cantitate}" data-field="cantitate"></div>
-        <div class="camp"><label>Transport/taxe</label><input type="number" inputmode="decimal" placeholder="0" value="${p.cheltuieli}" data-field="cheltuieli"></div>
-      </div>
-      <div class="produs-mini">
-        <span>Investesc <b class="mono">${lei(p.achizitie + p.cheltuieli)}</b></span>
-        <span>Încasez <b class="mono">${lei(p.vanzare)}</b></span>
-      </div>
-      <div class="linie-total">
-        <span class="marja">${p.vanzare > 0 ? "marjă " + p.marja.toFixed(0) + "%" : "—"}</span>
-        <span class="profit-val mono" style="color:${p.profit>0 ? "var(--profit)" : p.profit<0 ? "var(--pierdere)" : "var(--ink-soft)"};">${p.profit>=0?"+":""}${lei(p.profit)}</span>
-      </div>
-      <div class="stoc-rand">
-        <span class="stoc-eticheta">Stoc</span>
-        <button class="stoc-btn" data-stoc="-1" aria-label="Scade stocul">−</button>
-        <input type="number" inputmode="numeric" class="stoc-input" placeholder="—" value="${p.stoc}" data-field="stoc">
-        <button class="stoc-btn" data-stoc="1" aria-label="Crește stocul">+</button>
-        <span class="stoc-status" id="stoc-status-${p.id}"></span>
-      </div>
-    `;
-    div.querySelectorAll("input, select").forEach(inp => {
-      inp.addEventListener(inp.tagName === "SELECT" ? "change" : "input", e => {
-        const f = e.target.dataset.field;
-        const item = stare.produse.find(x => x.id === p.id);
-        item[f] = e.target.value;
-        randareSumar();
-        // doar linia de total și marja se actualizează live, fără re-render complet (păstrează focusul)
-        const randCurent = randuriProduse().find(x => x.id === p.id);
-        const marjaEl = div.querySelector(".marja");
-        const profitEl = div.querySelector(".profit-val");
-        const miniEls = div.querySelectorAll(".produs-mini b");
-        miniEls[0].textContent = lei(randCurent.achizitie + randCurent.cheltuieli);
-        miniEls[1].textContent = lei(randCurent.vanzare);
-        marjaEl.textContent = randCurent.vanzare > 0 ? "marjă " + randCurent.marja.toFixed(0) + "%" : "—";
-        profitEl.textContent = (randCurent.profit>=0?"+":"") + lei(randCurent.profit);
-        profitEl.style.color = randCurent.profit>0 ? "var(--profit)" : randCurent.profit<0 ? "var(--pierdere)" : "var(--ink-soft)";
-        salveaza();
-      });
-    });
-    div.querySelector(".buton-sterge").addEventListener("click", () => {
-      stare.produse = stare.produse.length > 1 ? stare.produse.filter(x => x.id !== p.id) : [produsGol()];
-      randareTot();
-      salveaza();
-    });
-    div.querySelectorAll(".stoc-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const item = stare.produse.find(x => x.id === p.id);
-        const curent = nr(item.stoc);
-        const nou = Math.max(0, curent + parseInt(btn.dataset.stoc, 10));
-        item.stoc = String(nou);
-        div.querySelector(".stoc-input").value = nou;
-        actualizeazaStocStatus(p.id, nou, item.stoc !== "");
-        salveaza();
-      });
-    });
-    div.querySelector(".stoc-input").addEventListener("input", e => {
-      const item = stare.produse.find(x => x.id === p.id);
-      item.stoc = e.target.value;
-      actualizeazaStocStatus(p.id, nr(e.target.value), e.target.value !== "");
-      salveaza();
-    });
-    actualizeazaStocStatus(p.id, nr(p.stoc), p.stoc !== "");
-    cont.appendChild(div);
-  });
-}
-
-function actualizeazaStocStatus(id, valoare, areValoare){
-  const el = document.getElementById(`stoc-status-${id}`);
-  if(!el) return;
-  if(!areValoare){
-    el.textContent = "";
-    el.className = "stoc-status";
-    return;
+function randareLista(){
+  const cont = document.getElementById("lista-note");
+  const filtru = document.getElementById("camp-cautare").value.trim().toLowerCase();
+  let filtrate = note.slice().sort((a,b)=> b.actualizat - a.actualizat);
+  if(filtru){
+    filtrate = filtrate.filter(n => (n.text||"").toLowerCase().includes(filtru));
   }
-  if(valoare <= 0){
-    el.textContent = "epuizat";
-    el.className = "stoc-status stoc-rosu";
-  }else if(valoare <= 2){
-    el.textContent = "stoc redus";
-    el.className = "stoc-status stoc-portocaliu";
-  }else{
-    el.textContent = "";
-    el.className = "stoc-status";
-  }
-}
-
-function randareDatornici(){
-  const cont = document.getElementById("lista-datornici");
-  cont.innerHTML = "";
-  const card = document.createElement("div");
-  card.className = "notite-card";
-  stare.datornici.forEach(d => {
-    const rand = document.createElement("div");
-    rand.className = `notita-rand ${d.platit ? "platit" : ""}`;
-    rand.innerHTML = `
-      <button class="notita-bifa ${d.platit ? "platit" : ""}" aria-label="Marchează plătit">✓</button>
-      <div class="notita-continut">
-        <div class="notita-nume-rand">
-          <input class="notita-nume" placeholder="Nume" value="${escHtml(d.nume)}" data-field="nume">
-          <input class="notita-suma" type="number" inputmode="decimal" placeholder="0" value="${d.suma}" data-field="suma">
-        </div>
-        <div class="notita-detaliu-rand">
-          <input class="notita-detaliu" placeholder="pentru ce" value="${escHtml(d.pentruCe)}" data-field="pentruCe">
-          <button class="notita-sterge" aria-label="Șterge">✕</button>
-        </div>
-      </div>
-    `;
-    rand.querySelectorAll("input").forEach(inp => {
-      inp.addEventListener("input", e => {
-        const item = stare.datornici.find(x => x.id === d.id);
-        item[e.target.dataset.field] = e.target.value;
-        randareSumar();
-        randareTotaluriPersoane();
-        salveaza();
-      });
-    });
-    rand.querySelector(".notita-bifa").addEventListener("click", () => {
-      const item = stare.datornici.find(x => x.id === d.id);
-      item.platit = !item.platit;
-      randareTot();
-      salveaza();
-    });
-    rand.querySelector(".notita-sterge").addEventListener("click", () => {
-      stare.datornici = stare.datornici.length > 1 ? stare.datornici.filter(x => x.id !== d.id) : [datornicGol()];
-      randareTot();
-      salveaza();
-    });
-    card.appendChild(rand);
-  });
-  cont.appendChild(card);
-  randareTotaluriPersoane();
-}
-
-function calculeazaTotaluriPersoane(){
-  const harta = {};
-  stare.datornici.forEach(d => {
-    const nume = (d.nume || "").trim();
-    if(!nume || d.platit) return;
-    const cheie = nume.toLowerCase();
-    if(!harta[cheie]) harta[cheie] = { nume, suma:0, count:0 };
-    harta[cheie].suma += nr(d.suma);
-    harta[cheie].count += 1;
-  });
-  return Object.values(harta).filter(g => g.count > 1).sort((a,b) => b.suma - a.suma);
-}
-
-function randareTotaluriPersoane(){
-  const cont = document.getElementById("totaluri-persoane");
-  if(!cont) return;
-  const grupuri = calculeazaTotaluriPersoane();
-  if(!grupuri.length){
-    cont.style.display = "none";
+  if(filtrate.length === 0){
     cont.innerHTML = "";
+    const gol = document.createElement("div");
+    gol.className = "gol";
+    gol.innerHTML = filtru
+      ? `<b>Niciun rezultat</b><span>Încearcă alt cuvânt de căutare.</span>`
+      : `<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                <b>Nicio notiță</b><span>Apasă pe ＋ ca să scrii prima notiță — vânzări, datorii, orice.</span>`;
+    cont.appendChild(gol);
     return;
   }
-  cont.style.display = "block";
-  cont.innerHTML = `<div class="tp-titlu">Total pe persoană</div>` + grupuri.map(g => `
-    <div class="tp-rand">
-      <span class="tp-nume">${escHtml(g.nume)} <span class="tp-count">(${g.count})</span></span>
-      <span class="tp-suma mono">${lei(g.suma)}</span>
-    </div>
-  `).join("");
-}
-
-function randareSumar(){
-  const randuri = randuriProduse();
-  const totalVanzari = randuri.reduce((s,r) => s + r.vanzare, 0);
-  const totalCosturi = randuri.reduce((s,r) => s + r.achizitie + r.cheltuieli, 0);
-  const totalProfit = totalVanzari - totalCosturi;
-  const marjaMedie = totalVanzari > 0 ? (totalProfit/totalVanzari)*100 : 0;
-  const areDate = totalVanzari > 0 || totalCosturi > 0;
-  const deIncasat = stare.datornici.reduce((s,d) => d.platit ? s : s + nr(d.suma), 0);
-  const areDatornici = stare.datornici.some(d => nr(d.suma) > 0);
-
-  document.getElementById("eticheta-sumar").textContent = areDate ? "Profit net total" : "Adaugă prețuri pentru a vedea profitul";
-  const pt = document.getElementById("profit-total");
-  pt.textContent = (totalProfit>=0?"+":"") + lei(totalProfit);
-  pt.style.color = totalProfit >= 0 ? "var(--footer-profit)" : "var(--footer-pierdere)";
-  document.getElementById("s-investit-mic").textContent = leiScurt(totalCosturi);
-  document.getElementById("s-vanzari-mic").textContent = leiScurt(totalVanzari);
-  document.getElementById("sumar-mini").style.display = areDate ? "flex" : "none";
-  document.getElementById("s-marja").textContent = marjaMedie.toFixed(1) + "%";
-  document.getElementById("s-produse").textContent = stare.produse.length;
-  const incasatEl = document.getElementById("incasat-linie");
-  incasatEl.style.display = areDatornici ? "flex" : "none";
-  document.getElementById("s-incasat").textContent = lei(deIncasat);
-}
-
-function escHtml(s){
-  return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function randareTot(){
-  randareTeme();
-  randareProduse();
-  randareDatornici();
-  randareSumar();
-}
-
-// evenimente statice
-document.getElementById("btn-adauga-produs").onclick = () => {
-  stare.produse.unshift(produsGol());
-  randareTot();
-  salveaza();
-};
-document.getElementById("btn-adauga-datornic").onclick = () => {
-  stare.datornici.unshift(datornicGol());
-  randareTot();
-  salveaza();
-};
-document.querySelectorAll(".segment button").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".segment button").forEach(b => b.classList.remove("activ"));
-    btn.classList.add("activ");
-    const tab = btn.dataset.tab;
-    document.getElementById("panel-produse").classList.toggle("activ", tab === "produse");
-    document.getElementById("panel-datornici").classList.toggle("activ", tab === "datornici");
-  };
-});
-document.getElementById("btn-teme").onclick = () => {
-  document.getElementById("overlay-teme").classList.add("deschis");
-};
-document.getElementById("btn-inchide-teme").onclick = () => {
-  document.getElementById("overlay-teme").classList.remove("deschis");
-};
-document.getElementById("overlay-teme").onclick = (e) => {
-  if(e.target.id === "overlay-teme") e.target.classList.remove("deschis");
-};
-
-const overlayFactura = document.getElementById("overlay-factura");
-const inputFactura = document.getElementById("input-factura");
-const statusFactura = document.getElementById("factura-status");
-const rezultateFactura = document.getElementById("factura-rezultate");
-const actiuniFactura = document.getElementById("factura-actiuni");
-
-function randFacturaTotal(total){
-  rezultateFactura.innerHTML = "";
-  const div = document.createElement("div");
-  div.className = "factura-rand";
-  div.innerHTML = `
-    <div class="factura-camp-nume">
-      <input type="text" class="f-nume" placeholder="Denumire (ex: Marfă furnizor X)">
-      <div class="factura-sub">
-        <div class="f-mini"><label>Total investit</label><input type="number" inputmode="decimal" class="f-pret" value="${total!=null?total.toFixed(2):""}"></div>
-        <div class="f-mini"><label>Bucăți</label><input type="number" inputmode="decimal" class="f-bucati" value="1" min="1"></div>
-        <div class="f-mini"><label>Vând cu / buc</label><input type="number" inputmode="decimal" class="f-vanzare" placeholder="0"></div>
+  cont.innerHTML = "";
+  filtrate.forEach(n => {
+    const {titlu, preview} = titluSiPreview(n.text);
+    const total = calculeazaTotal(n.text);
+    const rand = document.createElement("div");
+    rand.className = "nota-rand";
+    rand.innerHTML = `
+      <div class="nota-titlu"></div>
+      <div class="nota-sub">
+        <span class="nota-data"></span>
+        <span class="nota-preview"></span>
+        ${Math.abs(total) >= 0.005 ? `<span class="nota-total ${total>=0?"pozitiv":"negativ"}"></span>` : ""}
       </div>
-      <div class="factura-profit-preview" id="factura-profit-preview"></div>
-    </div>
-  `;
-  rezultateFactura.appendChild(div);
-  div.querySelector(".f-pret").addEventListener("input", actualizeazaPreviewFactura);
-  div.querySelector(".f-bucati").addEventListener("input", actualizeazaPreviewFactura);
-  div.querySelector(".f-vanzare").addEventListener("input", actualizeazaPreviewFactura);
-  actualizeazaPreviewFactura();
+    `;
+    rand.querySelector(".nota-titlu").textContent = titlu;
+    rand.querySelector(".nota-data").textContent = formatDataScurta(n.actualizat);
+    rand.querySelector(".nota-preview").textContent = preview ? ("  " + preview) : "";
+    const totalEl = rand.querySelector(".nota-total");
+    if(totalEl) totalEl.textContent = (total>=0?"":"−") + formatLei(Math.abs(total));
+    rand.addEventListener("click", () => deschideNota(n.id));
+    cont.appendChild(rand);
+  });
 }
 
-function actualizeazaPreviewFactura(){
-  const preview = document.getElementById("factura-profit-preview");
-  const rand = rezultateFactura.querySelector(".factura-rand");
-  if(!preview || !rand) return;
-  const vanzareStr = rand.querySelector(".f-vanzare").value;
-  if(vanzareStr === ""){ preview.innerHTML = ""; return; }
-  const achizitieTotal = nr(rand.querySelector(".f-pret").value);
-  const bucati = Math.max(1, nr(rand.querySelector(".f-bucati").value) || 1);
-  const pretVanzareBucata = nr(vanzareStr);
-  const vanzareTotal = pretVanzareBucata * bucati;
-  const profit = vanzareTotal - achizitieTotal;
-  const marja = vanzareTotal > 0 ? (profit/vanzareTotal)*100 : 0;
-  const culoare = profit > 0 ? "var(--profit)" : profit < 0 ? "var(--pierdere)" : "var(--ink-soft)";
-  preview.innerHTML = `Vinzi tot cu <b class="mono">${lei(vanzareTotal)}</b> → Profit: <b class="mono" style="color:${culoare};">${profit>=0?"+":""}${lei(profit)}</b> <span style="color:var(--ink-faded);">(${marja.toFixed(1)}%)</span>`;
+function actualizeazaTotalEditor(text){
+  const cont = document.getElementById("editor-total");
+  const val = document.getElementById("editor-total-val");
+  const total = calculeazaTotal(text);
+  if(Math.abs(total) < 0.005){ cont.classList.add("ascuns"); return; }
+  cont.classList.remove("ascuns");
+  val.textContent = (total>=0?"":"−") + formatLei(Math.abs(total));
+  val.className = "val " + (total>=0 ? "pozitiv" : "negativ");
 }
 
-document.getElementById("btn-scaneaza-factura").onclick = () => {
-  rezultateFactura.innerHTML = "";
-  actiuniFactura.style.display = "none";
-  statusFactura.textContent = "";
-  inputFactura.value = "";
-  inputFactura.click();
-};
-document.getElementById("btn-factura-alta").onclick = () => inputFactura.click();
-overlayFactura.onclick = (e) => {
-  if(e.target.id === "overlay-factura") e.target.classList.remove("deschis");
-};
+function deschideNota(id){
+  notaCurentaId = id;
+  const n = note.find(x => x.id === id);
+  const text = n ? n.text : "";
+  document.getElementById("editor-text").value = text;
+  document.getElementById("editor-data").textContent = n ? formatDataLunga(n.actualizat) : "";
+  actualizeazaTotalEditor(text);
+  document.getElementById("ecran-editor").classList.add("deschis");
+  setTimeout(() => document.getElementById("editor-text").focus(), 50);
+}
 
-inputFactura.onchange = async () => {
-  const fisier = inputFactura.files[0];
-  if(!fisier) return;
-  overlayFactura.classList.add("deschis");
-  rezultateFactura.innerHTML = "";
-  actiuniFactura.style.display = "none";
-  statusFactura.textContent = "Se pregătește recunoașterea textului…";
-  try{
-    const { data } = await Tesseract.recognize(fisier, "ron", {
-      logger: m => {
-        if(m.status === "recognizing text"){
-          statusFactura.textContent = `Se citește factura… ${Math.round((m.progress||0)*100)}%`;
-        } else if(m.status){
-          statusFactura.textContent = /language/i.test(m.status)
-            ? "Se descarcă datele pentru limba română (doar prima dată)…"
-            : "Se pregătește…";
-        }
-      }
-    });
-    const total = parseFacturaTotal(data.text || "");
-    randFacturaTotal(total);
-    statusFactura.textContent = total != null
-      ? "Verifică suma și pune o denumire, apoi apasă Adaugă."
-      : "Nu am găsit automat un total — completează-l tu mai jos.";
-    actiuniFactura.style.display = "flex";
-  } catch(err){
-    statusFactura.textContent = "Nu am putut citi factura (verifică și conexiunea la internet, e nevoie de ea la prima scanare). Încearcă o poză mai clară sau completează manual.";
-    randFacturaTotal(null);
-    actiuniFactura.style.display = "flex";
+function notaNoua(){
+  const n = { id: idNou(), text: "", actualizat: Date.now() };
+  note.unshift(n);
+  deschideNota(n.id);
+}
+
+function inchideEditor(){
+  // curăță notițele complet goale la ieșire
+  const n = note.find(x => x.id === notaCurentaId);
+  if(n && !n.text.trim()){
+    note = note.filter(x => x.id !== notaCurentaId);
+    salveaza();
   }
-};
+  notaCurentaId = null;
+  document.getElementById("ecran-editor").classList.remove("deschis");
+  randareLista();
+}
 
-document.getElementById("btn-factura-adauga").onclick = () => {
-  const rand = rezultateFactura.querySelector(".factura-rand");
-  if(!rand) return;
-  const nume = rand.querySelector(".f-nume").value.trim() || "Marfă din factură";
-  const totalInvestit = nr(rand.querySelector(".f-pret").value);
-  const bucati = Math.max(1, nr(rand.querySelector(".f-bucati").value) || 1);
-  const vanzareBucata = rand.querySelector(".f-vanzare").value || "";
-  const p = produsGol();
-  p.nume = nume;
-  p.pretAchizitie = bucati > 0 ? String(+(totalInvestit / bucati).toFixed(4)) : String(totalInvestit);
-  p.pretVanzare = vanzareBucata;
-  p.cantitate = String(bucati);
-  p.stoc = String(bucati);
-  stare.produse.unshift(p);
-  randareTot();
-  salveaza();
-  overlayFactura.classList.remove("deschis");
-};
-
-document.getElementById("btn-curs").onclick = () => {
-  document.getElementById("curs-eur").value = stare.curs.eur || "";
-  document.getElementById("curs-usd").value = stare.curs.usd || "";
-  randareConvertor();
-  document.getElementById("overlay-curs").classList.add("deschis");
-};
-document.getElementById("btn-inchide-curs").onclick = () => {
-  stare.curs.eur = document.getElementById("curs-eur").value;
-  stare.curs.usd = document.getElementById("curs-usd").value;
-  randareTot();
-  salveaza();
-  document.getElementById("overlay-curs").classList.remove("deschis");
-};
-document.getElementById("overlay-curs").onclick = (e) => {
-  if(e.target.id === "overlay-curs") e.target.classList.remove("deschis");
-};
-document.getElementById("btn-curs-auto").onclick = async () => {
-  const status = document.getElementById("curs-auto-status");
-  status.textContent = "se actualizează…";
-  try{
-    const [rEur, rUsd] = await Promise.all([
-      fetch("https://api.frankfurter.dev/v1/latest?from=EUR&to=RON").then(r => r.json()),
-      fetch("https://api.frankfurter.dev/v1/latest?from=USD&to=RON").then(r => r.json()),
-    ]);
-    const eur = rEur && rEur.rates && rEur.rates.RON;
-    const usd = rUsd && rUsd.rates && rUsd.rates.RON;
-    if(!eur || !usd) throw new Error("lipsă date");
-    document.getElementById("curs-eur").value = eur.toFixed(4);
-    document.getElementById("curs-usd").value = usd.toFixed(4);
-    randareConvertor();
-    const data = rEur.date || "";
-    status.textContent = `actualizat (curs BCE${data ? ", " + data : ""})`;
-  }catch(e){
-    status.textContent = "nu am putut lua cursul — verifică internetul sau scrie-l manual";
-  }
-};
-["curs-eur", "curs-usd", "conv-suma", "conv-moneda"].forEach(id => {
-  document.getElementById(id).addEventListener("input", randareConvertor);
-  document.getElementById(id).addEventListener("change", randareConvertor);
+document.getElementById("editor-text").addEventListener("input", (e) => {
+  const n = note.find(x => x.id === notaCurentaId);
+  if(!n) return;
+  n.text = e.target.value;
+  n.actualizat = Date.now();
+  document.getElementById("editor-data").textContent = formatDataLunga(n.actualizat);
+  actualizeazaTotalEditor(n.text);
+  clearTimeout(debounceSalvare);
+  debounceSalvare = setTimeout(salveaza, 250);
 });
 
-function randareConvertor(){
-  const eur = nr(document.getElementById("curs-eur").value);
-  const usd = nr(document.getElementById("curs-usd").value);
-  const suma = nr(document.getElementById("conv-suma").value);
-  const moneda = document.getElementById("conv-moneda").value;
-  const cont = document.getElementById("conv-rezultate");
+document.getElementById("btn-nota-noua").addEventListener("click", notaNoua);
+document.getElementById("btn-inapoi").addEventListener("click", inchideEditor);
+document.getElementById("camp-cautare").addEventListener("input", randareLista);
 
-  // valoarea sumei introduse, convertită mai întâi în lei
-  let sumaInLei;
-  if(moneda === "RON") sumaInLei = suma;
-  else if(moneda === "EUR") sumaInLei = suma * eur;
-  else sumaInLei = suma * usd;
-
-  const randuri = [];
-  if(moneda !== "RON"){
-    randuri.push({ eticheta: "RON", valoare: sumaInLei, gata: true });
-  }
-  if(moneda !== "EUR"){
-    randuri.push({ eticheta: "EUR", valoare: eur > 0 ? sumaInLei / eur : 0, gata: eur > 0 });
-  }
-  if(moneda !== "USD"){
-    randuri.push({ eticheta: "USD", valoare: usd > 0 ? sumaInLei / usd : 0, gata: usd > 0 });
-  }
-
-  cont.innerHTML = randuri.map(r => `
-    <div class="cr-rand">
-      <span class="cr-eticheta">${r.eticheta}</span>
-      <span class="cr-val">${r.gata ? r.valoare.toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2}) : '<span class="cr-lipsa">completează cursul</span>'}</span>
-    </div>
-  `).join("");
-}
-
-// ---------- Parolă / blocare ----------
-
-function randareSheetParola(){
-  const cont = document.getElementById("sheet-parola");
-  if(stare.parola){
-    cont.innerHTML = `
-      <h2>Parolă</h2>
-      <p class="sub">Parola e activă — se cere de fiecare dată când redeschizi aplicația.</p>
-      <div class="parola-activa">🔒 Parolă setată</div>
-      <button class="parola-secundar" id="btn-blocheaza-acum">Blochează acum</button>
-      <button class="parola-secundar" id="btn-elimina-parola" style="color:var(--pierdere);">Elimină parola</button>
-      <button class="sheet-inchide" id="btn-inchide-parola" style="margin-top:14px;">Gata</button>
-    `;
-    document.getElementById("btn-blocheaza-acum").onclick = () => {
-      document.getElementById("overlay-parola").classList.remove("deschis");
-      aratLockScreen();
-    };
-    document.getElementById("btn-elimina-parola").onclick = () => {
-      const actuala = prompt("Pentru siguranță, scrie parola actuală ca să o elimini:");
-      if(actuala === null) return;
-      if(actuala !== stare.parola){
-        alert("Parolă greșită.");
-        return;
-      }
-      stare.parola = "";
-      salveaza();
-      randareSheetParola();
-    };
-    document.getElementById("btn-inchide-parola").onclick = () => {
-      document.getElementById("overlay-parola").classList.remove("deschis");
-    };
-  }else{
-    cont.innerHTML = `
-      <h2>Setează o parolă</h2>
-      <p class="sub">O protecție simplă, locală, ca alții să nu-ți deschidă aplicația din curiozitate — nu ține loc de securitate reală, dar te lasă liniștit(ă) pentru uz de zi cu zi.</p>
-      <div class="parola-camp"><label>Parolă nouă</label><input type="password" id="parola-noua" autocomplete="off"></div>
-      <div class="parola-camp"><label>Confirmă parola</label><input type="password" id="parola-confirma" autocomplete="off"></div>
-      <div class="parola-eroare" id="parola-eroare"></div>
-      <button class="sheet-inchide" id="btn-salveaza-parola">Activează parola</button>
-    `;
-    document.getElementById("btn-salveaza-parola").onclick = () => {
-      const noua = document.getElementById("parola-noua").value;
-      const confirma = document.getElementById("parola-confirma").value;
-      const eroare = document.getElementById("parola-eroare");
-      if(!noua.trim()){
-        eroare.textContent = "Scrie o parolă.";
-        return;
-      }
-      if(noua !== confirma){
-        eroare.textContent = "Parolele nu se potrivesc.";
-        return;
-      }
-      stare.parola = noua;
-      salveaza();
-      randareSheetParola();
-      document.getElementById("overlay-parola").classList.remove("deschis");
-    };
-  }
-}
-
-document.getElementById("btn-parola").onclick = () => {
-  randareSheetParola();
-  document.getElementById("overlay-parola").classList.add("deschis");
-};
-document.getElementById("overlay-parola").onclick = (e) => {
-  if(e.target.id === "overlay-parola") e.target.classList.remove("deschis");
-};
-
-function aratLockScreen(){
-  document.getElementById("ecran-blocare").style.display = "flex";
-  document.getElementById("blocare-input").value = "";
-  document.getElementById("blocare-eroare").textContent = "";
-  setTimeout(() => document.getElementById("blocare-input").focus(), 50);
-}
-function ascundeLockScreen(){
-  document.getElementById("ecran-blocare").style.display = "none";
-}
-function incearcaDeblocare(){
-  const val = document.getElementById("blocare-input").value;
-  if(val === stare.parola){
-    ascundeLockScreen();
-  }else{
-    document.getElementById("blocare-eroare").textContent = "Parolă greșită, încearcă din nou.";
-    document.getElementById("blocare-input").value = "";
-    document.getElementById("blocare-input").focus();
-  }
-}
-document.getElementById("btn-deblocheaza").onclick = incearcaDeblocare;
-document.getElementById("blocare-input").addEventListener("keydown", e => {
-  if(e.key === "Enter") incearcaDeblocare();
+document.getElementById("btn-sterge-nota").addEventListener("click", () => {
+  document.getElementById("confirm-overlay").classList.add("deschis");
 });
-
-function aplicaExtins(){
-  document.getElementById("sumar-detalii").style.display = stare.extins ? "block" : "none";
-  document.getElementById("profit-total").classList.toggle("cu-detalii", stare.extins);
-  document.getElementById("chevron").textContent = stare.extins ? "▾" : "▴";
-}
-document.getElementById("toggle-sumar").onclick = () => {
-  stare.extins = !stare.extins;
-  aplicaExtins();
-};
-function exportaCSV(){
-  const linii = [];
-  linii.push("PRODUSE");
-  linii.push("Nume;Cumparare;Vanzare;Bucati;Transport/taxe;Profit;Marja %");
-  randuriProduse().forEach(p => {
-    linii.push([p.nume, p.pretAchizitie, p.pretVanzare, p.cantitate, p.cheltuieli,
-      p.profit.toFixed(2), p.marja.toFixed(1)].map(x => String(x ?? "").replace(/;/g, ",")).join(";"));
-  });
-  linii.push("");
-  linii.push("DE INCASAT");
-  linii.push("Nume;Pentru ce;Suma;Platit");
-  stare.datornici.forEach(d => {
-    linii.push([d.nume, d.pentruCe, d.suma, d.platit ? "da" : "nu"]
-      .map(x => String(x ?? "").replace(/;/g, ",")).join(";"));
-  });
-
-  const continut = "\uFEFF" + linii.join("\r\n");
-  const blob = new Blob([continut], {type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  const azi = new Date().toISOString().slice(0,10);
-  a.href = url;
-  a.download = `revanzari-${azi}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-function exportaBackup(){
-  const payload = {
-    tip: "revanzari-backup",
-    versiune: 1,
-    exportat: new Date().toISOString(),
-    produse: stare.produse,
-    datornici: stare.datornici,
-    tema: stare.tema,
-    curs: stare.curs,
-  };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  const azi = new Date().toISOString().slice(0,10);
-  a.href = url;
-  a.download = `revanzari-backup-${azi}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-function porneste_restaurare(fisierText){
-  let parsate;
-  try{
-    parsate = JSON.parse(fisierText);
-  }catch(e){
-    alert("Fișierul nu e un backup valid.");
-    return;
-  }
-  if(!parsate || (!Array.isArray(parsate.produse) && !Array.isArray(parsate.datornici))){
-    alert("Fișierul nu pare să fie un backup făcut din această aplicație.");
-    return;
-  }
-  const zona = document.getElementById("reset-zona");
-  zona.innerHTML = `
-    <span style="font-size:12.5px;color:var(--ink-faded);">Înlocuiești toate datele actuale cu cele din backup?</span>
-    <button class="buton-mic" id="confirma-restaurare-da" style="background:var(--pierdere);color:#fff;">Da, restaurează</button>
-    <button class="buton-mic" id="confirma-restaurare-nu" style="background:var(--segment-bg);color:var(--ink-faded);">Anulează</button>
-  `;
-  document.getElementById("confirma-restaurare-da").onclick = () => {
-    stare.produse = Array.isArray(parsate.produse) && parsate.produse.length ? parsate.produse : [produsGol()];
-    stare.datornici = Array.isArray(parsate.datornici) && parsate.datornici.length ? parsate.datornici : [datornicGol()];
-    stare.tema = (parsate.tema && TEME[parsate.tema]) ? parsate.tema : "clasic";
-    stare.curs = parsate.curs ? { eur: parsate.curs.eur || "", usd: parsate.curs.usd || "" } : { eur:"", usd:"" };
-    document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
-    actualizeazaMetaTema();
-    randareTot();
-    salveaza();
-    zona.innerHTML = zonaResetNormala();
-    ataseazaReset();
-  };
-  document.getElementById("confirma-restaurare-nu").onclick = () => {
-    zona.innerHTML = zonaResetNormala();
-    ataseazaReset();
-  };
-}
-
-function zonaResetNormala(){
-  return `<button class="buton-mic" id="btn-export" style="background:var(--segment-bg);color:var(--ink-faded);">⬇ Exportă CSV</button>
-    <button class="buton-mic" id="btn-backup" style="background:var(--segment-bg);color:var(--ink-faded);">💾 Backup complet</button>
-    <button class="buton-mic" id="btn-restaurare" style="background:var(--segment-bg);color:var(--ink-faded);">⤴ Restaurează backup</button>
-    <button class="buton-mic" id="btn-reset" style="background:transparent;color:var(--ink-soft);">↺ Șterge toate datele</button>`;
-}
-
-function ataseazaReset(){
-  const btn = document.getElementById("btn-reset");
-  if(btn) btn.onclick = porneste_confirmare_reset;
-  const exp = document.getElementById("btn-export");
-  if(exp) exp.onclick = exportaCSV;
-  const bak = document.getElementById("btn-backup");
-  if(bak) bak.onclick = exportaBackup;
-  const res = document.getElementById("btn-restaurare");
-  const inputFisier = document.getElementById("input-restaurare");
-  if(res && inputFisier) res.onclick = () => inputFisier.click();
-}
-function inputRestaurareAsculta(){
-  const inputFisier = document.getElementById("input-restaurare");
-  if(!inputFisier) return;
-  inputFisier.addEventListener("change", (e) => {
-    const fisier = e.target.files[0];
-    if(!fisier) return;
-    const cititor = new FileReader();
-    cititor.onload = () => porneste_restaurare(cititor.result);
-    cititor.readAsText(fisier);
-    inputFisier.value = "";
-  });
-}
-function porneste_confirmare_reset(){
-  const zona = document.getElementById("reset-zona");
-  zona.innerHTML = `
-    <span style="font-size:12.5px;color:var(--ink-faded);">Ștergi tot?</span>
-    <button class="buton-mic" id="confirma-da" style="background:var(--pierdere);color:#fff;">Da, șterge</button>
-    <button class="buton-mic" id="confirma-nu" style="background:var(--segment-bg);color:var(--ink-faded);">Anulează</button>
-  `;
-  document.getElementById("confirma-da").onclick = () => {
-    stare.produse = [produsGol()];
-    stare.datornici = [datornicGol()];
-    randareTot();
-    salveaza();
-    zona.innerHTML = zonaResetNormala();
-    ataseazaReset();
-  };
-  document.getElementById("confirma-nu").onclick = () => {
-    zona.innerHTML = zonaResetNormala();
-    ataseazaReset();
-  };
-}
-
-
-// pornire
-incarca();
-document.documentElement.setAttribute("data-theme", stare.tema === "clasic" ? "" : stare.tema);
-actualizeazaMetaTema();
-randareTot();
-aplicaExtins();
-ataseazaReset();
-inputRestaurareAsculta();
-if(stare.parola) aratLockScreen();
+document.getElementById("confirm-anuleaza-btn").addEventListener("click", () => {
+  document.getElementById("confirm-overlay").classList.remove("deschis");
+});
+document.getElementById("confirm-sterge-btn").addEventListener("click", () => {
+  note = note.filter(x => x.id !== notaCurentaId);
+  salveaza();
+  document.getElementById("confirm-overlay").classList.remove("deschis");
+  notaCurentaId = null;
+  document.getElementById("ecran-editor").classList.remove("deschis");
+  randareLista();
+});
 
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
   });
 }
+
+incarca();
+randareLista();
 </script>
 </body>
 </html>
