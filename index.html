@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#FAF6EC" id="meta-theme-color">
+<meta name="theme-color" content="#FFF3D6" id="meta-theme-color">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Notițe">
@@ -12,30 +12,76 @@
 <title>Notițe</title>
 <style>
 :root{
-  --bg:#FAF6EC; --ink:#2B2620; --ink-soft:#8A8172; --ink-faded:#B7AF9E;
-  --card-bg:#FFFFFF; --card-border:#EFE7D6;
-  --accent:#F2A93B; --accent-ink:#7A4A00;
-  --footer-bg:#2B2620; --footer-text:#F4EFE3; --footer-subtle:#9C9484;
-  --danger:#D9534F; --divider:#EFE7D6;
-  --search-bg:#F0EAD9;
+  --bg:#FFF3D6; --ink:#241C08; --ink-soft:#8A7A4C; --ink-faded:#C4B48A;
+  --card-bg:#FFFFFF; --card-border:#F3E3B8;
+  --accent:#F2A93B; --accent-ink:#3D2400;
+  --footer-bg:#241C08; --footer-text:#FFF3D6; --footer-subtle:#B4A57A;
+  --danger:#E0402F; --divider:#F0DFAF;
+  --search-bg:#FCE8B0;
+  --check-off:#2E8B57; --check-on:#8A8172;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#17140F; --ink:#F1ECE0; --ink-soft:#9C9484; --ink-faded:#6B6455;
-    --card-bg:#221E17; --card-border:#332C20;
-    --accent:#F2A93B; --accent-ink:#2B1900;
-    --footer-bg:#000000; --footer-text:#F4EFE3; --footer-subtle:#8A8172;
-    --danger:#E5776F; --divider:#332C20;
-    --search-bg:#221E17;
-  }
+[data-theme="roz"]{
+  --bg:#FFE1EF; --ink:#3A0620; --ink-soft:#9A4D71; --ink-faded:#D998B4;
+  --card-bg:#FFFFFF; --card-border:#FBC7DE;
+  --accent:#FF2D87; --accent-ink:#4A0022;
+  --footer-bg:#3A0620; --footer-text:#FFE1EF; --footer-subtle:#C98AA6;
+  --danger:#E0402F; --divider:#FBC7DE;
+  --search-bg:#FFC9E0;
+  --check-off:#2E8B57; --check-on:#9A4D71;
 }
-:root[data-theme="dark"]{
-  --bg:#17140F; --ink:#F1ECE0; --ink-soft:#9C9484; --ink-faded:#6B6455;
-  --card-bg:#221E17; --card-border:#332C20;
-  --accent:#F2A93B; --accent-ink:#2B1900;
-  --footer-bg:#000000; --footer-text:#F4EFE3; --footer-subtle:#8A8172;
-  --danger:#E5776F; --divider:#332C20;
-  --search-bg:#221E17;
+[data-theme="verde"]{
+  --bg:#DCFCE3; --ink:#052E14; --ink-soft:#3E7A54; --ink-faded:#9AD1AC;
+  --card-bg:#FFFFFF; --card-border:#B7EEC5;
+  --accent:#17C964; --accent-ink:#022B10;
+  --footer-bg:#052E14; --footer-text:#DCFCE3; --footer-subtle:#7CB791;
+  --danger:#E0402F; --divider:#B7EEC5;
+  --search-bg:#B7EEC5;
+  --check-off:#0E7A3B; --check-on:#3E7A54;
+}
+[data-theme="albastru"]{
+  --bg:#DCE9FF; --ink:#04122E; --ink-soft:#3E5C8C; --ink-faded:#9AB4E0;
+  --card-bg:#FFFFFF; --card-border:#B7D2F5;
+  --accent:#2D6CFF; --accent-ink:#03102B;
+  --footer-bg:#04122E; --footer-text:#DCE9FF; --footer-subtle:#7C97C4;
+  --danger:#FF6B6B; --divider:#B7D2F5;
+  --search-bg:#B7D2F5;
+  --check-off:#1F9D55; --check-on:#3E5C8C;
+}
+[data-theme="portocaliu"]{
+  --bg:#FFE5D3; --ink:#3A1400; --ink-soft:#9A5A2E; --ink-faded:#E0AE8C;
+  --card-bg:#FFFFFF; --card-border:#FBCFAE;
+  --accent:#FF6B1A; --accent-ink:#4A1800;
+  --footer-bg:#3A1400; --footer-text:#FFE5D3; --footer-subtle:#C99B7A;
+  --danger:#D9264A; --divider:#FBCFAE;
+  --search-bg:#FDCBA0;
+  --check-off:#2E8B57; --check-on:#9A5A2E;
+}
+[data-theme="turcoaz"]{
+  --bg:#D2FAFB; --ink:#012B2E; --ink-soft:#2E7A80; --ink-faded:#8FD6D9;
+  --card-bg:#FFFFFF; --card-border:#A9EEF0;
+  --accent:#00C2CC; --accent-ink:#012B2E;
+  --footer-bg:#012B2E; --footer-text:#D2FAFB; --footer-subtle:#6FB4B8;
+  --danger:#E0402F; --divider:#A9EEF0;
+  --search-bg:#A9EEF0;
+  --check-off:#0E7A3B; --check-on:#2E7A80;
+}
+[data-theme="mov"]{
+  --bg:#EFE0FF; --ink:#22043A; --ink-soft:#6E4A94; --ink-faded:#C6ACE0;
+  --card-bg:#FFFFFF; --card-border:#DCC2F5;
+  --accent:#8B2FE0; --accent-ink:#2A0048;
+  --footer-bg:#22043A; --footer-text:#EFE0FF; --footer-subtle:#A98CC4;
+  --danger:#E0402F; --divider:#DCC2F5;
+  --search-bg:#DCC2F5;
+  --check-off:#2E8B57; --check-on:#6E4A94;
+}
+[data-theme="rosu"]{
+  --bg:#FFDEDE; --ink:#3A0505; --ink-soft:#9A4040; --ink-faded:#E0A0A0;
+  --card-bg:#FFFFFF; --card-border:#FBBEBE;
+  --accent:#FF3B3B; --accent-ink:#450000;
+  --footer-bg:#3A0505; --footer-text:#FFDEDE; --footer-subtle:#C48383;
+  --danger:#8B0000; --divider:#FBBEBE;
+  --search-bg:#FBBEBE;
+  --check-off:#1F9D55; --check-on:#9A4040;
 }
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html,body{
@@ -48,24 +94,29 @@ body{
   -webkit-font-smoothing:antialiased;
   display:flex; flex-direction:column;
   padding-top:env(safe-area-inset-top,0px);
+  transition:background .2s;
 }
 html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 
-/* ---------- Ecran listă ---------- */
-#ecran-lista{
-  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;
-}
+/* ---------- Header + selector temă ---------- */
+#ecran-lista{ flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
 .lista-header{
-  padding:14px 18px 10px;
+  padding:12px 18px 10px;
   padding-left:calc(env(safe-area-inset-left,0px) + 18px);
   padding-right:calc(env(safe-area-inset-right,0px) + 18px);
 }
-.lista-titlu{ font-size:30px; font-weight:800; margin:0 0 12px; }
+.header-sus{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.lista-titlu{ font-size:28px; font-weight:800; margin:0; }
+#btn-tema{
+  display:flex; align-items:center; gap:7px; background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:20px; padding:7px 12px 7px 9px; font-family:inherit; font-size:13.5px; font-weight:600; color:var(--ink);
+}
+#tema-punct{ width:13px; height:13px; border-radius:50%; background:var(--accent); flex-shrink:0; }
 .cautare{
   background:var(--search-bg); border-radius:11px; padding:9px 12px;
   display:flex; align-items:center; gap:6px;
 }
-.cautare svg{ flex-shrink:0; opacity:.55; }
+.cautare svg{ flex-shrink:0; opacity:.6; }
 .cautare input{
   border:none; background:transparent; outline:none; font-size:16px;
   color:var(--ink); width:100%; font-family:inherit;
@@ -78,24 +129,25 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   padding-left:calc(env(safe-area-inset-left,0px) + 18px);
   padding-right:calc(env(safe-area-inset-right,0px) + 18px);
 }
+.sectiune-eticheta{ font-size:12px; font-weight:700; color:var(--ink-faded); text-transform:uppercase; letter-spacing:.04em; padding:14px 2px 4px; }
+.sectiune-eticheta:first-child{ padding-top:6px; }
 .nota-rand{
   padding:12px 2px; border-bottom:1px solid var(--divider);
   display:flex; flex-direction:column; gap:3px; cursor:pointer;
 }
 .nota-rand:active{ opacity:.6; }
-.nota-titlu{ font-size:17px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.nota-sub{ font-size:14px; color:var(--ink-soft); display:flex; gap:6px; white-space:nowrap; overflow:hidden; align-items:center; }
+.nota-titlu-rand{ font-size:17px; font-weight:700; display:flex; align-items:center; gap:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pin-mic{ flex-shrink:0; opacity:.7; }
+.nota-sub{ font-size:14px; color:var(--ink-soft); display:flex; gap:8px; white-space:nowrap; overflow:hidden; align-items:center; }
 .nota-data{ flex-shrink:0; }
 .nota-preview{ overflow:hidden; text-overflow:ellipsis; flex:1; }
-.nota-total{ flex-shrink:0; font-weight:700; font-variant-numeric:tabular-nums; }
-.nota-total.pozitiv{ color:#2E8B57; }
-.nota-total.negativ{ color:var(--danger); }
+.nota-total{ flex-shrink:0; font-weight:700; font-variant-numeric:tabular-nums; font-size:13.5px; background:var(--search-bg); padding:2px 8px; border-radius:20px; }
 
 .gol{
   flex:1; display:flex; align-items:center; justify-content:center;
   flex-direction:column; gap:8px; color:var(--ink-faded); text-align:center; padding:0 30px;
 }
-.gol svg{ opacity:.35; margin-bottom:4px; }
+.gol svg{ opacity:.4; margin-bottom:4px; }
 .gol b{ font-size:17px; color:var(--ink-soft); font-weight:600; }
 .gol span{ font-size:14px; }
 
@@ -105,7 +157,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   width:58px; height:58px; border-radius:50%; border:none;
   background:var(--accent); color:var(--accent-ink);
   font-size:28px; font-weight:400; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 6px 18px rgba(0,0,0,.25); z-index:5;
+  box-shadow:0 6px 18px rgba(0,0,0,.28); z-index:5;
 }
 .buton-nou:active{ transform:scale(.94); }
 
@@ -123,42 +175,89 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   padding-right:calc(env(safe-area-inset-right,0px) + 14px);
 }
 .editor-bara button{
-  border:none; background:transparent; color:var(--accent); font-size:17px;
-  font-family:inherit; padding:6px 8px; display:flex; align-items:center; gap:3px;
+  border:none; background:transparent; color:var(--accent-ink); font-size:16px;
+  font-family:inherit; padding:6px 8px; display:flex; align-items:center; gap:4px;
 }
 .editor-bara button:active{ opacity:.5; }
+.editor-bara-dreapta{ display:flex; align-items:center; gap:2px; }
 .editor-sterge{ color:var(--danger) !important; }
+.editor-pin.activ{ color:var(--accent-ink); }
+.editor-titlu{
+  border:none; outline:none; background:transparent; color:var(--ink); width:100%;
+  font-family:inherit; font-size:22px; font-weight:800;
+  padding:6px 18px 4px;
+  padding-left:calc(env(safe-area-inset-left,0px) + 18px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
+}
+.editor-titlu::placeholder{ color:var(--ink-faded); }
 .editor-data{
-  text-align:center; font-size:12px; color:var(--ink-faded); padding:2px 0 6px;
-}
-.editor-total{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:10px 18px; margin:0 14px 8px; border-radius:12px;
-  background:var(--search-bg);
+  font-size:12px; color:var(--ink-faded); padding:0 18px 8px;
   padding-left:calc(env(safe-area-inset-left,0px) + 18px);
-  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
 }
-.editor-total.ascuns{ display:none; }
-.editor-total .lbl{ font-size:13px; color:var(--ink-soft); }
-.editor-total .val{ font-size:17px; font-weight:700; font-variant-numeric:tabular-nums; }
-.editor-total .val.pozitiv{ color:#2E8B57; }
-.editor-total .val.negativ{ color:var(--danger); }
-#editor-text{
-  flex:1; min-height:0; border:none; outline:none; background:transparent; color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
-  font-size:17px; line-height:1.5; resize:none;
-  padding:4px 18px calc(env(safe-area-inset-bottom,0px) + 24px);
-  padding-left:calc(env(safe-area-inset-left,0px) + 18px);
-  padding-right:calc(env(safe-area-inset-right,0px) + 18px);
-  -webkit-overflow-scrolling:touch;
-}
-#editor-text::placeholder{ color:var(--ink-faded); }
 
-/* ---------- Confirmare ștergere ---------- */
-.confirm-overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:60;
-  display:none; align-items:flex-end; justify-content:center;
+.total-bara{
+  display:flex; margin:0 14px 10px; border-radius:12px; overflow:hidden;
+  margin-left:calc(env(safe-area-inset-left,0px) + 14px);
+  margin-right:calc(env(safe-area-inset-right,0px) + 14px);
 }
+.total-bara.ascuns{ display:none; }
+.total-celula{ flex:1; padding:9px 12px; background:var(--search-bg); }
+.total-celula + .total-celula{ border-left:1px solid var(--divider); }
+.total-celula .lbl{ font-size:11.5px; color:var(--ink-soft); display:block; margin-bottom:1px; }
+.total-celula .val{ font-size:16px; font-weight:800; font-variant-numeric:tabular-nums; }
+.total-celula.de-incasat .val{ color:var(--danger); }
+.total-celula.incasat .val{ color:var(--check-off); }
+
+#lista-linii{
+  flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  padding:0 12px calc(env(safe-area-inset-bottom,0px) + 70px);
+  padding-left:calc(env(safe-area-inset-left,0px) + 12px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 12px);
+}
+.linie-rand{ display:flex; align-items:center; gap:9px; padding:5px 4px; }
+.linie-checkbox{
+  width:23px; height:23px; border-radius:50%; border:2px solid var(--ink-faded);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; background:transparent;
+}
+.linie-checkbox svg{ display:none; width:13px; height:13px; }
+.linie-rand.bifat .linie-checkbox{ background:var(--check-off); border-color:var(--check-off); }
+.linie-rand.bifat .linie-checkbox svg{ display:block; }
+.linie-text{
+  flex:1; min-width:0; border:none; outline:none; background:transparent; color:var(--ink);
+  font-family:inherit; font-size:16.5px; padding:6px 0;
+}
+.linie-rand.bifat .linie-text{ color:var(--ink-faded); text-decoration:line-through; }
+.linie-sterge{ border:none; background:transparent; color:var(--ink-faded); flex-shrink:0; padding:4px; font-size:19px; line-height:1; }
+.linie-adauga{
+  display:flex; align-items:center; gap:9px; padding:9px 4px; color:var(--ink-faded);
+  font-size:16px; border:none; background:transparent; width:100%; text-align:left; font-family:inherit;
+}
+
+/* ---------- Overlay temă ---------- */
+.overlay-fundal{
+  position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:50; display:none; align-items:flex-end; justify-content:center;
+}
+.overlay-fundal.deschis{ display:flex; }
+.card-jos{
+  background:var(--card-bg); width:100%; max-width:520px;
+  border-radius:16px 16px 0 0; padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 16px);
+  box-shadow:0 -6px 24px rgba(0,0,0,.2); max-height:75vh; overflow-y:auto;
+}
+.card-jos h3{ margin:0 0 12px; font-size:17px; text-align:center; }
+.tema-optiune{
+  display:flex; align-items:center; gap:12px; padding:11px 6px; border:none; background:transparent;
+  width:100%; font-family:inherit; font-size:16px; color:var(--ink); text-align:left;
+}
+.tema-optiune .punct{ width:22px; height:22px; border-radius:50%; flex-shrink:0; }
+.tema-optiune.activa{ font-weight:700; }
+.tema-optiune .bifa{ margin-left:auto; opacity:0; }
+.tema-optiune.activa .bifa{ opacity:1; }
+.card-jos button.anuleaza{
+  width:100%; padding:14px; border:none; border-radius:12px; font-size:16px;
+  font-family:inherit; margin-top:10px; background:var(--search-bg); color:var(--ink);
+}
+
+.confirm-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:60; display:none; align-items:flex-end; justify-content:center; }
 .confirm-overlay.deschis{ display:flex; }
 .confirm-card{
   background:var(--card-bg); width:100%; max-width:520px;
@@ -166,10 +265,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   box-shadow:0 -6px 24px rgba(0,0,0,.2);
 }
 .confirm-card p{ text-align:center; color:var(--ink-soft); font-size:13px; margin:4px 0 12px; }
-.confirm-card button{
-  width:100%; padding:14px; border:none; border-radius:12px; font-size:17px;
-  font-family:inherit; margin-bottom:8px;
-}
+.confirm-card button{ width:100%; padding:14px; border:none; border-radius:12px; font-size:17px; font-family:inherit; margin-bottom:8px; }
 .confirm-sterge{ background:var(--danger); color:#fff; font-weight:600; }
 .confirm-anuleaza{ background:var(--search-bg); color:var(--ink); }
 </style>
@@ -178,7 +274,10 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 
 <div id="ecran-lista">
   <div class="lista-header">
-    <h1 class="lista-titlu">Notițe</h1>
+    <div class="header-sus">
+      <h1 class="lista-titlu">Notițe</h1>
+      <button id="btn-tema"><span id="tema-punct"></span><span id="tema-nume">Galben</span></button>
+    </div>
     <div class="cautare">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" id="camp-cautare" placeholder="Caută">
@@ -192,14 +291,32 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 <div id="ecran-editor">
   <div class="editor-bara">
     <button id="btn-inapoi">‹ Notițe</button>
-    <button id="btn-sterge-nota" class="editor-sterge">Șterge</button>
+    <div class="editor-bara-dreapta">
+      <button id="btn-pin" class="editor-pin">📌</button>
+      <button id="btn-sterge-nota" class="editor-sterge">Șterge</button>
+    </div>
   </div>
+  <input type="text" id="editor-titlu" class="editor-titlu" placeholder="Titlu (ex: De încasat)">
   <div class="editor-data" id="editor-data"></div>
-  <div class="editor-total ascuns" id="editor-total">
-    <span class="lbl">Total sume din notiță</span>
-    <span class="val" id="editor-total-val">0,00 lei</span>
+  <div class="total-bara ascuns" id="total-bara">
+    <div class="total-celula de-incasat">
+      <span class="lbl">De încasat</span>
+      <span class="val" id="total-de-incasat">0,00 lei</span>
+    </div>
+    <div class="total-celula incasat">
+      <span class="lbl">Încasat</span>
+      <span class="val" id="total-incasat">0,00 lei</span>
+    </div>
   </div>
-  <textarea id="editor-text" placeholder="Ex: Ana îmi datorează 150 lei pentru 3 parfumuri..." autocapitalize="sentences"></textarea>
+  <div id="lista-linii"></div>
+</div>
+
+<div class="overlay-fundal" id="overlay-tema">
+  <div class="card-jos">
+    <h3>Alege o culoare</h3>
+    <div id="lista-teme"></div>
+    <button class="anuleaza" id="btn-tema-anuleaza">Închide</button>
+  </div>
 </div>
 
 <div class="confirm-overlay" id="confirm-overlay">
@@ -211,28 +328,80 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 </div>
 
 <script>
-const CHEIE = "notite_v1";
+const CHEIE = "notite_v2";
+const CHEIE_TEMA = "notite_tema";
 let note = [];
 let notaCurentaId = null;
 let debounceSalvare = null;
 
+const TEME = {
+  galben:      { nume:"Galben",      punct:"#F2A93B" },
+  roz:         { nume:"Roz aprins",  punct:"#FF2D87" },
+  verde:       { nume:"Verde electric", punct:"#17C964" },
+  albastru:    { nume:"Albastru intens", punct:"#2D6CFF" },
+  portocaliu:  { nume:"Portocaliu",  punct:"#FF6B1A" },
+  turcoaz:     { nume:"Turcoaz",     punct:"#00C2CC" },
+  mov:         { nume:"Mov aprins",  punct:"#8B2FE0" },
+  rosu:        { nume:"Roșu aprins", punct:"#FF3B3B" }
+};
+let temaCurenta = "galben";
+
+function idNou(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+/* ---------- Temă ---------- */
+function aplicaTema(cheie, salveazaAlegerea){
+  temaCurenta = TEME[cheie] ? cheie : "galben";
+  document.documentElement.setAttribute("data-theme", temaCurenta === "galben" ? "" : temaCurenta);
+  document.getElementById("tema-punct").style.background = TEME[temaCurenta].punct;
+  document.getElementById("tema-nume").textContent = TEME[temaCurenta].nume;
+  const meta = document.getElementById("meta-theme-color");
+  const bgActual = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  if(meta && bgActual) meta.setAttribute("content", bgActual);
+  if(salveazaAlegerea){ try{ localStorage.setItem(CHEIE_TEMA, temaCurenta); }catch(e){} }
+}
+function randareTeme(){
+  const cont = document.getElementById("lista-teme");
+  cont.innerHTML = "";
+  Object.keys(TEME).forEach(cheie => {
+    const t = TEME[cheie];
+    const btn = document.createElement("button");
+    btn.className = "tema-optiune" + (cheie === temaCurenta ? " activa" : "");
+    btn.innerHTML = `<span class="punct" style="background:${t.punct}"></span><span>${t.nume}</span><span class="bifa">✓</span>`;
+    btn.addEventListener("click", () => {
+      aplicaTema(cheie, true);
+      document.getElementById("overlay-tema").classList.remove("deschis");
+      randareTeme();
+    });
+    cont.appendChild(btn);
+  });
+}
+document.getElementById("btn-tema").addEventListener("click", () => {
+  randareTeme();
+  document.getElementById("overlay-tema").classList.add("deschis");
+});
+document.getElementById("btn-tema-anuleaza").addEventListener("click", () => {
+  document.getElementById("overlay-tema").classList.remove("deschis");
+});
+
+/* ---------- Date ---------- */
 function incarca(){
   try{
     const raw = localStorage.getItem(CHEIE);
     note = raw ? JSON.parse(raw) : [];
+    note.forEach(n => {
+      if(!Array.isArray(n.items)) n.items = [];
+      if(typeof n.pinned !== "boolean") n.pinned = false;
+      if(typeof n.titlu !== "string") n.titlu = "";
+    });
   }catch(e){ note = []; }
 }
 function salveaza(){
   try{ localStorage.setItem(CHEIE, JSON.stringify(note)); }catch(e){}
 }
-function idNou(){
-  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-}
 function formatDataScurta(ts){
   const d = new Date(ts);
   const azi = new Date();
-  const eAzi = d.toDateString() === azi.toDateString();
-  if(eAzi) return d.toLocaleTimeString("ro-RO", {hour:"2-digit", minute:"2-digit"});
+  if(d.toDateString() === azi.toDateString()) return d.toLocaleTimeString("ro-RO", {hour:"2-digit", minute:"2-digit"});
   const ieri = new Date(azi); ieri.setDate(azi.getDate()-1);
   if(d.toDateString() === ieri.toDateString()) return "Ieri";
   const diffZile = Math.floor((azi - d) / 86400000);
@@ -244,34 +413,42 @@ function formatDataLunga(ts){
   return d.toLocaleDateString("ro-RO", {day:"numeric", month:"long", year:"numeric"}) + " · " +
          d.toLocaleTimeString("ro-RO", {hour:"2-digit", minute:"2-digit"});
 }
-function titluSiPreview(text){
-  const linii = (text||"").split("\n");
-  const titlu = (linii[0] || "").trim() || "Notiță nouă";
-  const rest = linii.slice(1).join(" ").replace(/\s+/g," ").trim();
-  return {titlu, preview: rest};
-}
 function formatLei(n){
   return n.toLocaleString("ro-RO", {minimumFractionDigits:2, maximumFractionDigits:2}) + " lei";
 }
-function calculeazaTotal(text){
-  // ia fiecare sumă scrisă (ex: 150, 45.50, 30,5, -20 pentru o plată scăzută din datorie)
-  // dar ignoră numerele lipite de o dată (12.05.2024) sau de o oră (14:30)
+function sumaDinLinie(text){
   const curatat = String(text||"")
     .replace(/\b\d{1,2}[:.]\d{2}\b/g, " ")
     .replace(/\b\d{1,2}[./]\d{1,2}[./]\d{2,4}\b/g, " ");
-  const numere = curatat.match(/-?\b\d+(?:[.,]\d{1,2})?\b/g) || [];
-  return numere.reduce((sum, n) => sum + parseFloat(n.replace(",", ".")), 0);
+  const m = curatat.match(/-?\b\d+(?:[.,]\d{1,2})?\b/);
+  return m ? parseFloat(m[0].replace(",", ".")) : 0;
+}
+function totaluriNota(n){
+  let deIncasat = 0, incasat = 0;
+  (n.items||[]).forEach(it => {
+    const suma = Math.abs(sumaDinLinie(it.text));
+    if(it.bifat) incasat += suma; else deIncasat += suma;
+  });
+  return { deIncasat, incasat };
 }
 
+/* ---------- Listă ---------- */
 function randareLista(){
   const cont = document.getElementById("lista-note");
   const filtru = document.getElementById("camp-cautare").value.trim().toLowerCase();
-  let filtrate = note.slice().sort((a,b)=> b.actualizat - a.actualizat);
+  let filtrate = note.slice();
   if(filtru){
-    filtrate = filtrate.filter(n => (n.text||"").toLowerCase().includes(filtru));
+    filtrate = filtrate.filter(n => {
+      const text = (n.titlu + " " + (n.items||[]).map(i=>i.text).join(" ")).toLowerCase();
+      return text.includes(filtru);
+    });
   }
+  filtrate.sort((a,b)=> b.actualizat - a.actualizat);
+  const fixate = filtrate.filter(n => n.pinned);
+  const restul = filtrate.filter(n => !n.pinned);
+
+  cont.innerHTML = "";
   if(filtrate.length === 0){
-    cont.innerHTML = "";
     const gol = document.createElement("div");
     gol.className = "gol";
     gol.innerHTML = filtru
@@ -281,82 +458,188 @@ function randareLista(){
     cont.appendChild(gol);
     return;
   }
-  cont.innerHTML = "";
-  filtrate.forEach(n => {
-    const {titlu, preview} = titluSiPreview(n.text);
-    const total = calculeazaTotal(n.text);
+  function randRow(n){
+    const titlu = n.titlu.trim() || "Notiță nouă";
+    const preview = (n.items||[]).map(i=>i.text.trim()).filter(Boolean).join(" · ");
+    const { deIncasat } = totaluriNota(n);
     const rand = document.createElement("div");
     rand.className = "nota-rand";
     rand.innerHTML = `
-      <div class="nota-titlu"></div>
+      <div class="nota-titlu-rand">${n.pinned ? '<span class="pin-mic">📌</span>' : ""}<span></span></div>
       <div class="nota-sub">
         <span class="nota-data"></span>
         <span class="nota-preview"></span>
-        ${Math.abs(total) >= 0.005 ? `<span class="nota-total ${total>=0?"pozitiv":"negativ"}"></span>` : ""}
-      </div>
-    `;
-    rand.querySelector(".nota-titlu").textContent = titlu;
+        ${deIncasat >= 0.005 ? `<span class="nota-total"></span>` : ""}
+      </div>`;
+    rand.querySelector(".nota-titlu-rand span:last-child").textContent = titlu;
     rand.querySelector(".nota-data").textContent = formatDataScurta(n.actualizat);
-    rand.querySelector(".nota-preview").textContent = preview ? ("  " + preview) : "";
-    const totalEl = rand.querySelector(".nota-total");
-    if(totalEl) totalEl.textContent = (total>=0?"":"−") + formatLei(Math.abs(total));
+    rand.querySelector(".nota-preview").textContent = preview;
+    const totEl = rand.querySelector(".nota-total");
+    if(totEl) totEl.textContent = formatLei(deIncasat);
     rand.addEventListener("click", () => deschideNota(n.id));
-    cont.appendChild(rand);
-  });
+    return rand;
+  }
+  if(fixate.length){
+    const et = document.createElement("div");
+    et.className = "sectiune-eticheta"; et.textContent = "Fixate";
+    cont.appendChild(et);
+    fixate.forEach(n => cont.appendChild(randRow(n)));
+  }
+  if(restul.length){
+    if(fixate.length){
+      const et2 = document.createElement("div");
+      et2.className = "sectiune-eticheta"; et2.textContent = "Toate notițele";
+      cont.appendChild(et2);
+    }
+    restul.forEach(n => cont.appendChild(randRow(n)));
+  }
 }
 
-function actualizeazaTotalEditor(text){
-  const cont = document.getElementById("editor-total");
-  const val = document.getElementById("editor-total-val");
-  const total = calculeazaTotal(text);
-  if(Math.abs(total) < 0.005){ cont.classList.add("ascuns"); return; }
-  cont.classList.remove("ascuns");
-  val.textContent = (total>=0?"":"−") + formatLei(Math.abs(total));
-  val.className = "val " + (total>=0 ? "pozitiv" : "negativ");
-}
-
-function deschideNota(id){
-  notaCurentaId = id;
-  const n = note.find(x => x.id === id);
-  const text = n ? n.text : "";
-  document.getElementById("editor-text").value = text;
-  document.getElementById("editor-data").textContent = n ? formatDataLunga(n.actualizat) : "";
-  actualizeazaTotalEditor(text);
-  document.getElementById("ecran-editor").classList.add("deschis");
-  setTimeout(() => document.getElementById("editor-text").focus(), 50);
-}
-
+/* ---------- Editor ---------- */
 function notaNoua(){
-  const n = { id: idNou(), text: "", actualizat: Date.now() };
+  const n = { id: idNou(), titlu:"", items:[{id:idNou(), text:"", bifat:false}], pinned:false, actualizat: Date.now() };
   note.unshift(n);
   deschideNota(n.id);
 }
+function deschideNota(id){
+  notaCurentaId = id;
+  const n = note.find(x => x.id === id);
+  if(!n) return;
+  document.getElementById("editor-titlu").value = n.titlu || "";
+  document.getElementById("editor-data").textContent = formatDataLunga(n.actualizat);
+  document.getElementById("btn-pin").classList.toggle("activ", !!n.pinned);
+  randareLinii();
+  actualizeazaTotaluri();
+  document.getElementById("ecran-editor").classList.add("deschis");
+  if(!n.titlu){ setTimeout(() => document.getElementById("editor-titlu").focus(), 60); }
+}
+function notaCurenta(){ return note.find(x => x.id === notaCurentaId); }
+
+function randareLinii(){
+  const n = notaCurenta(); if(!n) return;
+  const cont = document.getElementById("lista-linii");
+  cont.innerHTML = "";
+  n.items.forEach(item => cont.appendChild(randLinie(item)));
+  const btnAdauga = document.createElement("button");
+  btnAdauga.className = "linie-adauga";
+  btnAdauga.innerHTML = `<span style="font-size:19px;">＋</span> Adaugă o linie`;
+  btnAdauga.addEventListener("click", () => {
+    const item = { id: idNou(), text:"", bifat:false };
+    n.items.push(item);
+    marcheazaModificat();
+    randareLinii();
+    const input = cont.querySelector(`[data-id="${item.id}"] .linie-text`);
+    if(input) input.focus();
+  });
+  cont.appendChild(btnAdauga);
+}
+function randLinie(item){
+  const rand = document.createElement("div");
+  rand.className = "linie-rand" + (item.bifat ? " bifat" : "");
+  rand.dataset.id = item.id;
+  rand.innerHTML = `
+    <button class="linie-checkbox" aria-label="Bifează">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12.5 9.5 18 20 6"/></svg>
+    </button>
+    <input type="text" class="linie-text" placeholder="Ex: Ana - 150 lei" value="${item.text.replace(/"/g,"&quot;")}">
+    <button class="linie-sterge" aria-label="Șterge linia">×</button>
+  `;
+  const checkbox = rand.querySelector(".linie-checkbox");
+  const input = rand.querySelector(".linie-text");
+  const sterge = rand.querySelector(".linie-sterge");
+  checkbox.addEventListener("click", () => {
+    item.bifat = !item.bifat;
+    rand.classList.toggle("bifat", item.bifat);
+    marcheazaModificat();
+    actualizeazaTotaluri();
+    randareListaDupaModificare();
+  });
+  input.addEventListener("input", () => {
+    item.text = input.value;
+    marcheazaModificat();
+    actualizeazaTotaluri();
+    randareListaDupaModificare();
+  });
+  input.addEventListener("keydown", (e) => {
+    const n = notaCurenta(); if(!n) return;
+    if(e.key === "Enter"){
+      e.preventDefault();
+      const idx = n.items.findIndex(x => x.id === item.id);
+      const nou = { id: idNou(), text:"", bifat:false };
+      n.items.splice(idx+1, 0, nou);
+      marcheazaModificat();
+      randareLinii();
+      const nextInput = document.querySelector(`[data-id="${nou.id}"] .linie-text`);
+      if(nextInput) nextInput.focus();
+    } else if(e.key === "Backspace" && input.value === "" && n.items.length > 1){
+      e.preventDefault();
+      const idx = n.items.findIndex(x => x.id === item.id);
+      n.items.splice(idx, 1);
+      marcheazaModificat();
+      randareLinii();
+      actualizeazaTotaluri();
+      const prevItem = n.items[Math.max(0, idx-1)];
+      const prevInput = document.querySelector(`[data-id="${prevItem.id}"] .linie-text`);
+      if(prevInput){ prevInput.focus(); prevInput.selectionStart = prevInput.selectionEnd = prevInput.value.length; }
+    }
+  });
+  sterge.addEventListener("click", () => {
+    const n = notaCurenta(); if(!n) return;
+    if(n.items.length <= 1){ item.text = ""; input.value=""; marcheazaModificat(); actualizeazaTotaluri(); randareListaDupaModificare(); return; }
+    n.items = n.items.filter(x => x.id !== item.id);
+    marcheazaModificat();
+    randareLinii();
+    actualizeazaTotaluri();
+  });
+  return rand;
+}
+function marcheazaModificat(){
+  const n = notaCurenta(); if(!n) return;
+  n.actualizat = Date.now();
+  document.getElementById("editor-data").textContent = formatDataLunga(n.actualizat);
+  clearTimeout(debounceSalvare);
+  debounceSalvare = setTimeout(salveaza, 250);
+}
+function randareListaDupaModificare(){ /* lista din fundal se actualizează la ieșire; nu re-randăm în timp ce scrii, ca să nu pierdem focusul */ }
+function actualizeazaTotaluri(){
+  const n = notaCurenta(); if(!n) return;
+  const { deIncasat, incasat } = totaluriNota(n);
+  const bara = document.getElementById("total-bara");
+  if(deIncasat < 0.005 && incasat < 0.005){ bara.classList.add("ascuns"); return; }
+  bara.classList.remove("ascuns");
+  document.getElementById("total-de-incasat").textContent = formatLei(deIncasat);
+  document.getElementById("total-incasat").textContent = formatLei(incasat);
+}
+
+document.getElementById("editor-titlu").addEventListener("input", (e) => {
+  const n = notaCurenta(); if(!n) return;
+  n.titlu = e.target.value;
+  marcheazaModificat();
+});
+document.getElementById("btn-pin").addEventListener("click", () => {
+  const n = notaCurenta(); if(!n) return;
+  n.pinned = !n.pinned;
+  document.getElementById("btn-pin").classList.toggle("activ", n.pinned);
+  marcheazaModificat();
+});
 
 function inchideEditor(){
-  // curăță notițele complet goale la ieșire
-  const n = note.find(x => x.id === notaCurentaId);
-  if(n && !n.text.trim()){
-    note = note.filter(x => x.id !== notaCurentaId);
+  const n = notaCurenta();
+  if(n){
+    n.items = n.items.filter(it => it.text.trim() !== "");
+    if(!n.titlu.trim() && n.items.length === 0){
+      note = note.filter(x => x.id !== notaCurentaId);
+    } else if(n.items.length === 0){
+      n.items.push({id:idNou(), text:"", bifat:false});
+    }
     salveaza();
   }
   notaCurentaId = null;
   document.getElementById("ecran-editor").classList.remove("deschis");
   randareLista();
 }
-
-document.getElementById("editor-text").addEventListener("input", (e) => {
-  const n = note.find(x => x.id === notaCurentaId);
-  if(!n) return;
-  n.text = e.target.value;
-  n.actualizat = Date.now();
-  document.getElementById("editor-data").textContent = formatDataLunga(n.actualizat);
-  actualizeazaTotalEditor(n.text);
-  clearTimeout(debounceSalvare);
-  debounceSalvare = setTimeout(salveaza, 250);
-});
-
-document.getElementById("btn-nota-noua").addEventListener("click", notaNoua);
 document.getElementById("btn-inapoi").addEventListener("click", inchideEditor);
+document.getElementById("btn-nota-noua").addEventListener("click", notaNoua);
 document.getElementById("camp-cautare").addEventListener("input", randareLista);
 
 document.getElementById("btn-sterge-nota").addEventListener("click", () => {
@@ -380,6 +663,11 @@ if("serviceWorker" in navigator){
   });
 }
 
+(function initTema(){
+  let salvata = "galben";
+  try{ salvata = localStorage.getItem(CHEIE_TEMA) || "galben"; }catch(e){}
+  aplicaTema(salvata, false);
+})();
 incarca();
 randareLista();
 </script>
