@@ -105,9 +105,13 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   padding-left:calc(env(safe-area-inset-left,0px) + 18px);
   padding-right:calc(env(safe-area-inset-right,0px) + 18px);
 }
-.header-sus{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; }
-.header-butoane{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.header-sus{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; flex-wrap:wrap; }
+.header-butoane{ display:flex; align-items:center; gap:7px; flex-shrink:0; }
 #btn-curs{
+  display:flex; align-items:center; justify-content:center; background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:50%; width:34px; height:34px; font-size:16px; flex-shrink:0;
+}
+#btn-total-general{
   display:flex; align-items:center; justify-content:center; background:var(--card-bg); border:1px solid var(--card-border);
   border-radius:50%; width:34px; height:34px; font-size:16px; flex-shrink:0;
 }
@@ -137,12 +141,14 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 .sectiune-eticheta{ font-size:12px; font-weight:700; color:var(--ink-faded); text-transform:uppercase; letter-spacing:.04em; padding:14px 2px 4px; }
 .sectiune-eticheta:first-child{ padding-top:6px; }
 .nota-rand{
-  padding:12px 2px; border-bottom:1px solid var(--divider);
+  padding:12px 2px 12px 12px; border-bottom:1px solid var(--divider);
   display:flex; flex-direction:column; gap:3px; cursor:pointer;
+  border-left:4px solid transparent; border-radius:4px;
 }
 .nota-rand:active{ opacity:.6; }
 .nota-titlu-rand{ font-size:17px; font-weight:700; display:flex; align-items:center; gap:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .pin-mic{ flex-shrink:0; opacity:.7; }
+.culoare-mica{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
 .nota-sub{ font-size:14px; color:var(--ink-soft); display:flex; gap:8px; white-space:nowrap; overflow:hidden; align-items:center; }
 .nota-data{ flex-shrink:0; }
 .nota-preview{ overflow:hidden; text-overflow:ellipsis; flex:1; }
@@ -187,6 +193,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 .editor-bara-dreapta{ display:flex; align-items:center; gap:2px; }
 .editor-sterge{ color:var(--danger) !important; }
 .editor-pin.activ{ color:var(--accent-ink); }
+.tema-optiune .punct.mare{ width:26px; height:26px; }
 .editor-titlu{
   border:none; outline:none; background:transparent; color:var(--ink); width:100%;
   font-family:inherit; font-size:22px; font-weight:800;
@@ -309,6 +316,25 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 }
 .curs-swap:active{ transform:scale(.92); }
 .curs-rata{ text-align:center; font-size:13.5px; color:var(--ink-soft); margin-top:16px; }
+
+/* ---------- Toate de încasat ---------- */
+#ecran-total-general{
+  position:fixed; inset:0; z-index:25; background:var(--bg); color:var(--ink);
+  display:none; flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
+}
+#ecran-total-general.deschis{ display:flex; }
+.total-general-suma{ font-size:34px; font-weight:800; text-align:center; margin-top:4px; }
+.total-general-sub{ font-size:13px; color:var(--ink-faded); text-align:center; margin-bottom:14px; }
+.tg-grup{ margin-bottom:6px; }
+.tg-grup-titlu{
+  display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:700; color:var(--ink-soft);
+  padding:10px 2px 4px; border-bottom:1px solid var(--divider);
+}
+.tg-grup-total{ margin-left:auto; font-weight:800; color:var(--ink); }
+.tg-gol{
+  text-align:center; color:var(--ink-faded); padding:60px 20px; font-size:15px;
+}
 </style>
 </head>
 <body>
@@ -318,6 +344,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
     <div class="header-sus">
       <h1 class="lista-titlu">Notițe</h1>
       <div class="header-butoane">
+        <button id="btn-total-general" aria-label="Toate de încasat">📋</button>
         <button id="btn-curs" aria-label="Convertor valutar">💱</button>
         <button id="btn-tema"><span id="tema-punct"></span><span id="tema-nume">Galben</span></button>
       </div>
@@ -336,6 +363,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   <div class="editor-bara">
     <button id="btn-inapoi">‹ Notițe</button>
     <div class="editor-bara-dreapta">
+      <button id="btn-culoare-nota">🎨</button>
       <button id="btn-pin" class="editor-pin">📌</button>
       <button id="btn-sterge-nota" class="editor-sterge">Șterge</button>
     </div>
@@ -363,6 +391,14 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   </div>
 </div>
 
+<div class="overlay-fundal" id="overlay-culoare-nota">
+  <div class="card-jos">
+    <h3>Culoarea notiței</h3>
+    <div id="lista-culori-nota"></div>
+    <button class="anuleaza" id="btn-culoare-nota-anuleaza">Închide</button>
+  </div>
+</div>
+
 <div id="ecran-curs">
   <div class="editor-bara">
     <button id="btn-curs-inapoi">‹ Notițe</button>
@@ -385,6 +421,18 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
     </div>
 
     <div class="curs-rata" id="curs-rata"></div>
+  </div>
+</div>
+
+<div id="ecran-total-general">
+  <div class="editor-bara">
+    <button id="btn-total-general-inapoi">‹ Notițe</button>
+  </div>
+  <div class="curs-corp">
+    <h2 class="curs-titlu">Toate de încasat</h2>
+    <div class="total-general-suma" id="total-general-suma">0,00 lei</div>
+    <div class="total-general-sub" id="total-general-sub">de la toate notițele</div>
+    <div id="total-general-lista"></div>
   </div>
 </div>
 
@@ -414,6 +462,11 @@ const TEME = {
   rosu:        { nume:"Roșu aprins", punct:"#FF3B3B" }
 };
 let temaCurenta = "galben";
+
+const PALETA_NOTA = {
+  rosu:"#FF3B3B", portocaliu:"#FF6B1A", galben:"#F2A93B", verde:"#17C964",
+  turcoaz:"#00C2CC", albastru:"#2D6CFF", mov:"#8B2FE0", roz:"#FF2D87"
+};
 
 function idNou(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
@@ -461,6 +514,7 @@ function incarca(){
       if(!Array.isArray(n.items)) n.items = [];
       if(typeof n.pinned !== "boolean") n.pinned = false;
       if(typeof n.titlu !== "string") n.titlu = "";
+      if(typeof n.culoare !== "string") n.culoare = "";
     });
   }catch(e){ note = []; }
 }
@@ -485,10 +539,26 @@ function formatDataLunga(ts){
 function formatLei(n){
   return n.toLocaleString("ro-RO", {minimumFractionDigits:2, maximumFractionDigits:2}) + " lei";
 }
+function evalueazaExpresieSigura(expr){
+  const curat = expr.replace(/,/g, ".").replace(/[x×]/gi, "*").replace(/÷/g, "/").replace(/\s+/g, "");
+  if(!/^[\d.+\-*/]+$/.test(curat)) return null;
+  if(!/[+\-*/].*\d$|^\d/.test(curat)) return null;
+  try{
+    const rez = Function('"use strict"; return (' + curat + ")")();
+    return (typeof rez === "number" && isFinite(rez)) ? rez : null;
+  }catch(e){ return null; }
+}
 function sumaDinLinie(text){
   const curatat = String(text||"")
-    .replace(/\b\d{1,2}[:.]\d{2}\b/g, " ")
-    .replace(/\b\d{1,2}[./]\d{1,2}[./]\d{2,4}\b/g, " ");
+    .replace(/\b\d{1,2}[./]\d{1,2}[./]\d{2,4}\b/g, " ")
+    .replace(/\b\d{1,2}[:.]\d{2}\b/g, " ");
+  // 1) o expresie de calcul (ex: 4+4, 10*3, 100-20)
+  const mExpr = curatat.match(/\d+(?:[.,]\d+)?\s*(?:[+\-*x×÷/]\s*\d+(?:[.,]\d+)?\s*)+/);
+  if(mExpr){
+    const rezultat = evalueazaExpresieSigura(mExpr[0]);
+    if(rezultat != null) return rezultat;
+  }
+  // 2) un singur număr scris simplu
   const m = curatat.match(/-?\b\d+(?:[.,]\d{1,2})?\b/);
   return m ? parseFloat(m[0].replace(",", ".")) : 0;
 }
@@ -533,8 +603,9 @@ function randareLista(){
     const { deIncasat } = totaluriNota(n);
     const rand = document.createElement("div");
     rand.className = "nota-rand";
+    if(n.culoare && PALETA_NOTA[n.culoare]) rand.style.borderLeftColor = PALETA_NOTA[n.culoare];
     rand.innerHTML = `
-      <div class="nota-titlu-rand">${n.pinned ? '<span class="pin-mic">📌</span>' : ""}<span></span></div>
+      <div class="nota-titlu-rand">${n.culoare && PALETA_NOTA[n.culoare] ? `<span class="culoare-mica" style="background:${PALETA_NOTA[n.culoare]}"></span>` : ""}${n.pinned ? '<span class="pin-mic">📌</span>' : ""}<span></span></div>
       <div class="nota-sub">
         <span class="nota-data"></span>
         <span class="nota-preview"></span>
@@ -692,6 +763,37 @@ document.getElementById("btn-pin").addEventListener("click", () => {
   marcheazaModificat();
 });
 
+function randareCuloriNota(){
+  const n = notaCurenta(); if(!n) return;
+  const cont = document.getElementById("lista-culori-nota");
+  cont.innerHTML = "";
+  const faraBtn = document.createElement("button");
+  faraBtn.className = "tema-optiune" + (!n.culoare ? " activa" : "");
+  faraBtn.innerHTML = `<span class="punct mare" style="background:var(--search-bg); border:1.5px solid var(--card-border);"></span><span>Fără culoare</span><span class="bifa">✓</span>`;
+  faraBtn.addEventListener("click", () => { setCuloareNota(""); });
+  cont.appendChild(faraBtn);
+  Object.keys(PALETA_NOTA).forEach(cheie => {
+    const btn = document.createElement("button");
+    btn.className = "tema-optiune" + (n.culoare === cheie ? " activa" : "");
+    btn.innerHTML = `<span class="punct mare" style="background:${PALETA_NOTA[cheie]}"></span><span>${cheie.charAt(0).toUpperCase()+cheie.slice(1)}</span><span class="bifa">✓</span>`;
+    btn.addEventListener("click", () => { setCuloareNota(cheie); });
+    cont.appendChild(btn);
+  });
+}
+function setCuloareNota(cheie){
+  const n = notaCurenta(); if(!n) return;
+  n.culoare = cheie;
+  marcheazaModificat();
+  document.getElementById("overlay-culoare-nota").classList.remove("deschis");
+}
+document.getElementById("btn-culoare-nota").addEventListener("click", () => {
+  randareCuloriNota();
+  document.getElementById("overlay-culoare-nota").classList.add("deschis");
+});
+document.getElementById("btn-culoare-nota-anuleaza").addEventListener("click", () => {
+  document.getElementById("overlay-culoare-nota").classList.remove("deschis");
+});
+
 function inchideEditor(){
   const n = notaCurenta();
   if(n){
@@ -737,6 +839,8 @@ const CHEIE_CURS = "notite_curs_cache";
 const CHEIE_PERECHE = "notite_curs_pereche";
 const MONEDE = ["RON","EUR","USD","GBP","CHF","TRY","HUF"];
 const NUME_MONEDE = { RON:"RON — Leu", EUR:"EUR — Euro", USD:"USD — Dolar", GBP:"GBP — Liră", CHF:"CHF — Franc elvețian", TRY:"TRY — Liră turcească", HUF:"HUF — Forint" };
+// curs de rezervă, aproximativ — folosit doar dacă nu s-a putut lua încă niciun curs real
+const CURS_REZERVA = { rates:{ EUR:1, RON:5.2644, USD:1.1485, GBP:0.8593, CHF:0.9474, TRY:56.06, HUF:363.8 }, fetchedAt:null, aproximativ:true };
 let cursCache = null;
 
 function citesteCursCache(){
@@ -766,6 +870,13 @@ function formatOra(ts){
 async function actualizeazaCurs(force){
   const starePanou = document.getElementById("curs-stare");
   const cache = cursCache || citesteCursCache();
+
+  // arată imediat ceva — cache-ul existent, sau cursul de rezervă — cât timp așteptăm rețeaua
+  if(!cursCache){
+    cursCache = cache || CURS_REZERVA;
+    recalculeaza();
+  }
+
   const acum = Date.now();
   if(cache && !force && (acum - cache.fetchedAt) < 6*3600*1000){
     cursCache = cache;
@@ -777,7 +888,10 @@ async function actualizeazaCurs(force){
   starePanou.textContent = "Se actualizează cursul…";
   starePanou.classList.remove("eroare");
   try{
-    const r = await fetch("https://api.frankfurter.app/latest?from=EUR");
+    const control = new AbortController();
+    const timeout = setTimeout(() => control.abort(), 8000);
+    const r = await fetch("https://api.frankfurter.app/latest?from=EUR", { signal: control.signal });
+    clearTimeout(timeout);
     if(!r.ok) throw new Error("raspuns invalid");
     const data = await r.json();
     if(!data || !data.rates) throw new Error("date invalide");
@@ -791,7 +905,8 @@ async function actualizeazaCurs(force){
       cursCache = cache;
       starePanou.textContent = "Nu am putut actualiza — ultimul curs cunoscut: " + formatOra(cache.fetchedAt);
     } else {
-      starePanou.textContent = "Fără internet și fără curs salvat. Conectează-te și apasă Actualizează.";
+      cursCache = CURS_REZERVA;
+      starePanou.textContent = "Fără conexiune — folosesc un curs aproximativ, s-ar putea să nu fie exact la zi.";
     }
     starePanou.classList.add("eroare");
   }
@@ -834,6 +949,68 @@ document.getElementById("btn-curs-swap").addEventListener("click", () => {
   const tmp = selDin.value; selDin.value = selCatre.value; selCatre.value = tmp;
   salveazaPereche();
   recalculeaza();
+});
+
+/* ---------- Toate de încasat ---------- */
+function randareTotalGeneral(){
+  const cont = document.getElementById("total-general-lista");
+  cont.innerHTML = "";
+  let totalGeneral = 0;
+  const grupuri = [];
+  note.forEach(n => {
+    const linii = (n.items||[]).filter(it => !it.bifat && it.text.trim() !== "");
+    if(linii.length === 0) return;
+    const totalNota = linii.reduce((s,it) => s + Math.abs(sumaDinLinie(it.text)), 0);
+    if(totalNota < 0.005) return;
+    totalGeneral += totalNota;
+    grupuri.push({ nota:n, linii, totalNota });
+  });
+  grupuri.sort((a,b) => b.totalNota - a.totalNota);
+
+  document.getElementById("total-general-suma").textContent = formatLei(totalGeneral);
+
+  if(grupuri.length === 0){
+    cont.innerHTML = `<div class="tg-gol">Nimic de încasat momentan.<br>Bifează liniile din notițe pe măsură ce încasezi.</div>`;
+    return;
+  }
+  grupuri.forEach(g => {
+    const grup = document.createElement("div");
+    grup.className = "tg-grup";
+    const titluText = g.nota.titlu.trim() || "Notiță fără titlu";
+    grup.innerHTML = `<div class="tg-grup-titlu">
+        ${g.nota.culoare && PALETA_NOTA[g.nota.culoare] ? `<span class="culoare-mica" style="background:${PALETA_NOTA[g.nota.culoare]}"></span>` : ""}
+        <span></span><span class="tg-grup-total"></span>
+      </div>`;
+    grup.querySelector(".tg-grup-titlu span:nth-child(2)").textContent = titluText;
+    grup.querySelector(".tg-grup-total").textContent = formatLei(g.totalNota);
+    g.linii.forEach(item => {
+      const rand = document.createElement("div");
+      rand.className = "linie-rand";
+      rand.innerHTML = `
+        <button class="linie-checkbox" aria-label="Bifează">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12.5 9.5 18 20 6"/></svg>
+        </button>
+        <span class="linie-text" style="padding:6px 0; cursor:default;"></span>
+      `;
+      rand.querySelector(".linie-text").textContent = item.text;
+      rand.querySelector(".linie-checkbox").addEventListener("click", () => {
+        item.bifat = true;
+        g.nota.actualizat = Date.now();
+        salveaza();
+        randareTotalGeneral();
+      });
+      grup.appendChild(rand);
+    });
+    cont.appendChild(grup);
+  });
+}
+document.getElementById("btn-total-general").addEventListener("click", () => {
+  randareTotalGeneral();
+  document.getElementById("ecran-total-general").classList.add("deschis");
+});
+document.getElementById("btn-total-general-inapoi").addEventListener("click", () => {
+  document.getElementById("ecran-total-general").classList.remove("deschis");
+  randareLista();
 });
 
 (function initTema(){
