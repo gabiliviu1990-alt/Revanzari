@@ -105,7 +105,12 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   padding-left:calc(env(safe-area-inset-left,0px) + 18px);
   padding-right:calc(env(safe-area-inset-right,0px) + 18px);
 }
-.header-sus{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.header-sus{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; }
+.header-butoane{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+#btn-curs{
+  display:flex; align-items:center; justify-content:center; background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:50%; width:34px; height:34px; font-size:16px; flex-shrink:0;
+}
 .lista-titlu{ font-size:28px; font-weight:800; margin:0; }
 #btn-tema{
   display:flex; align-items:center; gap:7px; background:var(--card-bg); border:1px solid var(--card-border);
@@ -268,6 +273,42 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 .confirm-card button{ width:100%; padding:14px; border:none; border-radius:12px; font-size:17px; font-family:inherit; margin-bottom:8px; }
 .confirm-sterge{ background:var(--danger); color:#fff; font-weight:600; }
 .confirm-anuleaza{ background:var(--search-bg); color:var(--ink); }
+
+/* ---------- Convertor valutar ---------- */
+#ecran-curs{
+  position:fixed; inset:0; z-index:25; background:var(--bg); color:var(--ink);
+  display:none; flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
+}
+#ecran-curs.deschis{ display:flex; }
+#btn-curs-refresh{ font-size:14.5px !important; }
+.curs-corp{
+  flex:1; padding:10px 20px 20px; overflow-y:auto;
+  padding-left:calc(env(safe-area-inset-left,0px) + 20px);
+  padding-right:calc(env(safe-area-inset-right,0px) + 20px);
+}
+.curs-titlu{ font-size:22px; font-weight:800; margin:4px 0 4px; }
+.curs-stare{ font-size:12.5px; color:var(--ink-faded); margin-bottom:18px; }
+.curs-stare.eroare{ color:var(--danger); }
+.curs-camp{
+  display:flex; gap:10px; background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:14px; padding:12px 14px; align-items:center;
+}
+.curs-input{
+  flex:1; min-width:0; border:none; outline:none; background:transparent; color:var(--ink);
+  font-family:inherit; font-size:24px; font-weight:700;
+}
+.curs-select{
+  border:none; outline:none; background:var(--search-bg); color:var(--ink); font-family:inherit;
+  font-size:15px; font-weight:700; padding:8px 10px; border-radius:10px; flex-shrink:0;
+}
+.curs-swap{
+  display:flex; margin:10px auto; width:42px; height:42px; border-radius:50%;
+  border:none; background:var(--accent); color:var(--accent-ink); font-size:19px;
+  align-items:center; justify-content:center;
+}
+.curs-swap:active{ transform:scale(.92); }
+.curs-rata{ text-align:center; font-size:13.5px; color:var(--ink-soft); margin-top:16px; }
 </style>
 </head>
 <body>
@@ -276,7 +317,10 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   <div class="lista-header">
     <div class="header-sus">
       <h1 class="lista-titlu">Notițe</h1>
-      <button id="btn-tema"><span id="tema-punct"></span><span id="tema-nume">Galben</span></button>
+      <div class="header-butoane">
+        <button id="btn-curs" aria-label="Convertor valutar">💱</button>
+        <button id="btn-tema"><span id="tema-punct"></span><span id="tema-nume">Galben</span></button>
+      </div>
     </div>
     <div class="cautare">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -316,6 +360,31 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
     <h3>Alege o culoare</h3>
     <div id="lista-teme"></div>
     <button class="anuleaza" id="btn-tema-anuleaza">Închide</button>
+  </div>
+</div>
+
+<div id="ecran-curs">
+  <div class="editor-bara">
+    <button id="btn-curs-inapoi">‹ Notițe</button>
+    <button id="btn-curs-refresh">↻ Actualizează</button>
+  </div>
+  <div class="curs-corp">
+    <h2 class="curs-titlu">Convertor valutar</h2>
+    <div class="curs-stare" id="curs-stare">Se actualizează cursul…</div>
+
+    <div class="curs-camp">
+      <input type="number" inputmode="decimal" id="curs-suma-din" class="curs-input" value="1">
+      <select id="curs-moneda-din" class="curs-select"></select>
+    </div>
+
+    <button id="btn-curs-swap" class="curs-swap" aria-label="Inversează">⇅</button>
+
+    <div class="curs-camp">
+      <input type="number" inputmode="decimal" id="curs-suma-catre" class="curs-input" readonly>
+      <select id="curs-moneda-catre" class="curs-select"></select>
+    </div>
+
+    <div class="curs-rata" id="curs-rata"></div>
   </div>
 </div>
 
@@ -662,6 +731,110 @@ if("serviceWorker" in navigator){
     navigator.serviceWorker.register("./sw.js").catch(()=>{});
   });
 }
+
+/* ---------- Convertor valutar ---------- */
+const CHEIE_CURS = "notite_curs_cache";
+const CHEIE_PERECHE = "notite_curs_pereche";
+const MONEDE = ["RON","EUR","USD","GBP","CHF","TRY","HUF"];
+const NUME_MONEDE = { RON:"RON — Leu", EUR:"EUR — Euro", USD:"USD — Dolar", GBP:"GBP — Liră", CHF:"CHF — Franc elvețian", TRY:"TRY — Liră turcească", HUF:"HUF — Forint" };
+let cursCache = null;
+
+function citesteCursCache(){
+  try{ const raw = localStorage.getItem(CHEIE_CURS); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+}
+function salveazaCursCache(obj){
+  try{ localStorage.setItem(CHEIE_CURS, JSON.stringify(obj)); }catch(e){}
+}
+function populeazaSelecturi(){
+  let pereche = { din:"RON", catre:"EUR" };
+  try{ const raw = localStorage.getItem(CHEIE_PERECHE); if(raw) pereche = JSON.parse(raw); }catch(e){}
+  const selDin = document.getElementById("curs-moneda-din");
+  const selCatre = document.getElementById("curs-moneda-catre");
+  selDin.innerHTML = MONEDE.map(m => `<option value="${m}">${NUME_MONEDE[m]}</option>`).join("");
+  selCatre.innerHTML = MONEDE.map(m => `<option value="${m}">${NUME_MONEDE[m]}</option>`).join("");
+  selDin.value = pereche.din; selCatre.value = pereche.catre;
+}
+function salveazaPereche(){
+  try{ localStorage.setItem(CHEIE_PERECHE, JSON.stringify({
+    din: document.getElementById("curs-moneda-din").value,
+    catre: document.getElementById("curs-moneda-catre").value
+  })); }catch(e){}
+}
+function formatOra(ts){
+  return new Date(ts).toLocaleString("ro-RO", {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"});
+}
+async function actualizeazaCurs(force){
+  const starePanou = document.getElementById("curs-stare");
+  const cache = cursCache || citesteCursCache();
+  const acum = Date.now();
+  if(cache && !force && (acum - cache.fetchedAt) < 6*3600*1000){
+    cursCache = cache;
+    starePanou.textContent = "Curs actualizat " + formatOra(cache.fetchedAt);
+    starePanou.classList.remove("eroare");
+    recalculeaza();
+    return;
+  }
+  starePanou.textContent = "Se actualizează cursul…";
+  starePanou.classList.remove("eroare");
+  try{
+    const r = await fetch("https://api.frankfurter.app/latest?from=EUR");
+    if(!r.ok) throw new Error("raspuns invalid");
+    const data = await r.json();
+    if(!data || !data.rates) throw new Error("date invalide");
+    const nou = { rates: {...data.rates, EUR:1}, fetchedAt: acum };
+    cursCache = nou;
+    salveazaCursCache(nou);
+    starePanou.textContent = "Curs actualizat acum (sursă: BCE)";
+    starePanou.classList.remove("eroare");
+  }catch(e){
+    if(cache){
+      cursCache = cache;
+      starePanou.textContent = "Nu am putut actualiza — ultimul curs cunoscut: " + formatOra(cache.fetchedAt);
+    } else {
+      starePanou.textContent = "Fără internet și fără curs salvat. Conectează-te și apasă Actualizează.";
+    }
+    starePanou.classList.add("eroare");
+  }
+  recalculeaza();
+}
+function convertesteSuma(suma, din, catre){
+  if(!cursCache || !cursCache.rates[din] || !cursCache.rates[catre]) return null;
+  const inEuro = suma / cursCache.rates[din];
+  return inEuro * cursCache.rates[catre];
+}
+function recalculeaza(){
+  const suma = parseFloat((document.getElementById("curs-suma-din").value || "0").replace(",", "."));
+  const din = document.getElementById("curs-moneda-din").value;
+  const catre = document.getElementById("curs-moneda-catre").value;
+  const rezultat = isNaN(suma) ? null : convertesteSuma(suma, din, catre);
+  document.getElementById("curs-suma-catre").value = rezultat != null ? rezultat.toFixed(2) : "";
+  const rataEl = document.getElementById("curs-rata");
+  if(cursCache && cursCache.rates[din] && cursCache.rates[catre]){
+    const rata = convertesteSuma(1, din, catre);
+    rataEl.textContent = `1 ${din} = ${rata.toFixed(4)} ${catre}`;
+  } else {
+    rataEl.textContent = "";
+  }
+}
+document.getElementById("btn-curs").addEventListener("click", () => {
+  populeazaSelecturi();
+  document.getElementById("ecran-curs").classList.add("deschis");
+  actualizeazaCurs(false);
+});
+document.getElementById("btn-curs-inapoi").addEventListener("click", () => {
+  document.getElementById("ecran-curs").classList.remove("deschis");
+});
+document.getElementById("btn-curs-refresh").addEventListener("click", () => actualizeazaCurs(true));
+document.getElementById("curs-suma-din").addEventListener("input", recalculeaza);
+document.getElementById("curs-moneda-din").addEventListener("change", () => { salveazaPereche(); recalculeaza(); });
+document.getElementById("curs-moneda-catre").addEventListener("change", () => { salveazaPereche(); recalculeaza(); });
+document.getElementById("btn-curs-swap").addEventListener("click", () => {
+  const selDin = document.getElementById("curs-moneda-din");
+  const selCatre = document.getElementById("curs-moneda-catre");
+  const tmp = selDin.value; selDin.value = selCatre.value; selCatre.value = tmp;
+  salveazaPereche();
+  recalculeaza();
+});
 
 (function initTema(){
   let salvata = "galben";
