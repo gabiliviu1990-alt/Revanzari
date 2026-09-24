@@ -1,4 +1,4 @@
-const CACHE = "notite-v5";
+const CACHE = "notite-v6";
 const ASSETS = [
   "./index.html",
   "./manifest.json",

@@ -190,7 +190,8 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   font-family:inherit; padding:6px 8px; display:flex; align-items:center; gap:4px;
 }
 .editor-bara button:active{ opacity:.5; }
-.editor-bara-dreapta{ display:flex; align-items:center; gap:2px; }
+.editor-bara-dreapta{ display:flex; align-items:center; gap:0px; }
+.editor-bara-dreapta button{ padding:6px 6px !important; }
 .editor-sterge{ color:var(--danger) !important; }
 .editor-pin.activ{ color:var(--accent-ink); }
 .tema-optiune .punct.mare{ width:26px; height:26px; }
@@ -335,6 +336,40 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
 .tg-gol{
   text-align:center; color:var(--ink-faded); padding:60px 20px; font-size:15px;
 }
+
+/* ---------- Calculator profit ---------- */
+#ecran-calculator{
+  position:fixed; inset:0; z-index:30; background:var(--bg); color:var(--ink);
+  display:none; flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
+}
+#ecran-calculator.deschis{ display:flex; }
+.calc-denumire{
+  width:100%; border:none; outline:none; background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:12px; padding:12px 14px; font-family:inherit; font-size:16px; color:var(--ink); margin-bottom:12px;
+}
+.calc-denumire::placeholder{ color:var(--ink-faded); }
+.calc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.calc-camp{ background:var(--card-bg); border:1px solid var(--card-border); border-radius:12px; padding:9px 12px; }
+.calc-camp label{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:2px; }
+.calc-camp input{
+  width:100%; border:none; outline:none; background:transparent; color:var(--ink);
+  font-family:inherit; font-size:18px; font-weight:700;
+}
+.calc-rezultate{ background:var(--search-bg); border-radius:14px; padding:6px 16px; }
+.calc-r-rand{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; font-size:14px; color:var(--ink-soft); border-bottom:1px solid var(--divider); }
+.calc-r-rand:last-child{ border-bottom:none; }
+.calc-r-rand b{ font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums; }
+.calc-r-rand.mare{ padding:12px 0; }
+.calc-r-rand.mare span{ font-size:15px; font-weight:600; color:var(--ink); }
+.calc-r-rand.mare b{ font-size:21px; }
+.calc-r-rand.mare b.pozitiv{ color:#2E8B57; }
+.calc-r-rand.mare b.negativ{ color:var(--danger); }
+.calc-buton-adauga{
+  width:100%; margin-top:18px; padding:15px; border:none; border-radius:14px;
+  background:var(--accent); color:var(--accent-ink); font-size:16.5px; font-weight:700; font-family:inherit;
+}
+.calc-buton-adauga:active{ opacity:.7; }
 </style>
 </head>
 <body>
@@ -344,6 +379,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
     <div class="header-sus">
       <h1 class="lista-titlu">Notițe</h1>
       <div class="header-butoane">
+        <button id="btn-calculator" aria-label="Calculator profit">🧮</button>
         <button id="btn-total-general" aria-label="Toate de încasat">📋</button>
         <button id="btn-curs" aria-label="Convertor valutar">💱</button>
         <button id="btn-tema"><span id="tema-punct"></span><span id="tema-nume">Galben</span></button>
@@ -363,6 +399,7 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   <div class="editor-bara">
     <button id="btn-inapoi">‹ Notițe</button>
     <div class="editor-bara-dreapta">
+      <button id="btn-calculator-editor">🧮</button>
       <button id="btn-culoare-nota">🎨</button>
       <button id="btn-pin" class="editor-pin">📌</button>
       <button id="btn-sterge-nota" class="editor-sterge">Șterge</button>
@@ -433,6 +470,44 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
     <div class="total-general-suma" id="total-general-suma">0,00 lei</div>
     <div class="total-general-sub" id="total-general-sub">de la toate notițele</div>
     <div id="total-general-lista"></div>
+  </div>
+</div>
+
+<div id="ecran-calculator">
+  <div class="editor-bara">
+    <button id="btn-calculator-inapoi">‹ Înapoi</button>
+  </div>
+  <div class="curs-corp">
+    <h2 class="curs-titlu">Calculator profit</h2>
+    <input type="text" id="calc-denumire" class="calc-denumire" placeholder="Denumire (ex: Parfum Dirham Wardi)">
+
+    <div class="calc-grid">
+      <div class="calc-camp">
+        <label>Cumpărare / buc</label>
+        <input type="number" inputmode="decimal" id="calc-cumparare" placeholder="0">
+      </div>
+      <div class="calc-camp">
+        <label>Vânzare / buc</label>
+        <input type="number" inputmode="decimal" id="calc-vanzare" placeholder="0">
+      </div>
+      <div class="calc-camp">
+        <label>Bucăți</label>
+        <input type="number" inputmode="decimal" id="calc-bucati" value="1">
+      </div>
+      <div class="calc-camp">
+        <label>Transport/taxe</label>
+        <input type="number" inputmode="decimal" id="calc-transport" placeholder="0">
+      </div>
+    </div>
+
+    <div class="calc-rezultate">
+      <div class="calc-r-rand"><span>Investesc (cumpărare + transport)</span><b id="calc-investesc">0,00 lei</b></div>
+      <div class="calc-r-rand"><span>Încasez (vânzare)</span><b id="calc-incasez">0,00 lei</b></div>
+      <div class="calc-r-rand mare"><span>Profit</span><b id="calc-profit">0,00 lei</b></div>
+      <div class="calc-r-rand"><span>Marjă</span><b id="calc-marja">0,0%</b></div>
+    </div>
+
+    <button id="btn-calc-adauga" class="calc-buton-adauga">Adaugă în notiță</button>
   </div>
 </div>
 
@@ -1011,6 +1086,77 @@ document.getElementById("btn-total-general").addEventListener("click", () => {
 document.getElementById("btn-total-general-inapoi").addEventListener("click", () => {
   document.getElementById("ecran-total-general").classList.remove("deschis");
   randareLista();
+});
+
+/* ---------- Calculator profit ---------- */
+function actualizeazaCalculator(){
+  const cump = parseFloat((document.getElementById("calc-cumparare").value || "0").replace(",",".")) || 0;
+  const vanz = parseFloat((document.getElementById("calc-vanzare").value || "0").replace(",",".")) || 0;
+  const buc = Math.max(0, parseFloat((document.getElementById("calc-bucati").value || "0").replace(",",".")) || 0);
+  const transport = parseFloat((document.getElementById("calc-transport").value || "0").replace(",",".")) || 0;
+
+  const achizitieTotal = cump * buc;
+  const vanzareTotal = vanz * buc;
+  const investesc = achizitieTotal + transport;
+  const profit = vanzareTotal - investesc;
+  const marja = vanzareTotal > 0 ? (profit/vanzareTotal)*100 : 0;
+
+  document.getElementById("calc-investesc").textContent = formatLei(investesc);
+  document.getElementById("calc-incasez").textContent = formatLei(vanzareTotal);
+  const profitEl = document.getElementById("calc-profit");
+  profitEl.textContent = (profit>=0?"+":"−") + formatLei(Math.abs(profit));
+  profitEl.className = profit >= 0 ? "pozitiv" : "negativ";
+  document.getElementById("calc-marja").textContent = marja.toFixed(1) + "%";
+
+  return { cump, vanz, buc, transport, achizitieTotal, vanzareTotal, investesc, profit, marja };
+}
+["calc-cumparare","calc-vanzare","calc-bucati","calc-transport"].forEach(id => {
+  document.getElementById(id).addEventListener("input", actualizeazaCalculator);
+});
+function deschideCalculator(){
+  document.getElementById("calc-denumire").value = "";
+  document.getElementById("calc-cumparare").value = "";
+  document.getElementById("calc-vanzare").value = "";
+  document.getElementById("calc-bucati").value = "1";
+  document.getElementById("calc-transport").value = "";
+  actualizeazaCalculator();
+  const editorEraDeschis = document.getElementById("ecran-editor").classList.contains("deschis");
+  document.getElementById("btn-calc-adauga").textContent = editorEraDeschis ? "Adaugă în notiță" : "Creează notiță cu acest calcul";
+  document.getElementById("ecran-calculator").classList.add("deschis");
+}
+document.getElementById("btn-calculator").addEventListener("click", deschideCalculator);
+document.getElementById("btn-calculator-editor").addEventListener("click", deschideCalculator);
+document.getElementById("btn-calculator-inapoi").addEventListener("click", () => {
+  document.getElementById("ecran-calculator").classList.remove("deschis");
+});
+document.getElementById("btn-calc-adauga").addEventListener("click", () => {
+  const r = actualizeazaCalculator();
+  const denumire = document.getElementById("calc-denumire").value.trim() || "Produs";
+  const profitTxt = (r.profit>=0 ? "Profit " + formatLei(r.profit) : "Pierdere -" + formatLei(Math.abs(r.profit)));
+  const detaliiParti = [];
+  if(r.cump) detaliiParti.push("cump. " + formatLei(r.cump).replace(" lei","") + " lei buc");
+  if(r.buc) detaliiParti.push(r.buc + " buc");
+  if(r.transport) detaliiParti.push("transport " + formatLei(r.transport).replace(" lei","") + " lei");
+  if(r.vanz) detaliiParti.push("vând " + formatLei(r.vanz).replace(" lei","") + " lei buc");
+  const linieText = `${profitTxt} — ${denumire} (${detaliiParti.join(", ")})`;
+
+  const editorEraDeschis = document.getElementById("ecran-editor").classList.contains("deschis");
+  if(editorEraDeschis && notaCurentaId){
+    const n = notaCurenta();
+    if(n){
+      const gol = n.items.find(it => it.text.trim() === "");
+      if(gol){ gol.text = linieText; } else { n.items.push({id:idNou(), text:linieText, bifat:false}); }
+      marcheazaModificat();
+      randareLinii();
+      actualizeazaTotaluri();
+    }
+  } else {
+    const n = { id: idNou(), titlu: denumire, items:[{id:idNou(), text:linieText, bifat:false}], pinned:false, culoare:"", actualizat: Date.now() };
+    note.unshift(n);
+    salveaza();
+    deschideNota(n.id);
+  }
+  document.getElementById("ecran-calculator").classList.remove("deschis");
 });
 
 (function initTema(){
