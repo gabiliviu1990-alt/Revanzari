@@ -83,6 +83,33 @@
   --search-bg:#FBBEBE;
   --check-off:#1F9D55; --check-on:#9A4040;
 }
+[data-theme="alb"]{
+  --bg:#FFFFFF; --ink:#0A0A0A; --ink-soft:#6B6B6B; --ink-faded:#B5B5B5;
+  --card-bg:#F7F7F7; --card-border:#E2E2E2;
+  --accent:#0047FF; --accent-ink:#FFFFFF;
+  --footer-bg:#0A0A0A; --footer-text:#FFFFFF; --footer-subtle:#9A9A9A;
+  --danger:#E0402F; --divider:#E2E2E2;
+  --search-bg:#EFEFEF;
+  --check-off:#0EA25A; --check-on:#6B6B6B;
+}
+[data-theme="negru"]{
+  --bg:#0A0A0A; --ink:#F5F5F5; --ink-soft:#9A9A9A; --ink-faded:#5C5C5C;
+  --card-bg:#171717; --card-border:#2A2A2A;
+  --accent:#FFD60A; --accent-ink:#1A1400;
+  --footer-bg:#000000; --footer-text:#F5F5F5; --footer-subtle:#8A8A8A;
+  --danger:#FF453A; --divider:#262626;
+  --search-bg:#1C1C1C;
+  --check-off:#30D158; --check-on:#5C5C5C;
+}
+[data-theme="lime"]{
+  --bg:#F1FFC4; --ink:#1B2400; --ink-soft:#5C7A1A; --ink-faded:#A8C97A;
+  --card-bg:#FFFFFF; --card-border:#DFF29A;
+  --accent:#C6FF00; --accent-ink:#1B2400;
+  --footer-bg:#1B2400; --footer-text:#F1FFC4; --footer-subtle:#7A9A3A;
+  --danger:#E0402F; --divider:#DFF29A;
+  --search-bg:#E4FA9E;
+  --check-off:#2E8B57; --check-on:#5C7A1A;
+}
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html,body{
   height:100%; overflow:hidden; overscroll-behavior:none;
@@ -424,9 +451,12 @@ html{ scroll-padding-top:env(safe-area-inset-top,0px); }
   <div class="card-jos">
     <h3>Alege o culoare</h3>
     <div id="lista-teme"></div>
+    <button class="anuleaza" id="btn-backup" style="margin-top:14px;">⬇ Backup complet</button>
+    <button class="anuleaza" id="btn-restaureaza">⬆ Restaurează backup</button>
     <button class="anuleaza" id="btn-tema-anuleaza">Închide</button>
   </div>
 </div>
+<input type="file" id="input-restaurare" accept="application/json" style="position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; pointer-events:none;">
 
 <div class="overlay-fundal" id="overlay-culoare-nota">
   <div class="card-jos">
@@ -534,7 +564,10 @@ const TEME = {
   portocaliu:  { nume:"Portocaliu",  punct:"#FF6B1A" },
   turcoaz:     { nume:"Turcoaz",     punct:"#00C2CC" },
   mov:         { nume:"Mov aprins",  punct:"#8B2FE0" },
-  rosu:        { nume:"Roșu aprins", punct:"#FF3B3B" }
+  rosu:        { nume:"Roșu aprins", punct:"#FF3B3B" },
+  alb:         { nume:"Alb",         punct:"#0047FF" },
+  negru:       { nume:"Negru",       punct:"#FFD60A" },
+  lime:        { nume:"Lime electric", punct:"#C6FF00" }
 };
 let temaCurenta = "galben";
 
@@ -596,6 +629,55 @@ function incarca(){
 function salveaza(){
   try{ localStorage.setItem(CHEIE, JSON.stringify(note)); }catch(e){}
 }
+
+/* ---------- Backup / Restaurare ---------- */
+function descarcaBackup(){
+  const pachet = { app:"notite", versiune:1, exportat: Date.now(), tema: temaCurenta, note };
+  const blob = new Blob([JSON.stringify(pachet, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const data = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `notite-backup-${data}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+document.getElementById("btn-backup").addEventListener("click", descarcaBackup);
+
+const inputRestaurare = document.getElementById("input-restaurare");
+document.getElementById("btn-restaureaza").addEventListener("click", () => {
+  inputRestaurare.value = "";
+  inputRestaurare.click();
+});
+inputRestaurare.addEventListener("change", () => {
+  const fisier = inputRestaurare.files[0];
+  if(!fisier) return;
+  const cititor = new FileReader();
+  cititor.onload = () => {
+    try{
+      const pachet = JSON.parse(cititor.result);
+      const noteRestaurate = Array.isArray(pachet.note) ? pachet.note : (Array.isArray(pachet) ? pachet : null);
+      if(!noteRestaurate) throw new Error("format invalid");
+      note = noteRestaurate;
+      note.forEach(n => {
+        if(!Array.isArray(n.items)) n.items = [];
+        if(typeof n.pinned !== "boolean") n.pinned = false;
+        if(typeof n.titlu !== "string") n.titlu = "";
+        if(typeof n.culoare !== "string") n.culoare = "";
+      });
+      salveaza();
+      if(pachet.tema && TEME[pachet.tema]) aplicaTema(pachet.tema, true);
+      document.getElementById("overlay-tema").classList.remove("deschis");
+      randareLista();
+      alert("Backup restaurat cu succes.");
+    }catch(e){
+      alert("Fișierul nu pare a fi un backup valid.");
+    }
+  };
+  cititor.readAsText(fisier);
+});
 function formatDataScurta(ts){
   const d = new Date(ts);
   const azi = new Date();
