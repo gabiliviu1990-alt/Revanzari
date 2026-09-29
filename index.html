@@ -382,6 +382,7 @@ function applyTheme(){
 function aspectHtml(){
   const pr = store.prefs||{};
   return `<h2>Aspect</h2><div class="card"><label class="f">Culori</label><div class="chips">${Object.keys(THEMES).map(k=>`<button class="chip${(pr.th||"mare")===k?" on":""}" style="--c:${THEMES[k]["--sea"]||"#1B998B"}" data-th="${k}">${THEMES[k].n}</button>`).join("")}</div>
+    <label class="f">Kcal rămase (ecranul Azi)</label><div class="chips">${[["add","Mișcarea adaugă"],["none","Mișcarea nu contează"],["sub","Mișcarea scade"]].map(x=>`<button class="chip${(pr.km||"sub")===x[0]?" on":""}" style="--c:var(--butter)" data-km="${x[0]}">${x[1]}</button>`).join("")}</div>
     <label class="f">Ordinea meselor în ecranul Azi</label><div class="chips" style="margin-bottom:0"><button class="chip${pr.ord!=="now"?" on":""}" style="--c:var(--butter)" data-ord="chrono">Cronologică</button><button class="chip${pr.ord==="now"?" on":""}" style="--c:var(--butter)" data-ord="now">Masa curentă prima</button></div></div>`;
 }
 function orderedMeals(){
@@ -446,11 +447,11 @@ function renderLog(){
   if(!P){
     $("sum").innerHTML = `<div class="empty-card"><p><b>Începe cu profilul tău</b><br><span class="meta">Așa îți calculez ținta zilnică de kcal și macronutrienți.</span></p><button class="primary" data-go="prof">Completează profilul</button></div>`;
   } else {
-    const goal = P.kcal, left = Math.round(goal - eatK + actK), over = left < 0;
-    const ratio = eatK/Math.max(1,goal+actK);
+    const goal = P.kcal, km = ((store.prefs||{}).km||"sub"), allow = Math.max(0, goal + (km==="add"?actK:km==="sub"?-actK:0)), left = Math.round(allow - eatK), over = left < 0;
+    const ratio = eatK/Math.max(1,allow);
     const st = over ? ["#F26B4F","Ai trecut de țintă azi. Nicio problemă, mâine o iei de la capăt."] : ratio>=.9 ? ["#F2A93B","Ești aproape de țintă. Mai ai loc pentru o gustare mică."] : eatK>0 ? ["#1B998B","Ești pe drum bun. Continuă în ritmul tău."] : ["#1B998B","Zi nouă. Adaugă prima masă."];
     document.documentElement.style.setProperty("--acc",st[0]);
-    const L = Math.PI*90, frac = Math.min(1, eatK/Math.max(1, goal+actK));
+    const L = Math.PI*90, frac = Math.min(1, eatK/Math.max(1, allow));
     const arc = "M20 110 A90 90 0 0 1 200 110";
     const tube = (name,T,E,col)=>{
       const l = T-E;
@@ -927,7 +928,8 @@ function renderExtra(){
     <h2>Greutate</h2><div class="card"><div class="wrow"><input id="wkg" type="number" step="0.1" min="35" max="250" placeholder="kg azi" inputmode="decimal"><button class="ghost" id="wsave">Salvează</button></div>${spark}</div>`;
 }
 $("extra").addEventListener("click",e=>{
-  const id = e.target.id, th = e.target.closest("[data-th]"), od = e.target.closest("[data-ord]");
+  const id = e.target.id, th = e.target.closest("[data-th]"), od = e.target.closest("[data-ord]"), km = e.target.closest("[data-km]");
+  if(km){ (store.prefs = store.prefs||{}).km = km.dataset.km; persist(); renderExtra(); return; }
   if(th){ (store.prefs = store.prefs||{}).th = th.dataset.th; persist(); renderExtra(); return; }
   if(od){ (store.prefs = store.prefs||{}).ord = od.dataset.ord; persist(); renderExtra(); return; }
   if(id==="wsave"){
