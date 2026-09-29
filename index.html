@@ -132,7 +132,10 @@
   .panel{background:var(--card);width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
   .grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
   .panel h2{margin-top:4px}
-  .tiles3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .tiles3{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .frow{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:var(--mist);border-radius:14px;padding:12px 14px;margin-bottom:6px;font-weight:600;cursor:pointer}
+  .frow small{color:var(--muted);font-weight:500}.frow.done{opacity:.55;text-decoration:line-through}
+  .shop{display:flex;align-items:center;gap:6px}.shop .frow{flex:1}
   .opt{background:var(--mist);border:0;border-radius:20px;padding:18px 6px;text-align:center;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.9rem}
   .opt .ic{width:28px;height:28px}
   .thumb{width:100%;max-height:200px;object-fit:cover;border-radius:18px;margin-bottom:12px}
@@ -169,6 +172,11 @@
   }
 
   :root{--acc:#1B998B}
+  .pbs{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+  .pb small{display:block;font-size:.7rem;color:var(--muted)}
+  .pbar{height:90px;background:var(--mist);border-radius:8px;position:relative;display:flex;align-items:flex-end;overflow:hidden;margin-bottom:4px}
+  .pbar i{display:block;width:100%;border-radius:8px 8px 0 0}
+  .pbar u{position:absolute;left:0;right:0;height:2px;background:var(--ink);opacity:.5;text-decoration:none}
   .stmsg{text-align:center;color:#EAF2F5;font-size:.88rem;font-weight:600;margin-top:12px}
   .slot{background:color-mix(in srgb,var(--c) 22%,var(--card))}
   .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.duo .wcard{margin-top:0}
@@ -254,6 +262,7 @@
       </form>
     </div>
     <div id="pres"></div>
+    <div id="extra"></div>
     <p class="meta" style="margin-top:18px">Estimare orientativă (formula Mifflin-St Jeor), nu înlocuiește sfatul unui medic sau nutriționist. Caloriile din poze și cele arse la antrenament sunt estimări. Dacă ai afecțiuni, ești însărcinată sau alăptezi, discută mai întâi cu medicul.</p>
   </section>
 
@@ -322,6 +331,64 @@ const R = {
 };
 
 // MET pe activitate: kcal arse = MET × kg × ore
+/* ---------- rețete românești noi ---------- */
+R.mic.push({t:"Mămăligă cu brânză de vaci și smântână",i:[["Mălai (făină de porumb)",50,364,7,77,1.6],["Brânză de vaci",100,98,11,3.4,4.3],["Smântână 20%",30,206,2.5,3.5,20]],s:["Fierbe mălaiul în 250 ml de apă cu sare, amestecând 10–12 minute, până se îngroașă.","Pune mămăliga în farfurie și adaugă brânza de vaci.","Termină cu smântâna."]},
+ {t:"Ochiuri cu roșii și pâine",i:[["Ouă",120,143,12.6,0.7,9.5],["Roșii",150,18,0.9,3.9,0.2],["Ulei de măsline",6,884,0,0,100],["Pâine integrală",60,250,9,45,3.5]],s:["Rumenește roșiile tăiate felii 2 minute în ulei.","Sparge ouăle peste roșii și gătește sub capac 3–4 minute.","Servește cu pâinea."]});
+R.pranz.push({t:"Ciorbă de legume cu pui",i:[["Piept de pui (crud)",120,120,23,0,2.6],["Cartofi",150,77,2,17,0.1],["Morcov",80,41,0.9,9.6,0.2],["Ceapă",60,40,1.1,9,0.1],["Pâine integrală",50,250,9,45,3.5]],s:["Fierbe puiul în 1 litru de apă cu sare, 15 minute, apoi scoate spuma.","Adaugă ceapa, morcovul și cartofii tăiați cubulețe și fierbe 15 minute.","Scoate puiul, rupe-l bucăți și pune-l înapoi. Acrește cu borș sau lămâie. Servește cu pâine."]},
+ {t:"Ardei umpluți cu carne și orez",i:[["Carne tocată de curcan",120,170,20,0,9],["Orez alb (crud)",30,350,7,78,0.6],["Ardei gras",200,27,1,6,0.3],["Pastă de tomate",40,82,4.3,19,0.5]],s:["Amestecă carnea cu orezul spălat, sare și piper.","Umple ardeii golițiți și așază-i într-o oală.","Adaugă pasta de tomate diluată cu 300 ml de apă și fierbe la foc mic 45 de minute."]},
+ {t:"Tocăniță de pui cu mămăligă",i:[["Piept de pui (crud)",150,120,23,0,2.6],["Ceapă",80,40,1.1,9,0.1],["Roșii la conservă",150,20,1,4,0.2],["Ulei de măsline",8,884,0,0,100],["Mălai (făină de porumb)",60,364,7,77,1.6]],s:["Călește ceapa în ulei 4 minute, adaugă puiul tăiat cuburi și rumenește 6 minute.","Adaugă roșiile, sare, piper și 100 ml de apă și fierbe la foc mic 25 de minute.","Fierbe mălaiul în 300 ml de apă cu sare, 10–12 minute. Servește tocănița peste mămăligă."]});
+R.gust.push({t:"Telemea cu roșii și castraveți",i:[["Telemea",50,260,17,1,21],["Roșii",150,18,0.9,3.9,0.2],["Castraveți",100,15,0.7,3.6,0.1],["Pâine integrală",30,250,9,45,3.5]],s:["Taie legumele felii.","Așază telemeaua lângă ele.","Servește cu pâinea."]},
+ {t:"Salată de vinete cu pâine",i:[["Vinete",200,25,1,6,0.2],["Ceapă",30,40,1.1,9,0.1],["Ulei de măsline",10,884,0,0,100],["Pâine integrală",40,250,9,45,3.5]],s:["Coace vinetele întregi 40 de minute la 220°C, până se înmoaie.","Curăță-le de coajă, scurge-le și toacă-le fin.","Amestecă cu uleiul, ceapa tocată și sare. Servește cu pâine."]});
+R.cina.push({t:"Piept de pui cu cartofi și varză murată",i:[["Piept de pui (crud)",150,120,23,0,2.6],["Cartofi",200,77,2,17,0.1],["Varză murată",150,19,0.9,4.3,0.1],["Ulei de măsline",8,884,0,0,100]],s:["Fierbe cartofii întregi 20 de minute.","Rumenește puiul condimentat în ulei, 6–7 minute pe fiecare parte.","Servește cu varza murată."]},
+ {t:"Păstrăv la cuptor cu cartofi și salată",i:[["Păstrăv",150,140,20,0,6],["Cartofi",200,77,2,17,0.1],["Salată mixtă",150,15,1.3,2.5,0.2],["Ulei de măsline",8,884,0,0,100]],s:["Taie cartofii felii, unge-i cu jumătate din ulei și coace-i la 200°C, 15 minute.","Adaugă păstrăvul condimentat cu sare, piper și lămâie și coace încă 15 minute.","Servește cu salata asezonată cu restul de ulei."]});
+
+/* ---------- alimente: [nume, kcal, proteine, carbohidrați, grăsimi (la 100 g), porție g] ---------- */
+const FOODS = [
+["Banană",89,1.1,23,.3,120],["Măr",52,.3,14,.2,180],["Portocală",47,.9,12,.1,150],["Struguri",69,.7,18,.2,100],["Căpșuni",32,.7,8,.3,150],["Pepene roșu",30,.6,8,.2,200],
+["Roșii",18,.9,3.9,.2,100],["Castraveți",15,.7,3.6,.1,100],["Ardei gras",27,1,6,.3,100],["Cartofi fierți",77,2,17,.1,200],["Morcov",41,.9,10,.2,80],["Varză murată",19,.9,4.3,.1,100],
+["Fasole boabe fiartă",127,8.7,23,.5,150],["Linte fiartă",116,9,20,.4,150],["Mazăre",81,5.4,14,.4,100],
+["Pâine albă",265,9,49,3.2,50],["Pâine integrală",250,9,45,3.5,50],["Mămăligă fiartă",70,1.5,15,.3,200],["Orez fiert",130,2.7,28,.3,150],["Paste fierte",158,5.8,31,.9,180],["Fulgi de ovăz",370,13,60,7,50],["Biscuiți simpli",430,7,72,12,30],
+["Ou fiert",155,13,1.1,11,60],["Lapte 1,5%",46,3.4,4.8,1.5,200],["Iaurt natural",61,3.5,4.7,3.3,150],["Brânză de vaci",98,11,3.4,4.3,100],["Telemea",260,17,1,21,50],["Cașcaval",350,25,1.5,28,30],["Smântână 20%",206,2.5,3.5,20,30],["Urdă",174,11,3,13,50],
+["Piept de pui fript",165,31,0,3.6,120],["Pulpă de pui",209,26,0,11,120],["Carne de porc slabă",143,21,0,6,120],["Carne tocată de vită",250,26,0,15,120],["Cârnați",300,14,2,27,60],["Șuncă",145,21,1.5,6,40],["Somon",208,20,0,13,150],["Păstrăv",140,20,0,6,150],["Ton în apă",110,25,0,1,100],
+["Nuci",654,15,14,65,30],["Migdale",579,21,22,50,30],["Alune",567,26,16,49,30],["Semințe de floarea-soarelui",584,21,20,51,30],["Ciocolată neagră",546,5,61,31,25],["Chipsuri",536,7,53,34,30],
+["Ulei",884,0,0,100,10],["Unt",717,.9,.1,81,10],["Miere",304,.3,82,0,15],["Zahăr",387,0,100,0,10],["Suc de portocale",45,.7,10,.2,250],["Cola",42,0,10.6,0,330],["Bere",43,.5,3.6,0,500],["Vin",85,.1,2.6,0,150],
+["Pizza",266,11,33,10,150],["Cartofi prăjiți",312,3.4,41,15,120],["Sarmale",110,7,7,6,200]];
+ICON.srch='<svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>';
+const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+function fillRes(q){
+  const n = norm(q.trim()), r = FOODS.map((x,i)=>[x,i]).filter(([x])=>!n||norm(x[0]).includes(n)).slice(0,10);
+  $("fres").innerHTML = r.length ? r.map(([x,i])=>`<button class="frow" data-food="${i}">${x[0]} <small>${x[1]} kcal / 100 g</small></button>`).join("") : '<p class="meta">Nimic găsit. Poți adăuga manual.</p>';
+}
+function foodVals(){ const x = FOODS[sheet.food], g = Math.max(1,+$("fg").value||x[5]), k = g/100; return {n:`${x[0]} (${g} g)`,kc:x[1]*k,p:x[2]*k,c:x[3]*k,f:x[4]*k}; }
+function calcFood(){ const v = foodVals(); $("fcalc").textContent = `${Math.round(v.kc)} kcal · P ${Math.round(v.p)} g · C ${Math.round(v.c)} g · G ${Math.round(v.f)} g`; }
+
+/* ---------- lista de cumpărături ---------- */
+function shopHtml(){
+  const L = store.shop||[]; if(!L.length) return "";
+  return `<h2>Lista de cumpărături</h2><div class="card">${L.map((x,i)=>`<div class="shop"><button class="frow${x.ok?" done":""}" data-si="${i}">${x.ok?"☑":"☐"} ${x.n} <b>${x.g} g</b></button><button class="del" data-sd="${i}" aria-label="Șterge ${x.n}">✕</button></div>`).join("")}<div class="wbtns" style="margin-top:10px"><button class="ghost" data-scp="1">Copiază</button><button class="ghost" data-sclr="1">Golește lista</button></div></div>`;
+}
+
+/* ---------- culori și ordinea meselor ---------- */
+const THEMES = {
+ mare:{n:"Marină"},
+ padure:{n:"Pădure","--deep":"#16302B","--sea":"#2E8B57","--seaL":"#5CC48A","--tomato":"#E8794A","--butter":"#F2D16B"},
+ prune:{n:"Prună","--deep":"#2B1B3D","--sea":"#7B5EA7","--seaL":"#A98BD6","--tomato":"#F0776B","--butter":"#F5C96A"},
+ corai:{n:"Corai","--deep":"#3B2230","--sea":"#D9685A","--seaL":"#F09A8C","--tomato":"#F2A93B","--butter":"#FFD9A0"}
+};
+function applyTheme(){
+  const th = THEMES[(store.prefs||{}).th] || THEMES.mare, st = document.documentElement.style;
+  ["--deep","--sea","--seaL","--tomato","--butter"].forEach(v=>th[v] ? st.setProperty(v,th[v]) : st.removeProperty(v));
+}
+function aspectHtml(){
+  const pr = store.prefs||{};
+  return `<h2>Aspect</h2><div class="card"><label class="f">Culori</label><div class="chips">${Object.keys(THEMES).map(k=>`<button class="chip${(pr.th||"mare")===k?" on":""}" style="--c:${THEMES[k]["--sea"]||"#1B998B"}" data-th="${k}">${THEMES[k].n}</button>`).join("")}</div>
+    <label class="f">Ordinea meselor în ecranul Azi</label><div class="chips" style="margin-bottom:0"><button class="chip${pr.ord!=="now"?" on":""}" style="--c:var(--butter)" data-ord="chrono">Cronologică</button><button class="chip${pr.ord==="now"?" on":""}" style="--c:var(--butter)" data-ord="now">Masa curentă prima</button></div></div>`;
+}
+function orderedMeals(){
+  if((store.prefs||{}).ord!=="now" || iso(sel)!==iso(new Date())) return MEALS;
+  const i = MEALS.findIndex(m=>m[0]===autoMeal()); return MEALS.slice(i).concat(MEALS.slice(0,i));
+}
+
 const MV = {
   "Cardio": {"Mers alert":3.5,"Alergare ușoară":8.3,"Alergare rapidă":11,"Bandă / eliptică":5,"Ciclism":6.8,"Înot":6,"HIIT":8,"Yoga / întinderi":2.5},
   "Fiare": {"Fiare, ritm moderat":3.5,"Fiare, intens":6,"Calisthenics":3.8}
@@ -338,6 +405,8 @@ let sel = new Date();
 function day(){ const k = iso(sel); if(!store.days[k]) store.days[k] = {eaten:[],moves:[]}; return store.days[k]; }
 const sum = (a,k) => a.reduce((t,x)=>t+(+x[k]||0),0);
 const kg = () => (store.profile && store.profile.w) || 70;
+// kcal arse din pași: ~0,0005 kcal × kg × pas (70 kg → 6000 pași ≈ 210 kcal)
+const stepK = D => Math.round((D.steps||0) * 0.0005 * kg());
 const autoMeal = () => { const h = new Date().getHours(); return h<10?"mic":h<15?"pranz":h<18?"gust":"cina"; };
 
 /* ---------- navigare ---------- */
@@ -373,7 +442,7 @@ function renderLog(){
   $("week").innerHTML = wk;
 
   const D = day(), P = store.profile;
-  const eatK = sum(D.eaten,"kc"), actK = sum(D.moves,"kc");
+  const eatK = sum(D.eaten,"kc"), actK = sum(D.moves,"kc") + stepK(D);
   if(!P){
     $("sum").innerHTML = `<div class="empty-card"><p><b>Începe cu profilul tău</b><br><span class="meta">Așa îți calculez ținta zilnică de kcal și macronutrienți.</span></p><button class="primary" data-go="prof">Completează profilul</button></div>`;
   } else {
@@ -410,7 +479,7 @@ function renderLog(){
       </div>`;
   }
 
-  const slots = MEALS.map(([key,label])=>{
+  const slots = orderedMeals().map(([key,label])=>{
     const items = D.eaten.map((x,i)=>({x,i})).filter(o=>o.x.meal===key);
     const tot = Math.round(sum(items.map(o=>o.x),"kc"));
     const list = items.length
@@ -418,8 +487,8 @@ function renderLog(){
       : "";
     return `<div class="slot" style="--c:var(--${key})"><header><h3>${label}</h3><span class="k">${items.length?tot+" kcal":""}</span><button class="plus" data-add="${key}" aria-label="Adaugă la ${label}">+</button></header>${list}</div>`;
   }).join("");
-  const work = `<div class="slot" style="--c:var(--work)"><header><h3>Antrenament</h3><span class="k">${D.moves.length?Math.round(actK)+" kcal":""}</span><button class="plus" data-addw="1" aria-label="Adaugă antrenament">+</button></header>${
-    D.moves.length ? `<ul class="log">${D.moves.map((x,i)=>`<li><span>${esc(x.n)}<small>${x.m} min</small></span><span class="r">${Math.round(x.kc)} kcal <button class="del" data-del="m${i}">Șterge</button></span></li>`).join("")}</ul>` : ""
+  const work = `<div class="slot" style="--c:var(--work)"><header><h3>Antrenament</h3><span class="k">${(D.moves.length||D.steps)?Math.round(actK)+" kcal":""}</span><button class="plus" data-addw="1" aria-label="Adaugă antrenament">+</button></header>${
+    (D.moves.length||D.steps) ? `<ul class="log">${D.moves.map((x,i)=>`<li><span>${esc(x.n)}<small>${x.m} min</small></span><span class="r">${Math.round(x.kc)} kcal <button class="del" data-del="m${i}">Șterge</button></span></li>`).join("")}${D.steps?`<li><span>Pași<small>${D.steps} pași</small></span><span class="r">${stepK(D)} kcal <button class="del" data-del="s0">Șterge</button></span></li>`:""}</ul>` : ""
   }</div>`;
   $("lists").innerHTML = waterCard(D)+`<h2>Mesele de azi</h2>${slots}<h2>Mișcare</h2>${work}`+tipCard();
 }
@@ -430,7 +499,7 @@ $("v-log").addEventListener("click",e=>{
   const a = e.target.closest("[data-add]"); if(a){ openSheet("menu", a.dataset.add); return; }
   if(e.target.closest("[data-addw]")){ openSheet("workout"); return; }
   const del = e.target.dataset.del;
-  if(del){ const D = day(); const i = +del.slice(1); (del[0]==="e"?D.eaten:D.moves).splice(i,1); persist(); renderLog(); }
+  if(del){ const D = day(); const i = +del.slice(1); if(del[0]==="s") D.steps = 0; else (del[0]==="e"?D.eaten:D.moves).splice(i,1); persist(); renderLog(); }
 });
 $("dprev").addEventListener("click",()=>{ sel = new Date(sel.getFullYear(),sel.getMonth(),sel.getDate()-1); renderLog(); });
 $("dnext").addEventListener("click",()=>{ sel = new Date(sel.getFullYear(),sel.getMonth(),sel.getDate()+1); renderLog(); });
@@ -463,9 +532,10 @@ function renderMenu(){
         <div class="btns">
           <button type="button" class="primary" data-eat="1" data-meal="${key}" data-n="${r.t}" data-kc="${kc}" data-p="${p}" data-c="${c}" data-f="${fa}">Am mâncat asta</button>
           <button type="button" class="ghost" data-k="${key}">Altă idee</button>
+          <button type="button" class="ghost" data-shop="1">🛒 Listă</button>
         </div>
       </div>
-    </article>`;
+    </article>${shopHtml()}`;
 }
 $("menubox").addEventListener("click",e=>{
   const t = e.target.closest("button"); if(!t) return;
@@ -474,11 +544,22 @@ $("menubox").addEventListener("click",e=>{
     day().eaten.push({n:t.dataset.n,kc:+t.dataset.kc,p:+t.dataset.p,c:+t.dataset.c,f:+t.dataset.f,meal:t.dataset.meal});
     persist(); t.textContent = "Adăugat ✓"; return;
   }
+  if(t.dataset.shop){
+    const r = R[menuMeal][pick[menuMeal]], f = Math.min(2, Math.max(.5, store.profile.kcal*MEALS.find(m=>m[0]===menuMeal)[2]/baseKcal(r)));
+    store.shop = store.shop||[];
+    r.i.forEach(x=>{ const g = Math.max(1,rnd(x[1]*f)), o = store.shop.find(y=>y.n===x[0]); if(o) o.g += g; else store.shop.push({n:x[0],g,ok:0}); });
+    persist(); renderMenu(); return;
+  }
+  if(t.dataset.si!==undefined){ store.shop[+t.dataset.si].ok ^= 1; persist(); renderMenu(); return; }
+  if(t.dataset.sd!==undefined){ store.shop.splice(+t.dataset.sd,1); persist(); renderMenu(); return; }
+  if(t.dataset.sclr){ store.shop = []; persist(); renderMenu(); return; }
+  if(t.dataset.scp){ const txt = store.shop.map(x=>`${x.ok?"[x]":"[ ]"} ${x.n} ${x.g} g`).join("\n"); try{ navigator.clipboard.writeText(txt); }catch(_){} t.textContent = "Copiat ✓"; return; }
   if(t.dataset.k){ pick[t.dataset.k] = (pick[t.dataset.k]+1) % R[t.dataset.k].length; renderMenu(); }
 });
 
 /* ---------- profil ---------- */
 function renderProfile(){
+  renderExtra();
   const P = store.profile;
   if(P){
     document.querySelector(`input[name=sex][value=${P.sex}]`).checked = true;
@@ -525,6 +606,7 @@ function renderSheet(){
       <div class="tiles3">
         <label class="opt" for="pfile">${ICON.cam}Poză</label>
         <input id="pfile" class="vh" type="file" accept="image/*">
+        <button class="opt" data-mode="search">${ICON.srch}Caută</button>
         <button class="opt" data-mode="manual">${ICON.pen}Manual</button>
         <button class="opt" data-mode="workout">${ICON.bolt}Antrenament</button>
       </div>
@@ -565,6 +647,13 @@ function renderSheet(){
         <button class="primary" data-act="addmanual">Adaugă în jurnal</button>
         <button class="ghost" data-act="close">Închide</button>
       </div>`;
+  } else if(sheet.mode==="search"){
+    el.innerHTML = `${G}<h2>Caută aliment</h2><input id="fq" type="text" placeholder="ex: banană, mămăligă, telemea" autocomplete="off"><div id="fres" style="margin-top:8px"></div><button class="ghost" data-act="close" style="width:100%;margin-top:8px">Închide</button>`;
+    fillRes("");
+  } else if(sheet.mode==="foodsel"){
+    const x = FOODS[sheet.food];
+    el.innerHTML = `${G}<h2>${x[0]}</h2><p class="meta" id="fcalc"></p><label class="f" for="fg">Grame</label><input id="fg" type="number" min="1" value="${x[5]}" inputmode="numeric"><div style="margin-top:10px"><label class="f" for="fmeal">Masa</label>${mealSel("fmeal",sheet.meal)}</div><button class="primary" data-act="addfood" style="margin-top:12px">Adaugă în jurnal</button><button class="ghost" data-mode="search" style="width:100%;margin-top:8px">Înapoi la căutare</button>`;
+    calcFood();
   } else if(sheet.mode==="workout"){
     el.innerHTML = `${G}<h2>Adaugă antrenament</h2>
       <div style="display:grid;gap:10px">
@@ -579,7 +668,8 @@ function renderSheet(){
 }
 
 $("panel").addEventListener("click",e=>{
-  const t = e.target.closest("[data-mode],[data-act],[data-rm],[data-rec]"); if(!t) return;
+  const t = e.target.closest("[data-mode],[data-act],[data-rm],[data-rec],[data-food]"); if(!t) return;
+  if(t.dataset.food!==undefined){ sheet.food = +t.dataset.food; sheet.mode = "foodsel"; renderSheet(); return; }
   if(t.dataset.rec !== undefined){ const r = sheet.rec[+t.dataset.rec]; day().eaten.push({n:r.n,kc:r.kc,p:r.p,c:r.c,f:r.f,meal:sheet.meal}); persist(); closeSheet(); renderLog(); return; }
   if(t.dataset.mode){ sheet.mode = t.dataset.mode; renderSheet(); return; }
   if(t.dataset.rm !== undefined){ photo.items.splice(+t.dataset.rm,1); renderSheet(); return; }
@@ -590,6 +680,7 @@ $("panel").addEventListener("click",e=>{
     photo.items.forEach(x=>D.eaten.push({n:x.n,kc:x.kc,p:x.p,c:x.c,f:x.f,meal}));
     persist(); closeSheet(); renderLog();
   }
+  else if(a==="addfood"){ day().eaten.push({...foodVals(),meal:$("fmeal").value}); persist(); closeSheet(); renderLog(); }
   else if(a==="addmanual"){
     const kc = +$("mk").value; if(!kc || kc<1) return;
     day().eaten.push({n:$("mn").value.trim()||"Mâncare",kc,p:+$("mp").value||0,c:+$("mc").value||0,f:+$("mf").value||0,meal:$("mmeal").value});
@@ -601,6 +692,7 @@ $("panel").addEventListener("click",e=>{
     persist(); closeSheet(); renderLog();
   }
 });
+$("panel").addEventListener("input",e=>{ if(e.target.id==="fq") fillRes(e.target.value); else if(e.target.id==="fg") calcFood(); });
 $("panel").addEventListener("change",e=>{
   const t = e.target;
   if(t.id==="pfile" && t.files && t.files[0]){ handleFile(t.files[0]); return; }
@@ -757,9 +849,9 @@ function waterCard(D){
   return `<div class="duo"><div class="card wcard"><b>💧 Apă</b><div class="big">${w}<small> / ${wg} ml</small></div>
     <div class="wbar"><i style="width:${Math.min(100,w/wg*100)}%"></i></div>
     <div class="wbtns"><button class="ghost" data-w="250">+ 250</button><button class="ghost" data-w="-250" aria-label="Scade 250 ml">−</button></div></div>
-    <div class="card wcard"><b>👟 Pași</b><div class="big"><input id="steps" type="number" min="0" inputmode="numeric" placeholder="ex: 6000" value="${D.steps||""}"></div><small class="meta">Un început bun: 6.000</small></div></div>`;
+    <div class="card wcard"><b>👟 Pași</b><div class="big"><input id="steps" type="number" min="0" inputmode="numeric" placeholder="ex: 6000" value="${D.steps||""}"></div><small class="meta">${D.steps?"≈ "+stepK(D)+" kcal arse":"Un început bun: 6.000"}</small></div></div>`;
 }
-$("v-log").addEventListener("change",e=>{ if(e.target.id==="steps"){ day().steps = Math.max(0,+e.target.value||0); persist(); } });
+$("v-log").addEventListener("change",e=>{ if(e.target.id==="steps"){ day().steps = Math.max(0,+e.target.value||0); persist(); renderLog(); } });
 
 /* ---------- alimente frecvente ---------- */
 function recHtml(){
@@ -811,6 +903,41 @@ $("sportbox").addEventListener("click",e=>{
   }
 });
 
+
+/* ---------- progres, greutate, copie de siguranță ---------- */
+function renderExtra(){
+  applyTheme();
+  const P = store.profile, goal = P ? P.kcal : 0, days = [];
+  for(let i=6;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const D = store.days[iso(d)];
+    days.push({l:DAYS[(d.getDay()+6)%7], e:D ? Math.round(sum(D.eaten,"kc")) : 0});
+  }
+  const mx = Math.max(goal, ...days.map(x=>x.e), 1);
+  const bars = days.map(x=>`<div class="pb"><div class="pbar"><i style="height:${x.e/mx*100}%;background:${goal&&x.e>goal?"var(--tomato)":"var(--sea)"}"></i>${goal?`<u style="bottom:${goal/mx*100}%"></u>`:""}</div><small>${x.l}</small><small>${x.e||"–"}</small></div>`).join("");
+  const wt = (store.wt||[]).slice(-10);
+  let spark = "";
+  if(wt.length){
+    const vs = wt.map(x=>x.kg), lo = Math.min(...vs), hi = Math.max(...vs), dl = vs[vs.length-1]-vs[0];
+    const pts = vs.map((v,i)=>`${wt.length>1?i/(wt.length-1)*200:100},${40-(v-lo)/((hi-lo)||1)*36}`).join(" ");
+    spark = `<svg viewBox="0 0 200 44" style="width:100%;margin-top:10px"><polyline points="${pts}" fill="none" stroke="#1B998B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p class="meta" style="margin:0">Ultima: <b>${vs[vs.length-1]} kg</b>${wt.length>1?` · față de prima măsurătoare: ${dl>0?"+":""}${dl.toFixed(1)} kg`:""}</p>`;
+  }
+  $("extra").innerHTML = `${aspectHtml()}<h2>Ultimele 7 zile</h2><div class="card"><div class="pbs">${bars}</div><p class="meta" style="margin:8px 0 0">Kcal mâncate pe zi${goal?`. Linia este ținta ta (${goal} kcal).`:"."}</p></div>
+    <h2>Greutate</h2><div class="card"><div class="wrow"><input id="wkg" type="number" step="0.1" min="35" max="250" placeholder="kg azi" inputmode="decimal"><button class="ghost" id="wsave">Salvează</button></div>${spark}</div>`;
+}
+$("extra").addEventListener("click",e=>{
+  const id = e.target.id, th = e.target.closest("[data-th]"), od = e.target.closest("[data-ord]");
+  if(th){ (store.prefs = store.prefs||{}).th = th.dataset.th; persist(); renderExtra(); return; }
+  if(od){ (store.prefs = store.prefs||{}).ord = od.dataset.ord; persist(); renderExtra(); return; }
+  if(id==="wsave"){
+    const v = +$("wkg").value; if(!(v>=35 && v<=250)) return;
+    store.wt = store.wt||[]; const d = iso(new Date()), i = store.wt.findIndex(x=>x.d===d);
+    if(i>=0) store.wt[i].kg = v; else store.wt.push({d,kg:v});
+    persist(); renderExtra();
+  }
+});
+
 /* icoană pentru ecranul principal */
 (()=>{ const c = document.createElement("canvas"); c.width = c.height = 180; const x = c.getContext("2d");
   x.fillStyle="#12263A"; x.fillRect(0,0,180,180);
@@ -819,6 +946,7 @@ $("sportbox").addEventListener("click",e=>{
   const l = document.createElement("link"); l.rel="apple-touch-icon"; l.href=c.toDataURL(); document.head.appendChild(l); })();
 
 /* ---------- pornire ---------- */
+applyTheme();
 show("log");
 </script>
 </body>
