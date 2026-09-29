@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Farfuria mea</title>
+<meta name="theme-color" content="#12263A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Farfuria">
 <style>
   :root{
     --deep:#12263A; --sea:#1B998B; --seaL:#3CC5B5; --tomato:#F26B4F; --butter:#FFD166;
@@ -21,7 +25,7 @@
   .head small{display:block;color:var(--muted);font-weight:600}
   .head h1{margin:0;font:800 1.75rem/1.1 var(--disp);letter-spacing:-.02em}
   .arrows{display:flex;gap:6px}
-  .arrows button{width:42px;height:42px;border-radius:14px;border:0;background:#fff;font-size:1.3rem;cursor:pointer}
+  .arrows button{width:42px;height:42px;border-radius:14px;border:0;background:var(--card);font-size:1.3rem;cursor:pointer}
   h2{font:800 1.1rem var(--disp);margin:24px 0 6px}
   .meta{color:var(--muted);font-size:.88rem}
   .card{background:var(--card);border-radius:22px;padding:16px}
@@ -32,7 +36,7 @@
 
   /* săptămână */
   .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
-  .dayb{border:0;background:#fff;border-radius:16px;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+  .dayb{border:0;background:var(--card);border-radius:16px;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
   .dayb small{font-size:.7rem;color:var(--muted)}
   .dayb b{font:700 1.05rem var(--disp)}
   .dayb i{width:5px;height:5px;border-radius:50%;background:transparent}
@@ -43,7 +47,7 @@
   .dayb.sel.today b{color:var(--butter)}
 
   /* hero */
-  .hero{background:var(--deep);color:#fff;border-radius:28px;padding:18px 14px 14px}
+  .hero{background:linear-gradient(160deg,var(--deep) 45%,color-mix(in srgb,var(--acc) 55%,var(--deep)));color:#fff;border-radius:28px;padding:18px 14px 14px}
   .gauge{position:relative;width:100%;max-width:300px;margin:0 auto}
   .gauge svg{display:block;width:100%;height:auto}
   .gauge .c{position:absolute;left:0;right:0;bottom:0;text-align:center}
@@ -60,11 +64,11 @@
   .tube .t i{position:absolute;left:0;right:0;bottom:0;background:var(--c);border-radius:8px}
   .tube small{display:block;color:#B9C8D2;font-size:.7rem;line-height:1.25}
   .tube b{font:800 1rem var(--disp)}
-  .empty-card{background:#fff;border-radius:22px;padding:20px;text-align:center}
+  .empty-card{background:var(--card);border-radius:22px;padding:20px;text-align:center}
   .empty-card p{margin:0 0 12px}
 
   /* sloturi */
-  .slot{background:#fff;border-radius:20px;padding:12px 14px;margin-top:10px}
+  .slot{background:var(--card);border-radius:20px;padding:12px 14px;margin-top:10px}
   .slot header{display:flex;align-items:center;gap:8px}
   .slot h3{margin:0;font:700 1rem var(--disp);flex:1;display:flex;align-items:center;gap:9px}
   .slot h3::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 0 0 3px rgba(18,38,58,.06)}
@@ -101,10 +105,10 @@
 
   /* meniu */
   .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
-  .chip{flex:none;border:0;background:#fff;border-radius:16px;padding:9px 14px;text-align:left;cursor:pointer;font-weight:700}
+  .chip{flex:none;border:0;background:var(--card);border-radius:16px;padding:9px 14px;text-align:left;cursor:pointer;font-weight:700}
   .chip small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
   .chip.on{background:var(--c);}
-  .rcard{background:#fff;border-radius:26px;overflow:hidden}
+  .rcard{background:var(--card);border-radius:26px;overflow:hidden}
   .rhead{background:var(--c);padding:16px 16px 14px}
   .rhead small{display:block;color:var(--deep);opacity:.75;font-weight:600}
   .rhead h3{margin:2px 0 6px;font:800 1.35rem/1.2 var(--disp)}
@@ -125,7 +129,7 @@
   /* sheet */
   .sheet{position:fixed;inset:0;background:rgba(18,38,58,.55);display:none;align-items:flex-end;justify-content:center;z-index:20}
   .sheet.on{display:flex}
-  .panel{background:#fff;width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+  .panel{background:var(--card);width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
   .grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
   .panel h2{margin-top:4px}
   .tiles3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -133,7 +137,7 @@
   .opt .ic{width:28px;height:28px}
   .thumb{width:100%;max-height:200px;object-fit:cover;border-radius:18px;margin-bottom:12px}
   .item{background:var(--mist);border-radius:16px;padding:10px;margin-bottom:8px}
-  .item input{background:#fff}
+  .item input{background:var(--card)}
   .item .top2{display:grid;grid-template-columns:1fr 84px auto;gap:8px;align-items:end}
   .item .mm{color:var(--muted);font-size:.82rem;margin-top:6px}
   .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -148,6 +152,33 @@
   .bfmark{position:absolute;top:-5px;width:4px;height:22px;background:var(--deep);border-radius:2px;transform:translateX(-2px)}
   .bfleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.78rem;color:var(--muted);margin-top:8px}
   .bfleg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:5px}
+
+  .tip{background:var(--butter);color:#12263A;border-radius:18px;padding:12px 14px;margin-top:12px;font-size:.92rem;font-weight:600}
+  .wcard{margin-top:12px}.wrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .wbar{height:10px;border-radius:6px;background:var(--mist);overflow:hidden;margin:8px 0 10px}
+  .wbar i{display:block;height:100%;background:var(--seaL);border-radius:6px}
+  .wbtns{display:flex;gap:8px}.wbtns .ghost{flex:1}
+  .rules ol{margin:8px 0 0;padding-left:20px}.rules li{padding:3px 0}
+  .plan{margin-top:14px}.ex{padding-left:20px;margin:0 0 14px}.ex li{padding:6px 0}
+  .ex small{display:block;color:var(--muted)}.dose{color:var(--sea);font-weight:700}
+  @media (prefers-color-scheme:dark){
+    :root{--deep:#1E3A56;--mist:#0E1A26;--card:#182B3D;--line:#2A4258;--muted:#9FB2C0;--ink:#EAF2F5;--del:#FF8A78}
+    .rhead,.chip.on,.chip.on small{color:#12263A}
+    .primary{background:var(--sea);color:#06222B}
+    .warn{background:#4A2A25}
+  }
+
+  :root{--acc:#1B998B}
+  .stmsg{text-align:center;color:#EAF2F5;font-size:.88rem;font-weight:600;margin-top:12px}
+  .slot{background:color-mix(in srgb,var(--c) 22%,var(--card))}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.duo .wcard{margin-top:0}
+  .big{font:800 1.5rem var(--disp);margin-top:4px}.big small{font:600 .75rem system-ui;color:var(--muted)}
+  .big input{font:inherit;padding:8px 10px}
+  .dock{background:var(--card);border:1px solid var(--line);box-shadow:0 8px 28px rgba(18,38,58,.18);gap:2px}
+  .dock button{flex:0 0 auto;flex-direction:row;color:var(--muted);font-size:.85rem;padding:12px 15px;border-radius:22px;gap:0}
+  .dock button span{display:none}
+  .dock button.on{flex:1;justify-content:center;background:var(--acc);color:#fff}
+  .dock button.on span{display:inline;margin-left:7px}
 </style>
 </head>
 <body>
@@ -226,12 +257,15 @@
     <p class="meta" style="margin-top:18px">Estimare orientativă (formula Mifflin-St Jeor), nu înlocuiește sfatul unui medic sau nutriționist. Caloriile din poze și cele arse la antrenament sunt estimări. Dacă ai afecțiuni, ești însărcinată sau alăptezi, discută mai întâi cu medicul.</p>
   </section>
 
+  <section class="view" id="v-sport"><div class="head"><div><small>Idei pentru începători</small><h1>Antrenament</h1></div></div><div id="sportbox"></div></section>
+
   <button class="fab" id="fab" aria-label="Adaugă"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Adaugă</button>
   <nav class="dock">
-    <button data-tab="log" class="on"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Azi</button>
-    <button data-tab="menu"><svg class="ic" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg>Meniu</button>
-    <button data-tab="body"><svg class="ic" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Corp</button>
-    <button data-tab="prof"><svg class="ic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil</button>
+    <button data-tab="log" class="on"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Azi</span></button>
+    <button data-tab="menu"><svg class="ic" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span>Meniu</span></button>
+    <button data-tab="sport"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/></svg><span>Sport</span></button>
+    <button data-tab="body"><svg class="ic" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span>Corp</span></button>
+    <button data-tab="prof"><svg class="ic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></button>
   </nav>
 </div>
 
@@ -289,7 +323,7 @@ const R = {
 
 // MET pe activitate: kcal arse = MET × kg × ore
 const MV = {
-  "Cardio": {"Mers alert":3.5,"Alergare ușoară":8.3,"Alergare rapidă":11,"Bandă / eliptică":5,"Ciclism":6.8,"Înot":6,"HIIT":8},
+  "Cardio": {"Mers alert":3.5,"Alergare ușoară":8.3,"Alergare rapidă":11,"Bandă / eliptică":5,"Ciclism":6.8,"Înot":6,"HIIT":8,"Yoga / întinderi":2.5},
   "Fiare": {"Fiare, ritm moderat":3.5,"Fiare, intens":6,"Calisthenics":3.8}
 };
 const metOf = n => { for(const g in MV) if(n in MV[g]) return MV[g][n]; return 4; };
@@ -308,13 +342,14 @@ const autoMeal = () => { const h = new Date().getHours(); return h<10?"mic":h<15
 
 /* ---------- navigare ---------- */
 function show(tab){
-  ["log","menu","body","prof"].forEach(t=>{
+  ["log","menu","sport","body","prof"].forEach(t=>{
     $("v-"+t).classList.toggle("on", t===tab);
     document.querySelector(`nav [data-tab=${t}]`).classList.toggle("on", t===tab);
   });
   $("fab").style.display = tab==="log" ? "flex" : "none";
   if(tab==="log") renderLog();
   if(tab==="menu") renderMenu();
+  if(tab==="sport") renderSport();
   if(tab==="prof") renderProfile();
   if(tab==="body") renderBody();
   window.scrollTo(0,0);
@@ -343,6 +378,9 @@ function renderLog(){
     $("sum").innerHTML = `<div class="empty-card"><p><b>Începe cu profilul tău</b><br><span class="meta">Așa îți calculez ținta zilnică de kcal și macronutrienți.</span></p><button class="primary" data-go="prof">Completează profilul</button></div>`;
   } else {
     const goal = P.kcal, left = Math.round(goal - eatK + actK), over = left < 0;
+    const ratio = eatK/Math.max(1,goal+actK);
+    const st = over ? ["#F26B4F","Ai trecut de țintă azi. Nicio problemă, mâine o iei de la capăt."] : ratio>=.9 ? ["#F2A93B","Ești aproape de țintă. Mai ai loc pentru o gustare mică."] : eatK>0 ? ["#1B998B","Ești pe drum bun. Continuă în ritmul tău."] : ["#1B998B","Zi nouă. Adaugă prima masă."];
+    document.documentElement.style.setProperty("--acc",st[0]);
     const L = Math.PI*90, frac = Math.min(1, eatK/Math.max(1, goal+actK));
     const arc = "M20 110 A90 90 0 0 1 200 110";
     const tube = (name,T,E,col)=>{
@@ -354,10 +392,11 @@ function renderLog(){
         <div class="gauge">
           <svg viewBox="0 0 220 120" aria-hidden="true">
             <path d="${arc}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="16" stroke-linecap="round"/>
-            ${eatK>0?`<path d="${arc}" fill="none" stroke="${over?"#F26B4F":"#FFD166"}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${L*frac} ${L}"/>`:""}
+            ${eatK>0?`<path d="${arc}" fill="none" stroke="${st[0]==="#1B998B"?"#3CC5B5":st[0]}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${L*frac} ${L}"/>`:""}
           </svg>
           <div class="c"><b>${Math.abs(left)}</b><small>${over?"kcal peste țintă":"kcal rămase"}</small></div>
         </div>
+        <div class="stmsg">${st[1]}</div>
         <div class="tiles">
           <div class="tile" style="--c:#8FB7D6"><small>Obiectiv</small><b>${goal}</b></div>
           <div class="tile" style="--c:#FFD166"><small>Mâncat</small><b>${Math.round(eatK)}</b></div>
@@ -382,11 +421,12 @@ function renderLog(){
   const work = `<div class="slot" style="--c:var(--work)"><header><h3>Antrenament</h3><span class="k">${D.moves.length?Math.round(actK)+" kcal":""}</span><button class="plus" data-addw="1" aria-label="Adaugă antrenament">+</button></header>${
     D.moves.length ? `<ul class="log">${D.moves.map((x,i)=>`<li><span>${esc(x.n)}<small>${x.m} min</small></span><span class="r">${Math.round(x.kc)} kcal <button class="del" data-del="m${i}">Șterge</button></span></li>`).join("")}</ul>` : ""
   }</div>`;
-  $("lists").innerHTML = `<h2>Mesele de azi</h2>${slots}<h2>Mișcare</h2>${work}`;
+  $("lists").innerHTML = waterCard(D)+`<h2>Mesele de azi</h2>${slots}<h2>Mișcare</h2>${work}`+tipCard();
 }
 $("v-log").addEventListener("click",e=>{
   const d = e.target.closest("[data-day]");
   if(d){ const [y,m,dd] = d.dataset.day.split("-").map(Number); sel = new Date(y,m-1,dd); renderLog(); return; }
+  const w = e.target.closest("[data-w]"); if(w){ const D = day(); D.water = Math.max(0,(D.water||0)+ +w.dataset.w); persist(); renderLog(); return; }
   const a = e.target.closest("[data-add]"); if(a){ openSheet("menu", a.dataset.add); return; }
   if(e.target.closest("[data-addw]")){ openSheet("workout"); return; }
   const del = e.target.dataset.del;
@@ -488,7 +528,7 @@ function renderSheet(){
         <button class="opt" data-mode="manual">${ICON.pen}Manual</button>
         <button class="opt" data-mode="workout">${ICON.bolt}Antrenament</button>
       </div>
-      <p class="meta">Cu poza, estimez caloriile și macronutrienții din ce se vede în ea.</p>
+      <p class="meta">Cu poza, estimez caloriile și macronutrienții din ce se vede în ea.</p>${recHtml()}
       <button class="ghost" data-act="close" style="width:100%;margin-top:6px">Închide</button>`;
   } else if(sheet.mode==="photo"){
     let body = "";
@@ -539,7 +579,8 @@ function renderSheet(){
 }
 
 $("panel").addEventListener("click",e=>{
-  const t = e.target.closest("[data-mode],[data-act],[data-rm]"); if(!t) return;
+  const t = e.target.closest("[data-mode],[data-act],[data-rm],[data-rec]"); if(!t) return;
+  if(t.dataset.rec !== undefined){ const r = sheet.rec[+t.dataset.rec]; day().eaten.push({n:r.n,kc:r.kc,p:r.p,c:r.c,f:r.f,meal:sheet.meal}); persist(); closeSheet(); renderLog(); return; }
   if(t.dataset.mode){ sheet.mode = t.dataset.mode; renderSheet(); return; }
   if(t.dataset.rm !== undefined){ photo.items.splice(+t.dataset.rm,1); renderSheet(); return; }
   const a = t.dataset.act;
@@ -707,6 +748,75 @@ function renderBmi(){
     </div>`;
 }
 ["bh","bw"].forEach(id=>$(id).addEventListener("input",renderBmi));
+
+/* ---------- apă, pași, sfaturi ---------- */
+const TIPS = ["Nu trebuie să fii perfect. Trei antrenamente pe săptămână, făcute constant, bat unul singur foarte greu.","Bea un pahar cu apă înainte de fiecare masă. Te ajută să mănânci mai atent.","Începe cu 15–20 de minute. Mai bine puțin și regulat decât mult și abandonat.","Somnul contează: 7–8 ore te ajută să te refaci și să ai mai puțină poftă de dulce.","O plimbare de 10 minute după masă contează. Fiecare pas se adună.","Nu te compara cu alții. Compară-te cu tine de acum o lună.","Ziua de odihnă face parte din plan. Mușchii se refac atunci când te odihnești."];
+const tipCard = () => `<div class="tip">💡 ${TIPS[Math.floor(sel.getTime()/864e5)%TIPS.length]}</div>`;
+function waterCard(D){
+  const wg = Math.max(1500, Math.round(kg()*30/250)*250), w = D.water||0;
+  return `<div class="duo"><div class="card wcard"><b>💧 Apă</b><div class="big">${w}<small> / ${wg} ml</small></div>
+    <div class="wbar"><i style="width:${Math.min(100,w/wg*100)}%"></i></div>
+    <div class="wbtns"><button class="ghost" data-w="250">+ 250</button><button class="ghost" data-w="-250" aria-label="Scade 250 ml">−</button></div></div>
+    <div class="card wcard"><b>👟 Pași</b><div class="big"><input id="steps" type="number" min="0" inputmode="numeric" placeholder="ex: 6000" value="${D.steps||""}"></div><small class="meta">Un început bun: 6.000</small></div></div>`;
+}
+$("v-log").addEventListener("change",e=>{ if(e.target.id==="steps"){ day().steps = Math.max(0,+e.target.value||0); persist(); } });
+
+/* ---------- alimente frecvente ---------- */
+function recHtml(){
+  const m = new Map(); let t = 0;
+  Object.keys(store.days).sort().forEach(k=>store.days[k].eaten.forEach(x=>{ const o = m.get(x.n); m.set(x.n,{x,cnt:(o?o.cnt:0)+1,t:++t}); }));
+  const rec = [...m.values()].sort((a,b)=>b.cnt-a.cnt||b.t-a.t).slice(0,8).map(o=>o.x);
+  sheet.rec = rec;
+  return rec.length ? `<h2 style="font-size:1rem;margin-top:14px">Adaugă rapid</h2><div class="chips">${rec.map((x,i)=>`<button class="chip" data-rec="${i}">${esc(x.n)}<small>${Math.round(x.kc)} kcal</small></button>`).join("")}</div>` : "";
+}
+
+/* ---------- antrenamente pentru începători ---------- */
+const WCATS = [["acasa","Acasă","work"],["cardio","Cardio","gust"],["sala","Sală","cina"],["mobil","Mobilitate","pranz"]];
+const WP = {
+ acasa:[
+  {t:"Corp întreg",s:"20 min · fără echipament",m:20,a:"Calisthenics",e:[["Genuflexiuni la scaun","3 × 10","Ridică-te încet, genunchii în linie cu vârfurile."],["Flotări la perete","3 × 10","Corpul drept ca o scândură."],["Pod pentru fese","3 × 12","Strânge fesele o secundă sus."],["Plank pe genunchi","3 × 20 sec","Respiră normal."]]},
+  {t:"Picioare și fese",s:"20 min · fără echipament",m:20,a:"Calisthenics",e:[["Fandări pe loc","3 × 8 / picior","Ține-te de un scaun dacă pierzi echilibrul."],["Ridicări pe vârfuri","3 × 15","Încet, cu pauză sus."],["Pași laterali","3 × 10 / parte","Genunchii ușor îndoiți."],["Pod cu pauză","3 × 10","Ține 2 secunde sus."]]},
+  {t:"Brațe și spate",s:"20 min · un scaun",m:20,a:"Calisthenics",e:[["Flotări pe genunchi","3 × 6","Coatele la 45° de corp."],["Superman","3 × 10","Ridică brațele și picioarele câțiva centimetri."],["Extensii triceps pe scaun","3 × 8","Coatele spre spate."],["Bird dog","3 × 8 / parte","Șoldurile rămân drepte."]]}],
+ cardio:[
+  {t:"Mers alert",s:"30 min",m:30,a:"Mers alert",e:[["Mers lent","5 min","Încălzire."],["Mers alert","20 min","Poți vorbi în propoziții scurte."],["Mers lent","5 min","Pulsul coboară."]]},
+  {t:"Alergare cu pauze de mers",s:"25 min",m:25,a:"Alergare ușoară",e:[["Mers alert","5 min","Încălzire."],["1 min alergare + 2 min mers","× 6","Ritm la care respiri ușor."],["Mers lent","2 min","Revii la calm."]]},
+  {t:"Bicicletă relaxată",s:"40 min",m:40,a:"Ciclism",e:[["Pedalat lejer","5 min","Rezistență mică."],["Ritm constant","30 min","Ușor, dar fără opriri."],["Pedalat lent","5 min","Încheiere."]]}],
+ sala:[
+  {t:"Full body",s:"40 min",m:40,a:"Fiare, ritm moderat",e:[["Bicicletă","5 min","Încălzire."],["Presă picioare","3 × 12","Ultimele repetări grele, dar corecte."],["Tracțiuni la helcometru","3 × 12","Omoplații lipiți."],["Împins cu gantere","3 × 10","Gantere mici la început."]]},
+  {t:"Picioare și spate",s:"40 min",m:40,a:"Fiare, ritm moderat",e:[["Presă picioare","3 × 12","Fără să blochezi genunchii."],["Flexii picior la mașină","3 × 12","Mișcare lentă."],["Ramat cu cablu","3 × 12","Spatele drept."],["Extensii lombare","2 × 10","Doar cât e confortabil."]]},
+  {t:"Piept, umeri, brațe",s:"40 min",m:40,a:"Fiare, ritm moderat",e:[["Împins la mașină","3 × 10","Greutate ușoară la început."],["Ridicări laterale","3 × 12","Gantere mici."],["Flexii biceps","3 × 10","Coatele lipite de corp."],["Extensii triceps la scripete","3 × 10","Controlează coborârea."]]}],
+ mobil:[
+  {t:"Dimineață, 10 minute",s:"10 min · fără echipament",m:10,a:"Yoga / întinderi",e:[["Rotiri de gât și umeri","1 min","Lent, fără forțare."],["Pisica și vaca","10 repetări","Arcuiește și curbează spatele pe rând."],["Genuflexiune adâncă ținută","30 sec","Sprijină-te de ceva dacă e nevoie."],["Întindere pentru spatele coapselor","2 × 30 sec","Fără durere."]]},
+  {t:"Pentru spate, după birou",s:"10 min · un scaun",m:10,a:"Yoga / întinderi",e:[["Rotiri de trunchi pe scaun","10 / parte","Lent."],["Întindere șold","2 × 30 sec / parte","Pieptul sus."],["Poziția copilului","1 min","Respiră adânc."],["Pod ușor","10","Ridică șoldurile puțin."]]},
+  {t:"După antrenament",s:"8 min",m:8,a:"Yoga / întinderi",e:[["Întindere față coapsă","30 sec / picior","Genunchii apropiați."],["Întindere piept la perete","30 sec / parte","Umărul relaxat."],["Fluturele","1 min","Stai drept."],["Respirații adânci","2 min","Inspiri pe nas, expiri lung."]]}]
+};
+let wk = {c:"acasa",i:{acasa:0,cardio:0,sala:0,mobil:0}};
+function renderSport(){
+  const list = WP[wk.c], n = wk.i[wk.c], p = list[n], cat = WCATS.find(x=>x[0]===wk.c);
+  $("sportbox").innerHTML = `<div class="chips">${WCATS.map(x=>`<button class="chip${x[0]===wk.c?" on":""}" style="--c:var(--${x[2]})" data-wc="${x[0]}">${x[1]}<small>${WP[x[0]].length} idei</small></button>`).join("")}</div>
+   <article class="rcard"><div class="rhead" style="--c:var(--${cat[2]})"><small>${cat[1]} · ideea ${n+1} din ${list.length} · ${p.s}</small><h3>${p.t}</h3></div>
+   <div class="rbody"><ol class="ex">${p.e.map(x=>`<li><b>${x[0]}</b> <span class="dose">${x[1]}</span><small>${x[2]}</small></li>`).join("")}</ol>
+   <div class="btns"><button class="primary" data-done="1">Am făcut antrenamentul</button><button class="ghost" data-next="1">Altă idee</button></div></div></article>
+   <div class="card rules" style="margin-top:14px"><b>Trei reguli pentru început</b><ol><li>Antrenează-te 3 zile pe săptămână, cu o zi de pauză între ele.</li><li>Ar trebui să poți vorbi în timp ce te miști. Dacă rămâi fără aer, încetinește.</li><li>Oprește-te la durere ascuțită. Febra musculară ușoară a doua zi e normală.</li></ol></div>
+   <p class="meta" style="margin-top:14px">Dacă nu ai mai făcut sport de mult, ai afecțiuni sau dureri, discută întâi cu medicul. Caloriile arse sunt estimări.</p>`;
+}
+$("sportbox").addEventListener("click",e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.wc){ wk.c = b.dataset.wc; renderSport(); return; }
+  if(b.dataset.next){ wk.i[wk.c] = (wk.i[wk.c]+1) % WP[wk.c].length; renderSport(); return; }
+  if(b.dataset.done){
+    const p = WP[wk.c][wk.i[wk.c]];
+    day().moves.push({n:p.t,m:p.m,kc:metOf(p.a)*kg()*(p.m/60)});
+    persist(); b.textContent = "Adăugat în jurnal ✓";
+  }
+});
+
+/* icoană pentru ecranul principal */
+(()=>{ const c = document.createElement("canvas"); c.width = c.height = 180; const x = c.getContext("2d");
+  x.fillStyle="#12263A"; x.fillRect(0,0,180,180);
+  x.fillStyle="#1B998B"; x.beginPath(); x.arc(90,90,60,0,7); x.fill();
+  x.fillStyle="#FFD166"; x.beginPath(); x.arc(90,90,34,0,7); x.fill();
+  const l = document.createElement("link"); l.rel="apple-touch-icon"; l.href=c.toDataURL(); document.head.appendChild(l); })();
 
 /* ---------- pornire ---------- */
 show("log");
