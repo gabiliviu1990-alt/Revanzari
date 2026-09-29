@@ -1,0 +1,21 @@
+FARFURIA MEA - jurnal de calorii, meniuri, IMC si grasime corporala
+====================================================================
+
+CUM O DESCHIZI
+1. Dezarhiveaza folderul.
+2. Deschide fisierul index.html intr-un browser (Chrome, Safari, Edge, Firefox).
+   Nu ai nevoie de internet sau de instalare pentru calculatoare si jurnal.
+
+CE FACE
+- Azi: obiectiv zilnic, mancat, ars la antrenament, kcal ramase, macronutrienti.
+- Meniu: idei de mese cu gramaje si mod de preparare.
+- Corp: IMC si procent de grasime corporala (metoda US Navy).
+- Profil: iti calculeaza tinta zilnica de kcal si macronutrienti.
+
+IMPORTANT
+- Datele se salveaza in browserul in care deschizi fisierul. Daca il deschizi
+  in alt browser sau pe alt telefon, jurnalul nu se muta.
+- Analiza caloriilor din poza functioneaza doar cand aplicatia este deschisa in
+  Claude (claude.ai sau aplicatia Claude). In alt browser, adaugi mesele manual.
+- Toate valorile sunt estimari orientative si nu inlocuiesc sfatul unui medic
+  sau nutritionist.
