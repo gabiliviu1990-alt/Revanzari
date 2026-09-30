@@ -104,7 +104,8 @@
   .warn{background:#FDE3DC;border-radius:14px;padding:11px 13px;font-size:.9rem;margin-top:12px}
 
   /* meniu */
-  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
+  .chips{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding-bottom:4px;margin-bottom:12px}
+  html{-webkit-text-size-adjust:100%}
   .chip{flex:none;border:0;background:var(--card);border-radius:16px;padding:9px 14px;text-align:left;cursor:pointer;font-weight:700}
   .chip small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
   .chip.on{background:var(--c);}
@@ -132,6 +133,7 @@
   .panel{background:var(--card);width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
   .grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
   .panel h2{margin-top:4px}
+  textarea{width:100%;border:0;border-radius:14px;background:var(--mist);color:var(--ink);padding:13px 14px;font:inherit;resize:none}
   .tiles3{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   .frow{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:var(--mist);border-radius:14px;padding:12px 14px;margin-bottom:6px;font-weight:600;cursor:pointer}
   .frow small{color:var(--muted);font-weight:500}.frow.done{opacity:.55;text-decoration:line-through}
@@ -182,11 +184,13 @@
   .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.duo .wcard{margin-top:0}
   .big{font:800 1.5rem var(--disp);margin-top:4px}.big small{font:600 .75rem system-ui;color:var(--muted)}
   .big input{font:inherit;padding:8px 10px}
-  .dock{background:var(--card);border:1px solid var(--line);box-shadow:0 8px 28px rgba(18,38,58,.18);gap:2px}
-  .dock button{flex:0 0 auto;flex-direction:row;color:var(--muted);font-size:.85rem;padding:12px 15px;border-radius:22px;gap:0}
-  .dock button span{display:none}
-  .dock button.on{flex:1;justify-content:center;background:var(--acc);color:#fff}
-  .dock button.on span{display:inline;margin-left:7px}
+  .dock{background:var(--deep);border:0;box-shadow:0 10px 26px rgba(18,38,58,.3);gap:0;padding:6px 4px;align-items:flex-end;max-width:440px}
+  .dock button{flex:1;min-width:0;flex-direction:column;color:#9FB2C0;font-size:.66rem;padding:8px 0 7px;border-radius:18px;gap:3px;background:none}
+  .dock button span{display:block;white-space:nowrap}
+  .dock button.on{background:rgba(255,255,255,.12);color:var(--butter)}
+  .dock .fab{position:static;height:auto;right:auto;bottom:auto;box-shadow:none;background:none;border-radius:0;padding:0 0 7px;color:#9FB2C0;z-index:auto}
+  .dock .fab .fp{width:50px;height:50px;border-radius:50%;background:var(--tomato);color:var(--deep);display:flex;align-items:center;justify-content:center;margin-top:-26px;border:4px solid var(--mist)}
+  .dock .fab .fp .ic{width:24px;height:24px}
 </style>
 </head>
 <body>
@@ -268,10 +272,10 @@
 
   <section class="view" id="v-sport"><div class="head"><div><small>Idei pentru începători</small><h1>Antrenament</h1></div></div><div id="sportbox"></div></section>
 
-  <button class="fab" id="fab" aria-label="Adaugă"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Adaugă</button>
   <nav class="dock">
     <button data-tab="log" class="on"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Azi</span></button>
     <button data-tab="menu"><svg class="ic" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span>Meniu</span></button>
+    <button class="fab" id="fab" aria-label="Adaugă"><span class="fp"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span>Adaugă</span></button>
     <button data-tab="sport"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/></svg><span>Sport</span></button>
     <button data-tab="body"><svg class="ic" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span>Corp</span></button>
     <button data-tab="prof"><svg class="ic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></button>
@@ -416,9 +420,8 @@ function show(tab){
     $("v-"+t).classList.toggle("on", t===tab);
     document.querySelector(`nav [data-tab=${t}]`).classList.toggle("on", t===tab);
   });
-  $("fab").style.display = tab==="log" ? "flex" : "none";
   if(tab==="log") renderLog();
-  if(tab==="menu") renderMenu();
+  if(tab==="menu"){ try{ renderMenu(); }catch(_){ store.shop = []; try{ renderMenu(); }catch(__){} } }
   if(tab==="sport") renderSport();
   if(tab==="prof") renderProfile();
   if(tab==="body") renderBody();
@@ -506,12 +509,48 @@ $("dprev").addEventListener("click",()=>{ sel = new Date(sel.getFullYear(),sel.g
 $("dnext").addEventListener("click",()=>{ sel = new Date(sel.getFullYear(),sel.getMonth(),sel.getDate()+1); renderLog(); });
 
 /* ---------- meniu ---------- */
-let pick = {mic:0,pranz:0,gust:0,cina:0}, menuMeal = "mic";
+let pick = {mic:0,pranz:0,gust:0,cina:0}, menuMeal = "mic", menuView = "recipes", weekOff = 0;
+
+/* ---------- planificator săptămânal ---------- */
+function weekStart(){ const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)+7*weekOff); return d; }
+function slotCalc(key,idx){
+  const r = R[key][idx], share = MEALS.find(m=>m[0]===key)[2], f = Math.min(2, Math.max(.5, store.profile.kcal*share/baseKcal(r)));
+  let kc=0,p=0,c=0,fa=0;
+  const ings = r.i.map(x=>{ const g = Math.max(1,rnd(x[1]*f)); kc+=g*x[2]/100; p+=g*x[3]/100; c+=g*x[4]/100; fa+=g*x[5]/100; return [x[0],g]; });
+  return {r,kc,p,c,f:fa,ings};
+}
+function weekDays(){ const ws = weekStart(); return [0,1,2,3,4,5,6].map(i=>{ const d = new Date(ws); d.setDate(ws.getDate()+i); return d; }); }
+function switchHtml(){ return `<div class="chips">${[["recipes","Rețete"],["week","Săptămână"]].map(x=>`<button class="chip${menuView===x[0]?" on":""}" style="--c:var(--butter)" data-mv="${x[0]}">${x[1]}</button>`).join("")}</div>`; }
+function weekHtml(){
+  const days = weekDays(), a = days[0], z = days[6], pl = store.plan||{};
+  let h = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><button class="ghost" data-wk="-1" aria-label="Săptămâna anterioară">‹</button><b>${a.getDate()} ${MONTHS[a.getMonth()]} – ${z.getDate()} ${MONTHS[z.getMonth()]}</b><button class="ghost" data-wk="1" aria-label="Săptămâna următoare">›</button></div>`;
+  days.forEach(d=>{
+    const key = iso(d), o = pl[key]||{}; let tot = 0;
+    const slots = MEALS.map(([k,label])=>{
+      if(o[k]===undefined) return `<button class="frow" data-ps="${key}|${k}"><span>${label}</span><small>Alege rețeta</small></button>`;
+      const c = slotCalc(k,o[k]); tot += c.kc;
+      return `<button class="frow" data-ps="${key}|${k}"><span>${label}<small style="display:block">${c.r.t}</small></span><small>${Math.round(c.kc)} kcal</small></button>`;
+    }).join("");
+    h += `<div class="card" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><b>${DOW[d.getDay()]} ${d.getDate()}</b><small class="meta">${tot?Math.round(tot)+" kcal":""}</small></div>${slots}</div>`;
+  });
+  return h + `<button class="primary" data-wauto="1">Completează automat</button><div class="btns"><button class="ghost" data-wlist="1" style="flex:1">🛒 Listă din plan</button><button class="ghost" data-wclr="1">Golește săptămâna</button></div><p class="meta">„Listă din plan” înlocuiește lista de cumpărături cu ingredientele întregii săptămâni.</p>`;
+}
+function weekAction(t){
+  const days = weekDays(); store.plan = store.plan||{};
+  if(t.dataset.wk){ weekOff += +t.dataset.wk; return; }
+  if(t.dataset.wauto){ days.forEach((d,i)=>{ const o = store.plan[iso(d)] = store.plan[iso(d)]||{}; MEALS.forEach(([k],mi)=>{ if(o[k]===undefined) o[k] = (i+mi)%R[k].length; }); }); persist(); return; }
+  if(t.dataset.wclr){ days.forEach(d=>delete store.plan[iso(d)]); persist(); return; }
+  if(t.dataset.wlist){
+    const m = {}; days.forEach(d=>{ const o = store.plan[iso(d)]||{}; MEALS.forEach(([k])=>{ if(o[k]!==undefined) slotCalc(k,o[k]).ings.forEach(([n,g])=>m[n]=(m[n]||0)+g); }); });
+    store.shop = Object.keys(m).map(n=>({n,g:m[n],ok:0})); persist();
+  }
+}
 const baseKcal = r => r.i.reduce((a,x)=>a+x[1]*x[2]/100,0);
 const rnd = g => g>=50 ? Math.round(g/5)*5 : Math.round(g);
 function renderMenu(){
   const box = $("menubox");
   if(!store.profile){ box.innerHTML = `<div class="empty-card"><p>Ca să-ți propun mese potrivite, am nevoie de profilul tău.</p><button class="primary" data-go="prof">Completează profilul</button></div>`; return; }
+  if(menuView==="week"){ box.innerHTML = switchHtml()+weekHtml()+shopHtml(); return; }
   const goal = store.profile.kcal;
   const chips = MEALS.map(([key,label,share])=>`<button class="chip${key===menuMeal?" on":""}" style="--c:var(--${key})" data-mt="${key}">${label}<small>~${Math.round(goal*share)} kcal</small></button>`).join("");
   const [, label, share] = MEALS.find(m=>m[0]===menuMeal);
@@ -523,7 +562,7 @@ function renderMenu(){
     kc += g*x[2]/100; p += g*x[3]/100; c += g*x[4]/100; fa += g*x[5]/100;
     return `<div class="ing"><span>${x[0]}</span><b>${g} g</b></div>`;
   }).join("");
-  box.innerHTML = `<div class="chips">${chips}</div>
+  box.innerHTML = `${switchHtml()}<div class="chips">${chips}</div>
     <article class="rcard">
       <div class="rhead" style="--c:var(--${key})"><small>${label} · ideea ${pick[key]+1} din ${R[key].length}</small><h3>${r.t}</h3><b>≈ ${Math.round(kc)} kcal</b></div>
       <div class="rbody">
@@ -540,6 +579,9 @@ function renderMenu(){
 }
 $("menubox").addEventListener("click",e=>{
   const t = e.target.closest("button"); if(!t) return;
+  if(t.dataset.mv){ menuView = t.dataset.mv; renderMenu(); return; }
+  if(t.dataset.wk||t.dataset.wauto||t.dataset.wclr||t.dataset.wlist){ weekAction(t); renderMenu(); return; }
+  if(t.dataset.ps){ sheet.slot = t.dataset.ps; openSheet("planpick"); return; }
   if(t.dataset.mt){ menuMeal = t.dataset.mt; renderMenu(); return; }
   if(t.dataset.eat){
     day().eaten.push({n:t.dataset.n,kc:+t.dataset.kc,p:+t.dataset.p,c:+t.dataset.c,f:+t.dataset.f,meal:t.dataset.meal});
@@ -608,16 +650,16 @@ function renderSheet(){
         <label class="opt" for="pfile">${ICON.cam}Poză</label>
         <input id="pfile" class="vh" type="file" accept="image/*">
         <button class="opt" data-mode="search">${ICON.srch}Caută</button>
-        <button class="opt" data-mode="manual">${ICON.pen}Manual</button>
+        <button class="opt" data-mode="manual">${ICON.pen}Scrie</button>
         <button class="opt" data-mode="workout">${ICON.bolt}Antrenament</button>
       </div>
       <p class="meta">Cu poza, estimez caloriile și macronutrienții din ce se vede în ea.</p>${recHtml()}
       <button class="ghost" data-act="close" style="width:100%;margin-top:6px">Închide</button>`;
   } else if(sheet.mode==="photo"){
     let body = "";
-    if(photo.status==="loading") body = `<p><span class="spin"></span>Analizez poza…</p>`;
-    else if(photo.status==="error") body = `<div class="warn" style="margin-top:0">${esc(photo.msg)}</div><button class="ghost" data-mode="manual" style="width:100%;margin-top:10px">Adaugă manual</button>`;
-    else if(!photo.items.length) body = `<p>Nu am găsit mâncare în poză.</p><button class="ghost" data-mode="manual" style="width:100%">Adaugă manual</button>`;
+    if(photo.status==="loading") body = `<p><span class="spin"></span>${photo.url?"Analizez poza…":"Calculez…"}</p>`;
+    else if(photo.status==="error") body = `<div class="warn" style="margin-top:0">${esc(photo.msg)}</div><button class="ghost" data-mode="manual2" style="width:100%;margin-top:10px">Adaugă manual</button>`;
+    else if(!photo.items.length) body = `<p>Nu am găsit mâncare în poză.</p><button class="ghost" data-mode="manual2" style="width:100%">Adaugă manual</button>`;
     else {
       const tot = sum(photo.items,"kc");
       body = photo.items.map((x,i)=>`<div class="item">
@@ -631,10 +673,18 @@ function renderSheet(){
         + `<p><b>Total: ${Math.round(tot)} kcal</b></p>
            <label class="f" for="pmeal">Masa</label>${mealSel("pmeal",sheet.meal)}
            <button class="primary" data-act="addphoto" style="margin-top:12px">Adaugă în jurnal</button>
-           <p class="meta">Estimare din poză. Corectează gramajul dacă porția ta e diferită.</p>`;
+           <p class="meta">Estimare orientativă. Corectează gramajul dacă porția ta e diferită.</p>`;
     }
-    el.innerHTML = `${G}<h2>Din poză</h2>${photo.url?`<img class="thumb" src="${photo.url}" alt="Poza mâncării">`:""}${body}<button class="ghost" data-act="close" style="width:100%;margin-top:8px">Închide</button>`;
+    el.innerHTML = `${G}<h2>${photo.url?"Din poză":"Estimare"}</h2>${photo.url?`<img class="thumb" src="${photo.url}" alt="Poza mâncării">`:""}${body}<button class="ghost" data-act="close" style="width:100%;margin-top:8px">Închide</button>`;
   } else if(sheet.mode==="manual"){
+    el.innerHTML = `${G}<h2>Ce ai mâncat?</h2>
+      <textarea id="mtxt" rows="3" placeholder="ex: 2 ouă ochiuri, o felie de pâine și o cafea cu lapte" aria-label="Ce ai mâncat"></textarea>
+      <p class="meta">Scrie liber, cu cantități dacă le știi. Calculez eu caloriile și macronutrienții.</p>
+      <label class="f" for="mmeal2">Masa</label>${mealSel("mmeal2",sheet.meal)}
+      <button class="primary" data-act="calctext" style="margin-top:12px">Calculează</button>
+      <button class="ghost" data-mode="manual2" style="width:100%;margin-top:8px">Introduc caloriile eu</button>
+      <button class="ghost" data-act="close" style="width:100%;margin-top:8px">Închide</button>`;
+  } else if(sheet.mode==="manual2"){
     el.innerHTML = `${G}<h2>Adaugă mâncare</h2>
       <div style="display:grid;gap:10px">
         <div><label class="f" for="mn">Ce ai mâncat</label><input id="mn" type="text" placeholder="ex: sandviș cu șuncă"></div>
@@ -648,6 +698,12 @@ function renderSheet(){
         <button class="primary" data-act="addmanual">Adaugă în jurnal</button>
         <button class="ghost" data-act="close">Închide</button>
       </div>`;
+  } else if(sheet.mode==="planpick"){
+    const [dk,mk] = sheet.slot.split("|"), cur = (store.plan&&store.plan[dk]||{})[mk];
+    const [y,m,dd] = dk.split("-").map(Number);
+    el.innerHTML = `${G}<h2>${MEALNAME[mk]} · ${dd} ${MONTHS[m-1]}</h2>${R[mk].map((r,i)=>`<button class="frow" data-pk="${i}"${cur===i?' style="outline:3px solid var(--butter)"':""}><span>${r.t}</span><small>${Math.round(slotCalc(mk,i).kc)} kcal</small></button>`).join("")}
+      ${cur!==undefined?`<button class="primary" data-pj="1" style="margin-top:8px">Am mâncat asta (în jurnal)</button><button class="ghost" data-pk="-1" style="width:100%;margin-top:8px">Scoate din plan</button>`:""}
+      <button class="ghost" data-act="close" style="width:100%;margin-top:8px">Închide</button>`;
   } else if(sheet.mode==="search"){
     el.innerHTML = `${G}<h2>Caută aliment</h2><input id="fq" type="text" placeholder="ex: banană, mămăligă, telemea" autocomplete="off"><div id="fres" style="margin-top:8px"></div><button class="ghost" data-act="close" style="width:100%;margin-top:8px">Închide</button>`;
     fillRes("");
@@ -669,7 +725,9 @@ function renderSheet(){
 }
 
 $("panel").addEventListener("click",e=>{
-  const t = e.target.closest("[data-mode],[data-act],[data-rm],[data-rec],[data-food]"); if(!t) return;
+  const t = e.target.closest("[data-mode],[data-act],[data-rm],[data-rec],[data-food],[data-pk],[data-pj]"); if(!t) return;
+  if(t.dataset.pk!==undefined){ const [dk,mk] = sheet.slot.split("|"); store.plan = store.plan||{}; const o = store.plan[dk] = store.plan[dk]||{}; if(+t.dataset.pk<0) delete o[mk]; else o[mk] = +t.dataset.pk; persist(); closeSheet(); renderMenu(); return; }
+  if(t.dataset.pj){ const [dk,mk] = sheet.slot.split("|"), c = slotCalc(mk,store.plan[dk][mk]); (store.days[dk] = store.days[dk]||{eaten:[],moves:[]}).eaten.push({n:c.r.t,kc:c.kc,p:c.p,c:c.c,f:c.f,meal:mk}); persist(); t.textContent = "Adăugat ✓"; return; }
   if(t.dataset.food!==undefined){ sheet.food = +t.dataset.food; sheet.mode = "foodsel"; renderSheet(); return; }
   if(t.dataset.rec !== undefined){ const r = sheet.rec[+t.dataset.rec]; day().eaten.push({n:r.n,kc:r.kc,p:r.p,c:r.c,f:r.f,meal:sheet.meal}); persist(); closeSheet(); renderLog(); return; }
   if(t.dataset.mode){ sheet.mode = t.dataset.mode; renderSheet(); return; }
@@ -682,6 +740,10 @@ $("panel").addEventListener("click",e=>{
     persist(); closeSheet(); renderLog();
   }
   else if(a==="addfood"){ day().eaten.push({...foodVals(),meal:$("fmeal").value}); persist(); closeSheet(); renderLog(); }
+  else if(a==="calctext"){
+    const txt = $("mtxt").value.trim(); if(!txt) return;
+    sheet.meal = $("mmeal2").value; photo = {url:"",items:[],status:"loading",msg:""}; sheet.mode = "photo"; renderSheet(); runAnalysis("",txt);
+  }
   else if(a==="addmanual"){
     const kc = +$("mk").value; if(!kc || kc<1) return;
     day().eaten.push({n:$("mn").value.trim()||"Mâncare",kc,p:+$("mp").value||0,c:+$("mc").value||0,f:+$("mf").value||0,meal:$("mmeal").value});
@@ -730,14 +792,14 @@ async function handleFile(file){
   }
 }
 const PROMPT = 'Ești nutriționist. Analizează poza cu mâncare. Identifică fiecare aliment sau preparat vizibil, estimează gramajul din poză (după dimensiunea porției) și valorile nutriționale pentru acel gramaj. Răspunde DOAR cu JSON valid, fără text în plus și fără markdown, în forma: {"items":[{"name":"...","grams":0,"kcal":0,"protein":0,"carbs":0,"fat":0}]}. Numele alimentelor în română. Dacă în poză nu e mâncare, răspunde {"items":[]}.';
-async function runAnalysis(dataUrl){
+const TXTPROMPT = 'Ești nutriționist. Utilizatorul descrie ce a mâncat. Descompune descrierea în alimente, estimează gramajul (dacă nu e dat, folosește porția obișnuită) și valorile nutriționale pentru acel gramaj. Răspunde DOAR cu JSON valid, fără text în plus și fără markdown, în forma: {"items":[{"name":"...","grams":0,"kcal":0,"protein":0,"carbs":0,"fat":0}]}. Numele alimentelor în română. Descrierea: ';
+async function runAnalysis(dataUrl, txt){
   photo.status = "loading"; renderSheet();
   try{
+    const content = dataUrl ? [{type:"image",source:{type:"base64",media_type:"image/jpeg",data:dataUrl.split(",")[1]}},{type:"text",text:PROMPT}] : [{type:"text",text:TXTPROMPT+JSON.stringify(txt)}];
     const res = await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user",content:[
-        {type:"image",source:{type:"base64",media_type:"image/jpeg",data:dataUrl.split(",")[1]}},
-        {type:"text",text:PROMPT}]}]})
+      body: JSON.stringify({model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user",content}]})
     });
     if(!res.ok) throw new Error("HTTP "+res.status);
     const data = await res.json();
@@ -748,7 +810,7 @@ async function runAnalysis(dataUrl){
     photo.status = "done";
   }catch(err){
     photo.status = "error";
-    photo.msg = "Analiza din poză nu a mers. Funcționează doar când aplicația e deschisă în Claude, cu conexiune la internet. Poți adăuga masa manual.";
+    photo.msg = "Estimarea nu a mers. Funcționează doar când aplicația e deschisă în Claude, cu conexiune la internet. Poți folosi „Caută” sau introduce caloriile tu.";
   }
   renderSheet();
 }
